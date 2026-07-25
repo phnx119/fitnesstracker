@@ -1,0 +1,14 @@
+{
+  "name": "Fitness Tracker",
+  "short_name": "FitTracker",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/agentpatrick.png",
+      "type": "image/png"
+    }
+  ]
+}
