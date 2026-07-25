@@ -1,3 +1,6 @@
+// next.config.ts
+import type { NextConfig } from 'next';
+
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
@@ -8,6 +11,9 @@ const withPWA = require('next-pwa')({
   },
 });
 
-module.exports = withPWA({
-  // Your existing Next.js config goes here
-});
+const nextConfig: NextConfig = {
+  devIndicators: false, // Hides the Next.js dev badge
+  // Add any other Next.js config options here if needed
+};
+
+export default withPWA(nextConfig);

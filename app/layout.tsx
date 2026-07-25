@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PwaRegister from "./components/pwa-register";
 import "./globals.css";
+import ThemeRegistry from "./components/ThemeRegistry";
 
 export const metadata: Metadata = {
   title: "Fitness Tracker",
@@ -27,8 +28,10 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body className="min-h-full flex flex-col m-0 p-0 bg-zinc-50 dark:bg-black">
-        <PwaRegister />
-        {children}
+        <ThemeRegistry>
+          <PwaRegister />
+          {children}
+        </ThemeRegistry>
       </body>
     </html>
   );
