@@ -22,13 +22,10 @@ export default function BottomNav() {
   const currentIndex = getIndexFromPath(pathname);
 
   return (
-    <Paper 
-      sx={{ position: 'absolute', bottom: 0, left: 0, right: 0 }} 
-      elevation={3}
-    >
+
       <BottomNavigation
         value={currentIndex}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue === 0) router.push('/training');
           if (newValue === 1) router.push('/personal');
           if (newValue === 2) router.push('/settings');
@@ -39,6 +36,5 @@ export default function BottomNav() {
         <BottomNavigationAction label="Personal" icon={<PersonIcon />} />
         <BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
       </BottomNavigation>
-    </Paper>
   );
 }

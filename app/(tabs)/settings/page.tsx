@@ -5,12 +5,12 @@ import { Stack, Button, Typography } from "@mui/material";
 
 export default function Settings() {
   return (
-    <Stack>
+    <Stack sx={{flex: 1}}>
       <Typography>
-        Exercise Tracker
+        Settings
       </Typography>
       <Button variant="contained" color="primary">
-        Log Workout
+        maus
       </Button>
     </Stack>
   );
