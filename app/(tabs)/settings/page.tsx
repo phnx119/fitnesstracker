@@ -1,20 +1,35 @@
 // app/(tabs)/exercise/page.tsx
 'use client';
 
-import { Box, Button, Stack } from '@mui/material';
+import { dbInstance } from '@/database/db';
+import { Card, FormControlLabel, Stack, Switch } from '@mui/material';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 export default function Settings() {
-    return (
-        <Stack sx={{ flex: 1, gap: 1, m: 1 }}>
-            <Box sx={{ flex: 1, bgcolor: 'red' }} />
-            <Button>maus</Button>
-            <Box sx={{ flex: 1, bgcolor: 'green' }} />
+    const settings = useLiveQuery(() => dbInstance.Settings.get(1));
+    const showDbViewer = settings?.showDbViewer ?? false;
 
-            <Stack direction="row" sx={{ bgcolor: 'blue' }}>
-                <Button variant="contained">maus2</Button>
-                <Box sx={{ flex: 1 }} />
-                <Button variant="contained">maus2</Button>
-            </Stack>
+    async function handleToggle(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = event.target.checked;
+
+        await dbInstance.Settings.update(1, {
+            showDbViewer: newValue,
+        });
+    }
+
+    return (
+        <Stack sx={{ flex: 1, gap: 1, p: 1 }}>
+            <Card sx={{ p: 2 }}>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={showDbViewer}
+                            onChange={handleToggle}
+                        />
+                    }
+                    label="Show Database Viewer"
+                />
+            </Card>
         </Stack>
     );
 }

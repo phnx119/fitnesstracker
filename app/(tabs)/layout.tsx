@@ -1,6 +1,6 @@
 // app/(tabs)/layout.tsx
 import BottomNav from '@/app/components/navigation/BottomNav';
-import { Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 
 export default function TabsLayout({
     children,
@@ -10,6 +10,7 @@ export default function TabsLayout({
     return (
         <Stack sx={{ flex: 1 }}>
             {children}
+            <Divider />
             <BottomNav />
         </Stack>
     );

@@ -1,25 +1,28 @@
 'use client';
 
+import { dbInstance } from '@/database/db';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StorageIcon from '@mui/icons-material/Storage';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
-const showDbViewer = true;
-
-const NAV_ITEMS = [
-    { label: 'Training', path: '/training', icon: <FitnessCenterIcon /> },
-    { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
-    { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
-    ...(showDbViewer
-        ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
-        : []),
-] as const;
-
 export default function BottomNav() {
+    const showDbViewer =
+        useLiveQuery(() => dbInstance.Settings.get(1))?.showDbViewer ?? false;
+
+    const NAV_ITEMS = [
+        { label: 'Training', path: '/training', icon: <FitnessCenterIcon /> },
+        { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
+        { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+        ...(showDbViewer
+            ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
+            : []),
+    ] as const;
+
     const router = useRouter();
     const pathname = usePathname();
 
