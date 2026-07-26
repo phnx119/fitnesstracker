@@ -34,7 +34,7 @@ const schemaDefinition = {
     },
 };
 
-type SchemaTables = typeof schemaDefinition;
+export type SchemaTables = typeof schemaDefinition;
 
 type DerivedTables = {
     [K in keyof SchemaTables]: EntityTable<

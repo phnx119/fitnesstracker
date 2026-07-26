@@ -1,42 +1,63 @@
-// components/navigation/BottomNav.tsx
 'use client';
 
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
+import StorageIcon from '@mui/icons-material/Storage';
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
 import { usePathname, useRouter } from 'next/navigation';
+import { useMemo } from 'react';
+
+const showDbViewer = true;
+
+const NAV_ITEMS = [
+    { label: 'Training', path: '/training', icon: <FitnessCenterIcon /> },
+    { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
+    { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+    ...(showDbViewer
+        ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
+        : []),
+] as const;
 
 export default function BottomNav() {
     const router = useRouter();
     const pathname = usePathname();
 
-    // Map paths to index values for MUI BottomNavigation
-    const getIndexFromPath = (path: string) => {
-        if (path.startsWith('/training')) return 0;
-        if (path.startsWith('/personal')) return 1;
-        if (path.startsWith('/settings')) return 2;
-        return 0;
-    };
+    // Berechnet den aktiven Index effizient & sauber
+    const activeIndex = useMemo(() => {
+        const index = NAV_ITEMS.findIndex((item) =>
+            pathname.startsWith(item.path),
+        );
+        return index !== -1 ? index : 0;
+    }, [pathname]);
 
-    const currentIndex = getIndexFromPath(pathname);
+    const handleNavigation = (
+        _event: React.SyntheticEvent,
+        newValue: number,
+    ) => {
+        const targetPath = NAV_ITEMS[newValue]?.path;
+        if (targetPath && targetPath !== pathname) {
+            router.push(targetPath);
+        }
+    };
 
     return (
         <BottomNavigation
-            value={currentIndex}
-            onChange={(_event, newValue) => {
-                if (newValue === 0) router.push('/training');
-                if (newValue === 1) router.push('/personal');
-                if (newValue === 2) router.push('/settings');
-            }}
+            value={activeIndex}
+            onChange={handleNavigation}
             showLabels
+            sx={{
+                // Hintergrund transparent halten, da Paper bereits styled
+                backgroundColor: 'transparent',
+            }}
         >
-            <BottomNavigationAction
-                label="Training"
-                icon={<FitnessCenterIcon />}
-            />
-            <BottomNavigationAction label="Personal" icon={<PersonIcon />} />
-            <BottomNavigationAction label="Settings" icon={<SettingsIcon />} />
+            {NAV_ITEMS.map((item) => (
+                <BottomNavigationAction
+                    key={item.path}
+                    label={item.label}
+                    icon={item.icon}
+                />
+            ))}
         </BottomNavigation>
     );
 }
