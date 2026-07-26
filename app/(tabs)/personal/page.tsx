@@ -32,5 +32,6 @@ export default function ExercisePage() {
                 </Card>
             </Stack>
         </Stack>
+        //push for lucas
     );
 }
