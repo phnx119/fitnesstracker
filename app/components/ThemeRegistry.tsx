@@ -1,16 +1,20 @@
 // components/ThemeRegistry.tsx
 'use client';
 
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
 
-export default function ThemeRegistry({ children }: { children: React.ReactNode }) {
-  return (
-    <ThemeProvider theme={theme}>
-      {/* CssBaseline fixes browser background consistency and applies standard resets */}
-      <CssBaseline />
-      {children}
-    </ThemeProvider>
-  );
+export default function ThemeRegistry({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
+    return (
+        <ThemeProvider theme={theme}>
+            {/* CssBaseline fixes browser background consistency and applies standard resets */}
+            <CssBaseline />
+            {children}
+        </ThemeProvider>
+    );
 }
