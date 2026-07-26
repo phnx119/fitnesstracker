@@ -60,13 +60,6 @@ class FitnessDatabase extends Dexie {
         }
 
         this.version(version).stores(storesConfig);
-
-        this.on('populate', () => {
-            this.table('Settings').add({
-                id: 1,
-                showDbViewer: true,
-            });
-        });
     }
 }
 
