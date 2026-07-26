@@ -12,16 +12,23 @@ import { useMemo } from 'react';
 
 export default function BottomNav() {
     const showDbViewer =
-        useLiveQuery(() => dbInstance.Settings.get(1))?.showDbViewer ?? false;
+        useLiveQuery(() => dbInstance.Settings.get(1))?.showDbViewer ?? true;
 
-    const NAV_ITEMS = [
-        { label: 'Training', path: '/training', icon: <FitnessCenterIcon /> },
-        { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
-        { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
-        ...(showDbViewer
-            ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
-            : []),
-    ] as const;
+    const NAV_ITEMS = useMemo(
+        () => [
+            {
+                label: 'Training',
+                path: '/training',
+                icon: <FitnessCenterIcon />,
+            },
+            { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
+            { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+            ...(showDbViewer
+                ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
+                : []),
+        ],
+        [showDbViewer],
+    );
 
     const router = useRouter();
     const pathname = usePathname();
@@ -32,7 +39,7 @@ export default function BottomNav() {
             pathname.startsWith(item.path),
         );
         return index !== -1 ? index : 0;
-    }, [pathname]);
+    }, [pathname, NAV_ITEMS]);
 
     const handleNavigation = (
         _event: React.SyntheticEvent,

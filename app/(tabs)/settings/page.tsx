@@ -1,4 +1,3 @@
-// app/(tabs)/exercise/page.tsx
 'use client';
 
 import { dbInstance } from '@/database/db';
