@@ -32,6 +32,5 @@ export default function ExercisePage() {
                 </Card>
             </Stack>
         </Stack>
-        //Test commit to check for Github Account
     );
 }
