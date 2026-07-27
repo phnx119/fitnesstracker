@@ -5,7 +5,7 @@ export default function SettingsGroup({ children }: PropsWithChildren) {
     return (
         <Card>
             <CardContent>
-                <Stack sx={{ gap: 1 }}>{children}</Stack>
+                <Stack sx={{ gap: 3 }}>{children}</Stack>
             </CardContent>
         </Card>
     );
