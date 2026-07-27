@@ -17,7 +17,7 @@ export default function Settings() {
     }
 
     return (
-        <Stack sx={{ flex: 1, gap: 1, p: 1 }}>
+        <Stack sx={{ flex: 1, gap: 1 }}>
             <Card sx={{ p: 2 }}>
                 <FormControlLabel
                     control={

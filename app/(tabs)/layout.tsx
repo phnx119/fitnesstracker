@@ -1,4 +1,5 @@
 'use client';
+
 import BottomNav from '@/app/components/navigation/BottomNav';
 import { dbInstance } from '@/database/db';
 import { Divider, Stack } from '@mui/material';
@@ -25,7 +26,7 @@ export default function TabsLayout({
 
     return (
         <Stack sx={{ flex: 1 }}>
-            {children}
+            <Stack sx={{ flex: 1, p: 2 }}>{children}</Stack>
             <Divider />
             <BottomNav />
         </Stack>
