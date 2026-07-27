@@ -36,6 +36,15 @@ const schemaDefinition = {
         weight: 0 as number,
         reps: 0 as number,
     },
+
+    PersonalData: {
+        personId: 0 as number,
+        bodyWeight: 0 as number,
+        bodyHeight: 0 as number,
+        bodyFat: 0 as number,
+        sex: '' as string,
+        targetWeigt: 0 as number,
+    },
 };
 
 export type SchemaTables = typeof schemaDefinition;
