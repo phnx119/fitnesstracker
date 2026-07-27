@@ -9,8 +9,17 @@ export default function Header({
 }>) {
     return (
         <Stack sx={{ ml: -2, mr: -2 }}>
-            <Stack direction="row" sx={{ gap: 1, p: 1 }}>
-                <Typography variant="h5">{title}</Typography>
+            <Stack
+                direction="row"
+                sx={{
+                    gap: 1,
+                    pr: 1,
+                    pl: 2,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography variant="h6">{title}</Typography>
 
                 <Box sx={{ flex: 1 }} />
 
