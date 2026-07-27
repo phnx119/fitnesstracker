@@ -12,8 +12,8 @@ export default function AddPlanDialog({ onClose }: { onClose(): void }) {
         <>
             <DialogTitle>Add a Plan</DialogTitle>
             <DialogContent>
-                <Stack sx={{ pt: 1 }}>
-                    <TextField label="Name" fullWidth />
+                <Stack sx={{ pt: 1, flex: 1 }}>
+                    <TextField label="Name" />
                     <Button>maus</Button>
                 </Stack>
             </DialogContent>

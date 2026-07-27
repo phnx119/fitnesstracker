@@ -55,6 +55,11 @@ const theme = extendTheme({
                 },
             },
         },
+        MuiDialog: {
+            defaultProps: {
+                fullWidth: true,
+            },
+        },
     },
 });
 
