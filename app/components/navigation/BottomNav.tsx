@@ -5,7 +5,12 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StorageIcon from '@mui/icons-material/Storage';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Divider,
+    Stack,
+} from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -53,22 +58,26 @@ export default function BottomNav() {
     }, [pathname, NAV_ITEMS]);
 
     return (
-        <BottomNavigation
-            value={activeIndex}
-            onChange={handleNavigation}
-            showLabels
-            sx={{
-                backgroundColor: 'transparent',
-            }}
-        >
-            {NAV_ITEMS.map((item) => (
-                <BottomNavigationAction
-                    key={item.path}
-                    label={item.label}
-                    icon={item.icon}
-                />
-            ))}
-        </BottomNavigation>
+        <Stack>
+            <Divider />
+
+            <BottomNavigation
+                value={activeIndex}
+                onChange={handleNavigation}
+                showLabels
+                sx={{
+                    backgroundColor: 'transparent',
+                }}
+            >
+                {NAV_ITEMS.map((item) => (
+                    <BottomNavigationAction
+                        key={item.path}
+                        label={item.label}
+                        icon={item.icon}
+                    />
+                ))}
+            </BottomNavigation>
+        </Stack>
     );
 
     function handleNavigation(_event: React.SyntheticEvent, newValue: number) {
