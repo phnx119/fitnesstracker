@@ -1,7 +1,21 @@
 'use client';
 
-import { Stack } from '@mui/material';
+import { Button, Dialog, Stack } from '@mui/material';
+import { useState } from 'react';
+import AddPlanDialog from './AddPlanDialog';
 
 export default function ExercisePage() {
-    return <Stack sx={{ flex: 1, gap: 1, m: 1 }}></Stack>;
+    const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);
+    return (
+        <Stack sx={{ flex: 1, gap: 1, m: 1 }}>
+            <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
+            <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
+                <AddPlanDialog onClose={closeAddPlanDialog} />
+            </Dialog>
+        </Stack>
+    );
+
+    function closeAddPlanDialog() {
+        setShowAddPlanDialog(false);
+    }
 }
