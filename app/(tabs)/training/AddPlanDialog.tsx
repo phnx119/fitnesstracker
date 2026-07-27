@@ -14,6 +14,12 @@ export default function AddPlanDialog({ onClose }: { onClose(): void }) {
             <DialogContent>
                 <Stack sx={{ pt: 1 }}>
                     <TextField label="maus?" />
+                    <TextField label="maus?" />
+                    <TextField label="maus?" />
+                    <TextField label="maus?" />
+                    <TextField label="maus?" />
+                    <TextField label="maus?" />
+                    <TextField label="maus?" />
                     <Button>maus</Button>
                 </Stack>
             </DialogContent>
