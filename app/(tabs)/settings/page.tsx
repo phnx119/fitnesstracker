@@ -3,7 +3,9 @@
 import { FIXED_NAV_ITEMS } from '@/app/components/navigation/BottomNav';
 import { dbInstance } from '@/database/db';
 import {
+    FormControl,
     FormControlLabel,
+    InputLabel,
     MenuItem,
     Select,
     SelectChangeEvent,
@@ -21,17 +23,21 @@ export default function Settings() {
     return (
         <Stack sx={{ flex: 1, gap: 1 }}>
             <SettingsGroup>
-                <Select
-                    label="Landing Page"
-                    value={landingPage}
-                    onChange={handleLandingPageSelect}
-                >
-                    {FIXED_NAV_ITEMS.map((item) => (
-                        <MenuItem key={item.path} value={item.path}>
-                            {item.label}
-                        </MenuItem>
-                    ))}
-                </Select>
+                <FormControl>
+                    <InputLabel id="landingPageLabel">Landing Page</InputLabel>
+                    <Select
+                        label="Landing Page"
+                        labelId="landingPageLabel"
+                        value={landingPage}
+                        onChange={handleLandingPageSelect}
+                    >
+                        {FIXED_NAV_ITEMS.map((item) => (
+                            <MenuItem key={item.path} value={item.path}>
+                                {item.label}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
 
                 <FormControlLabel
                     control={
