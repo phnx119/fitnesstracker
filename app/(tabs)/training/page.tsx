@@ -4,7 +4,7 @@ import { dbInstance } from '@/database/db';
 import { Button, Dialog, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
-import AddPlanDialog from './AddPlanDialog';
+import EditPlanDialog from './EditPlanDialog';
 import PlanCard from './PlanCard';
 
 export default function ExercisePage() {
@@ -17,7 +17,10 @@ export default function ExercisePage() {
             ))}
             <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
             <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
-                <AddPlanDialog onClose={closeAddPlanDialog} />
+                <EditPlanDialog
+                    open={showAddPlanDialog}
+                    onClose={closeAddPlanDialog}
+                />
             </Dialog>
         </Stack>
     );

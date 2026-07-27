@@ -1,4 +1,4 @@
-import { dbInstance } from '@/database/db';
+import { dbInstance, Row } from '@/database/db';
 import {
     Button,
     DialogActions,
@@ -9,11 +9,19 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-export default function AddPlanDialog({ onClose }: { onClose(): void }) {
-    const [planName, setPlanName] = useState('');
+export default function EditPlanDialog({
+    open,
+    onClose,
+    plan,
+}: {
+    open: boolean;
+    onClose(): void;
+    plan?: Row<'WorkoutPlan'>;
+}) {
+    const [planName, setPlanName] = useState(plan?.name ?? '');
     return (
         <>
-            <DialogTitle>Add a Plan</DialogTitle>
+            <DialogTitle>{plan?.id ? 'Edit Plan' : 'Add a Plan'}</DialogTitle>
             <DialogContent>
                 <Stack sx={{ pt: 1, flex: 1 }}>
                     <TextField
@@ -25,7 +33,10 @@ export default function AddPlanDialog({ onClose }: { onClose(): void }) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={savePlan} disabled={planName === ''}>
+                <Button
+                    onClick={savePlan}
+                    disabled={planName === '' || planName === plan?.name}
+                >
                     Save
                 </Button>
             </DialogActions>
@@ -33,9 +44,15 @@ export default function AddPlanDialog({ onClose }: { onClose(): void }) {
     );
 
     function savePlan() {
-        dbInstance.WorkoutPlan.add({
-            name: planName,
-        });
+        if (plan?.id) {
+            dbInstance.WorkoutPlan.update(plan.id, {
+                name: planName,
+            });
+        } else {
+            dbInstance.WorkoutPlan.add({
+                name: planName,
+            });
+        }
         onClose();
     }
 }
