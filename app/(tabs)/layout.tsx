@@ -17,6 +17,7 @@ export default function TabsLayout({
                 await dbInstance.Settings.put({
                     id: 1,
                     showDbViewer: true,
+                    landingPage: '/training',
                 });
             }
         }

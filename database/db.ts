@@ -8,6 +8,7 @@ const version = 2;
 const schemaDefinition = {
     Settings: {
         showDbViewer: true as boolean,
+        landingPage: '' as string,
     },
 
     Machine: {

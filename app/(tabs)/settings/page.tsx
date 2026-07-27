@@ -1,24 +1,38 @@
 'use client';
 
+import { FIXED_NAV_ITEMS } from '@/app/components/navigation/BottomNav';
 import { dbInstance } from '@/database/db';
-import { Card, FormControlLabel, Stack, Switch } from '@mui/material';
+import {
+    FormControlLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    Stack,
+    Switch,
+} from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
+import SettingsGroup from './SettingsGroup';
 
 export default function Settings() {
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
     const showDbViewer = settings?.showDbViewer ?? false;
-
-    async function handleToggle(event: React.ChangeEvent<HTMLInputElement>) {
-        const newValue = event.target.checked;
-
-        await dbInstance.Settings.update(1, {
-            showDbViewer: newValue,
-        });
-    }
+    const landingPage = settings?.landingPage ?? '/training';
 
     return (
         <Stack sx={{ flex: 1, gap: 1 }}>
-            <Card sx={{ p: 2 }}>
+            <SettingsGroup>
+                <Select
+                    label="Landing Page"
+                    value={landingPage}
+                    onChange={handleLandingPageSelect}
+                >
+                    {FIXED_NAV_ITEMS.map((item) => (
+                        <MenuItem key={item.path} value={item.path}>
+                            {item.label}
+                        </MenuItem>
+                    ))}
+                </Select>
+
                 <FormControlLabel
                     control={
                         <Switch
@@ -28,7 +42,21 @@ export default function Settings() {
                     }
                     label="Show Database Viewer"
                 />
-            </Card>
+            </SettingsGroup>
         </Stack>
     );
+
+    async function handleLandingPageSelect(e: SelectChangeEvent) {
+        await dbInstance.Settings.update(1, {
+            landingPage: e.target.value,
+        });
+    }
+
+    async function handleToggle(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = event.target.checked;
+
+        await dbInstance.Settings.update(1, {
+            showDbViewer: newValue,
+        });
+    }
 }
