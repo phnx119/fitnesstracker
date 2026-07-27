@@ -10,23 +10,10 @@ import {
 export default function AddPlanDialog({ onClose }: { onClose(): void }) {
     return (
         <>
-            <DialogTitle>maus</DialogTitle>
+            <DialogTitle>Add a Plan</DialogTitle>
             <DialogContent>
                 <Stack sx={{ pt: 1 }}>
-                    <TextField label="maus?" />
-                    <TextField label="maus?" />
-                    <TextField label="maus?" />
-                    <TextField label="maus?" />
-                    <TextField label="maus?" />
-                    <TextField label="maus?" />
-                    <TextField
-                        label="maus?"
-                        slotProps={{
-                            htmlInput: {
-                                autoComplete: 'off',
-                            },
-                        }}
-                    />
+                    <TextField label="Name" fullWidth />
                     <Button>maus</Button>
                 </Stack>
             </DialogContent>
