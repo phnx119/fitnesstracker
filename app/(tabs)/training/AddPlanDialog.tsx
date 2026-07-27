@@ -19,7 +19,14 @@ export default function AddPlanDialog({ onClose }: { onClose(): void }) {
                     <TextField label="maus?" />
                     <TextField label="maus?" />
                     <TextField label="maus?" />
-                    <TextField label="maus?" />
+                    <TextField
+                        label="maus?"
+                        slotProps={{
+                            htmlInput: {
+                                autoComplete: 'off',
+                            },
+                        }}
+                    />
                     <Button>maus</Button>
                 </Stack>
             </DialogContent>
