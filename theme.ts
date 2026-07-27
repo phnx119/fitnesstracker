@@ -46,9 +46,10 @@ const theme = extendTheme({
         },
         MuiTextField: {
             defaultProps: {
+                type: 'search',
                 slotProps: {
                     htmlInput: {
-                        autoComplete: 'maus',
+                        autoComplete: 'off',
                     },
                 },
             },
