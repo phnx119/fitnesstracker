@@ -50,6 +50,7 @@ const theme = extendTheme({
                 slotProps: {
                     htmlInput: {
                         autoComplete: 'off',
+                        enterKeyHint: 'done',
                     },
                 },
             },
