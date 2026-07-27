@@ -44,6 +44,15 @@ const theme = extendTheme({
                 variant: 'outlined',
             },
         },
+        MuiTextField: {
+            defaultProps: {
+                slotProps: {
+                    htmlInput: {
+                        autoComplete: 'off',
+                    },
+                },
+            },
+        },
     },
 });
 
