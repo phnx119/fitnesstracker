@@ -48,7 +48,7 @@ const theme = extendTheme({
             defaultProps: {
                 slotProps: {
                     htmlInput: {
-                        autoComplete: 'off',
+                        autoComplete: 'one-time-code',
                     },
                 },
             },
