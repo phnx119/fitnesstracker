@@ -27,11 +27,7 @@ export default function PlanDialog() {
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 {showEditDialog && (
-                    <EditPlanDialog
-                        open={showEditDialog}
-                        onClose={closeEditDialog}
-                        plan={plan}
-                    />
+                    <EditPlanDialog onClose={closeEditDialog} plan={plan} />
                 )}
             </Dialog>
         </Stack>

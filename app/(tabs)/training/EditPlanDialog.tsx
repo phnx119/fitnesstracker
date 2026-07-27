@@ -10,11 +10,9 @@ import {
 import { useState } from 'react';
 
 export default function EditPlanDialog({
-    open,
     onClose,
     plan,
 }: {
-    open: boolean;
     onClose(): void;
     plan?: Row<'WorkoutPlan'>;
 }) {

@@ -17,10 +17,7 @@ export default function ExercisePage() {
             ))}
             <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
             <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
-                <EditPlanDialog
-                    open={showAddPlanDialog}
-                    onClose={closeAddPlanDialog}
-                />
+                <EditPlanDialog onClose={closeAddPlanDialog} />
             </Dialog>
         </Stack>
     );
