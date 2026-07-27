@@ -1,10 +1,11 @@
 'use client';
 
+import Header from '@/components/Header';
 import { dbInstance } from '@/database/db';
-import { Settings } from '@mui/icons-material';
-import { Box, Dialog, IconButton, Stack, Typography } from '@mui/material';
+import { Close, Settings } from '@mui/icons-material';
+import { Dialog, IconButton, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import EditPlanDialog from '../EditPlanDialog';
 
@@ -12,16 +13,22 @@ export default function PlanDialog() {
     const { id: idString } = useParams<{ id: string }>();
     const planId = Number(idString);
 
+    const router = useRouter();
+
     const plan = useLiveQuery(() => dbInstance.WorkoutPlan.get(planId));
     const [showEditDialog, setShowEditDialog] = useState(false);
     return (
         <Stack sx={{ flex: 1 }}>
-            <Stack direction="row">
-                <Box sx={{ flex: 1 }} />
+            <Header title={plan?.name}>
                 <IconButton onClick={() => setShowEditDialog(true)}>
                     <Settings />
                 </IconButton>
-            </Stack>
+
+                <IconButton onClick={() => router.back()}>
+                    <Close />
+                </IconButton>
+            </Header>
+
             <Typography>{plan?.name}</Typography>
             <Typography>{planId}</Typography>
 

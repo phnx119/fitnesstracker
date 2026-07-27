@@ -1,4 +1,3 @@
-// components/ThemeRegistry.tsx
 'use client';
 
 import theme from '@/theme';
