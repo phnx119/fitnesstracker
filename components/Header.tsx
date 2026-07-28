@@ -13,7 +13,7 @@ export default function Header({
                 direction="row"
                 sx={{
                     gap: 1,
-                    pr: 1,
+                    p: 1,
                     pl: 2,
                     justifyContent: 'center',
                     alignItems: 'center',
