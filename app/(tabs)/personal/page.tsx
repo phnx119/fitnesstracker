@@ -4,13 +4,15 @@ import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 
 export default function ExercisePage() {
     return (
-        <Stack sx={{ flex: 1, gap: 1, m: 1, bgcolor: 'blue' }}>
+        //This sx is quite perfect and works as intended. Set bgcolor to see.
+        <Stack sx={{ flex: 1, gap: 1, m: 1 }}>
             <Stack direction="row" sx={{}}>
                 <Box sx={{ flex: 1 }} />
                 <Typography>Overview</Typography>
                 <Box sx={{ flex: 1 }} />
             </Stack>
-            <Stack sx={{ gap: 1, m: 1, overflowY: 'auto', maxHeight: 500 }}>
+            {/* This one still causes problems */}
+            <Stack sx={{ gap: 1, m: 1, overflowY: 'auto' }}>
                 <Card variant="outlined">
                     <CardContent>
                         <Typography variant="h6">Bodyheight</Typography>
@@ -19,10 +21,17 @@ export default function ExercisePage() {
                 </Card>
                 <Card variant="outlined">
                     <CardContent>
-                        <Typography variant="h6">Bodyweight1</Typography>
+                        <Typography variant="h6">Bodyweight</Typography>
                         <Typography variant="body1">Emptycheck2</Typography>
                     </CardContent>
                 </Card>
+                {/*
+
+                This still causes problems, the parent stack does not create a scroll bar and grows 
+                indefenitly. AI states this is caused by root layout configuration. Need to consult back with Lucas.
+
+                Currently, Cards are forced to shrink, rather than to be scrolled.
+
                 <Card variant="outlined">
                     <CardContent>
                         <Typography variant="h6">Bodyweight2</Typography>
@@ -59,6 +68,7 @@ export default function ExercisePage() {
                         <Typography variant="body1">Emptycheck2</Typography>
                     </CardContent>
                 </Card>
+                */}
             </Stack>
         </Stack>
     );
