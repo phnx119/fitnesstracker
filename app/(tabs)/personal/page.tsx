@@ -23,6 +23,30 @@ export default function ExercisePage() {
                         <Typography variant="body1">Emptycheck2</Typography>
                     </CardContent>
                 </Card>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography variant="h6">Bodyweight</Typography>
+                        <Typography variant="body1">Emptycheck2</Typography>
+                    </CardContent>
+                </Card>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography variant="h6">Bodyweight</Typography>
+                        <Typography variant="body1">Emptycheck2</Typography>
+                    </CardContent>
+                </Card>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography variant="h6">Bodyweight</Typography>
+                        <Typography variant="body1">Emptycheck2</Typography>
+                    </CardContent>
+                </Card>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography variant="h6">Bodyweight</Typography>
+                        <Typography variant="body1">Emptycheck2</Typography>
+                    </CardContent>
+                </Card>
             </Stack>
         </Stack>
     );
