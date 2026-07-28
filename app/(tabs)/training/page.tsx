@@ -11,7 +11,7 @@ export default function ExercisePage() {
     const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray());
     return (
-        <Stack sx={{ flex: 1, gap: 1 }}>
+        <Stack sx={{ flex: 1, gap: 1, p: 1 }}>
             {plans?.map((item) => (
                 <PlanCard key={item.id} plan={item} />
             ))}

@@ -29,8 +29,10 @@ export default function PlanDialog() {
                 </IconButton>
             </Header>
 
-            <Typography>{plan?.name}</Typography>
-            <Typography>{planId}</Typography>
+            <Stack sx={{ flex: 1, p: 1 }}>
+                <Typography>{plan?.name}</Typography>
+                <Typography>{planId}</Typography>
+            </Stack>
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 {showEditDialog && (

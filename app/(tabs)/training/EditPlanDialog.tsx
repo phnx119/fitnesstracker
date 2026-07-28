@@ -1,3 +1,5 @@
+'use client';
+
 import { dbInstance, Row } from '@/database/db';
 import {
     Button,
