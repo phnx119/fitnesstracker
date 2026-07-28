@@ -1,17 +1,27 @@
 'use client';
 
 import { dbInstance } from '@/database/db';
-import { Button, Dialog, Stack } from '@mui/material';
+import { Button, Card, Dialog, Link, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import EditPlanDialog from './EditPlanDialog';
 import PlanCard from './PlanCard';
 
 export default function ExercisePage() {
+    const pathName = usePathname();
     const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray());
+
     return (
         <Stack sx={{ flex: 1, gap: 1, p: 1 }}>
+            <Link href={`${pathName}/all`}>
+                <Card>
+                    <Stack direction="row" sx={{ alignItems: 'center', p: 2 }}>
+                        <Typography>All</Typography>
+                    </Stack>
+                </Card>
+            </Link>
             {plans?.map((item) => (
                 <PlanCard key={item.id} plan={item} />
             ))}
