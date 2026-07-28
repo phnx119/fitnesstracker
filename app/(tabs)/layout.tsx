@@ -27,7 +27,7 @@ export default function TabsLayout({
 
     return (
         <Stack sx={{ height: '100%', width: '100%' }}>
-            <Stack sx={{ flex: 1, minHeight: 0, p: 2 }}>{children}</Stack>
+            <Stack sx={{ flex: 1, minHeight: 0 }}>{children}</Stack>
             <BottomNav />
         </Stack>
     );
