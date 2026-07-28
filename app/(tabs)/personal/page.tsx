@@ -1,4 +1,3 @@
-// app/(tabs)/exercise/page.tsx
 'use client';
 
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';

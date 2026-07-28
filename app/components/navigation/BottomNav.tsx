@@ -5,24 +5,44 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StorageIcon from '@mui/icons-material/Storage';
-import { BottomNavigation, BottomNavigationAction } from '@mui/material';
+import {
+    BottomNavigation,
+    BottomNavigationAction,
+    Divider,
+    Stack,
+} from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
+export const FIXED_NAV_ITEMS = [
+    {
+        label: 'Training',
+        path: '/training',
+        icon: <FitnessCenterIcon />,
+    },
+    {
+        label: 'Personal',
+        path: '/personal',
+        icon: <PersonIcon />,
+    },
+    {
+        label: 'Settings',
+        path: '/settings',
+        icon: <SettingsIcon />,
+    },
+];
+
 export default function BottomNav() {
+    const router = useRouter();
+    const pathname = usePathname();
+
     const showDbViewer =
         useLiveQuery(() => dbInstance.Settings.get(1))?.showDbViewer ?? true;
 
     const NAV_ITEMS = useMemo(
         () => [
-            {
-                label: 'Training',
-                path: '/training',
-                icon: <FitnessCenterIcon />,
-            },
-            { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
-            { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+            ...FIXED_NAV_ITEMS,
             ...(showDbViewer
                 ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
                 : []),
@@ -30,10 +50,6 @@ export default function BottomNav() {
         [showDbViewer],
     );
 
-    const router = useRouter();
-    const pathname = usePathname();
-
-    // Berechnet den aktiven Index effizient & sauber
     const activeIndex = useMemo(() => {
         const index = NAV_ITEMS.findIndex((item) =>
             pathname.startsWith(item.path),
@@ -41,33 +57,33 @@ export default function BottomNav() {
         return index !== -1 ? index : 0;
     }, [pathname, NAV_ITEMS]);
 
-    const handleNavigation = (
-        _event: React.SyntheticEvent,
-        newValue: number,
-    ) => {
+    return (
+        <Stack>
+            <Divider />
+
+            <BottomNavigation
+                value={activeIndex}
+                onChange={handleNavigation}
+                showLabels
+                sx={{
+                    backgroundColor: 'transparent',
+                }}
+            >
+                {NAV_ITEMS.map((item) => (
+                    <BottomNavigationAction
+                        key={item.path}
+                        label={item.label}
+                        icon={item.icon}
+                    />
+                ))}
+            </BottomNavigation>
+        </Stack>
+    );
+
+    function handleNavigation(_event: React.SyntheticEvent, newValue: number) {
         const targetPath = NAV_ITEMS[newValue]?.path;
         if (targetPath && targetPath !== pathname) {
             router.push(targetPath);
         }
-    };
-
-    return (
-        <BottomNavigation
-            value={activeIndex}
-            onChange={handleNavigation}
-            showLabels
-            sx={{
-                // Hintergrund transparent halten, da Paper bereits styled
-                backgroundColor: 'transparent',
-            }}
-        >
-            {NAV_ITEMS.map((item) => (
-                <BottomNavigationAction
-                    key={item.path}
-                    label={item.label}
-                    icon={item.icon}
-                />
-            ))}
-        </BottomNavigation>
-    );
+    }
 }

@@ -8,6 +8,7 @@ const version = 2;
 const schemaDefinition = {
     Settings: {
         showDbViewer: true as boolean,
+        landingPage: '' as string,
     },
 
     Machine: {
@@ -49,11 +50,13 @@ const schemaDefinition = {
 
 export type SchemaTables = typeof schemaDefinition;
 
+export type Row<T extends keyof SchemaTables> = SchemaTables[T] & {
+    id: number;
+};
+export type Insert<T extends keyof SchemaTables> = SchemaTables[T];
+
 type DerivedTables = {
-    [K in keyof SchemaTables]: EntityTable<
-        SchemaTables[K] & { id: number },
-        'id'
-    >;
+    [K in keyof SchemaTables]: EntityTable<Row<K>, 'id'>;
 };
 
 class FitnessDatabase extends Dexie {
@@ -74,17 +77,3 @@ class FitnessDatabase extends Dexie {
 
 export const dbInstance = new FitnessDatabase() as FitnessDatabase &
     DerivedTables;
-
-type EntityTypes = {
-    [K in keyof DerivedTables]: {
-        row: DerivedTables[K] extends EntityTable<infer R> ? R : never;
-        insert: Omit<
-            DerivedTables[K] extends EntityTable<infer R> ? R : never,
-            'id'
-        >;
-    };
-};
-
-export type DBTypes = EntityTypes;
-export type Row<T extends keyof SchemaTables> = EntityTypes[T]['row'];
-export type Insert<T extends keyof SchemaTables> = EntityTypes[T]['insert'];
