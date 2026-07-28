@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" style={{ height: '100%', width: '100%' }}>
-            <body className="min-h-full flex flex-col m-0 p-0 bg-zinc-50 dark:bg-black">
+            <body className="h-screen w-screen flex flex-col m-0 p-0 overflow-hidden bg-zinc-50 dark:bg-black">
                 <ThemeRegistry>
                     <PwaRegister />
                     {children}
