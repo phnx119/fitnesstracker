@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 // INCREMENT AFTER EVERY SCHEMA CHANGE
-const version = 3;
+const version = 4;
 
 // tableName: { rowName: defaultValue as type }
 // id is added automatically
@@ -42,7 +42,6 @@ const schemaDefinition = {
         bodyWeight: 0 as number,
         bodyHeight: 0 as number,
         bodyFat: 0 as number,
-        sex: '' as string,
         targetWeigt: 0 as number,
     },
 };

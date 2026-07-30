@@ -65,7 +65,9 @@ export default function ExercisePage() {
                         </Card>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography variant="h6">Gender</Typography>
+                                <Typography variant="h6">
+                                    Bodyfat in %
+                                </Typography>
                                 <TextField
                                     label="Enter value"
                                     variant="outlined"
