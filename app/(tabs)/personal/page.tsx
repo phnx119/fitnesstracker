@@ -38,6 +38,7 @@ export default function ExercisePage() {
                     </IconButton>
                 </Stack>
                 <Collapse in={expanded}>
+                    {/* This stack holds the biometric data cards */}
                     <Stack sx={{ gap: 1 }}>
                         {/* To do: implement automatic Card generation via DB entries inside this stack*/}
                         {/* container to fix compression */}
