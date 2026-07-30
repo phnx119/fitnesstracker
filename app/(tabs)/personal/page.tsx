@@ -8,6 +8,7 @@ import {
     Collapse,
     IconButton,
     Stack,
+    TextField,
     Typography,
 } from '@mui/material';
 import { useState } from 'react';
@@ -39,203 +40,36 @@ export default function ExercisePage() {
                 </Stack>
                 <Collapse in={expanded}>
                     {/* This stack holds the biometric data cards */}
+                    {/* To do: make expand propmt more visually appealing */}
                     <Stack sx={{ gap: 1 }}>
                         {/* To do: implement automatic Card generation via DB entries inside this stack*/}
                         {/* container to fix compression */}
                         <Card variant="outlined">
+                            {/* To do: make content editable, db data saving and visualisation */}
                             <CardContent>
                                 <Typography variant="h6">Bodyheight</Typography>
-                                <Typography variant="body1">
-                                    Emptycheck
-                                </Typography>
+                                <TextField
+                                    label="Enter value"
+                                    variant="standard"
+                                />
                             </CardContent>
                         </Card>
                         <Card variant="outlined">
                             <CardContent>
                                 <Typography variant="h6">Bodyweight</Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
+                                <TextField
+                                    label="Enter value"
+                                    variant="filled"
+                                />
                             </CardContent>
                         </Card>
                         <Card variant="outlined">
                             <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight2
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight3
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight4
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight5
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight6
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight7
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight5
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight6
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight7
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight5
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight6
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight7
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight5
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight6
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight7
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight5
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight6
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
-                            </CardContent>
-                        </Card>
-                        <Card variant="outlined">
-                            <CardContent>
-                                <Typography variant="h6">
-                                    Bodyweight7
-                                </Typography>
-                                <Typography variant="body1">
-                                    Emptycheck2
-                                </Typography>
+                                <Typography variant="h6">Gender</Typography>
+                                <TextField
+                                    label="Enter value"
+                                    variant="outlined"
+                                />
                             </CardContent>
                         </Card>
                     </Stack>
