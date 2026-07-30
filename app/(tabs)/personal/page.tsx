@@ -30,9 +30,7 @@ export default function ExercisePage() {
                     <IconButton onClick={() => setExpanded(!expanded)}>
                         <ExpandMoreIcon
                             sx={{
-                                transform: expanded
-                                    ? 'rotate(180deg)'
-                                    : 'rotate(0deg)',
+                                transform: expanded ? 'rotate(180deg)' : '',
                                 transition: '0.2s',
                             }}
                         />
