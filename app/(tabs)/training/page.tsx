@@ -1,5 +1,6 @@
 'use client';
 
+import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import { Button, Card, Dialog, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -15,7 +16,7 @@ export default function ExercisePage() {
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray());
 
     return (
-        <Stack sx={{ flex: 1, gap: 1, p: 1 }}>
+        <TabContentStack>
             <Link href={`${pathName}/all`}>
                 <Card>
                     <Stack direction="row" sx={{ alignItems: 'center', p: 2 }}>
@@ -30,7 +31,7 @@ export default function ExercisePage() {
             <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
                 <EditPlanDialog onClose={closeAddPlanDialog} />
             </Dialog>
-        </Stack>
+        </TabContentStack>
     );
 
     function closeAddPlanDialog() {

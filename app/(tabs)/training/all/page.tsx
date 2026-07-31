@@ -1,9 +1,10 @@
-import { Button, Stack } from '@mui/material';
+import TabContentStack from '@/components/TabContentStack';
+import { Button } from '@mui/material';
 
 export default function allMachines() {
     return (
-        <Stack>
+        <TabContentStack>
             <Button>maus</Button>
-        </Stack>
+        </TabContentStack>
     );
 }

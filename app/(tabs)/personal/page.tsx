@@ -1,5 +1,6 @@
 'use client';
 
+import TabContentStack from '@/components/TabContentStack';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
     Box,
@@ -17,7 +18,7 @@ export default function ExercisePage() {
     const [expanded, setExpanded] = useState(false);
 
     return (
-        <Stack sx={{ flex: 1, gap: 1, m: 1, overflow: 'auto' }}>
+        <TabContentStack sx={{ gap: 1, overflow: 'auto' }}>
             <Stack direction="row">
                 <Box sx={{ flex: 1 }} />
                 <Typography>Overview</Typography>
@@ -75,6 +76,6 @@ export default function ExercisePage() {
                     </Stack>
                 </Collapse>
             </Stack>
-        </Stack>
+        </TabContentStack>
     );
 }

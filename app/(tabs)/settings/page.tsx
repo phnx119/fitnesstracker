@@ -1,6 +1,7 @@
 'use client';
 
 import { FIXED_NAV_ITEMS } from '@/app/components/navigation/BottomNav';
+import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import {
     FormControl,
@@ -9,7 +10,6 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
-    Stack,
     Switch,
 } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -21,7 +21,7 @@ export default function Settings() {
     const landingPage = settings?.landingPage ?? '/training';
 
     return (
-        <Stack sx={{ flex: 1, gap: 1 }}>
+        <TabContentStack>
             <SettingsGroup>
                 <FormControl>
                     <InputLabel id="landingPageLabel">Landing Page</InputLabel>
@@ -49,7 +49,7 @@ export default function Settings() {
                     label="Show Database Viewer"
                 />
             </SettingsGroup>
-        </Stack>
+        </TabContentStack>
     );
 
     async function handleLandingPageSelect(e: SelectChangeEvent) {
