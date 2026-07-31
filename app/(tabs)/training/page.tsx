@@ -16,7 +16,7 @@ export default function ExercisePage() {
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray());
 
     return (
-        <TabContentStack>
+        <TabContentStack sx={{ gap: 1 }}>
             <Link href={`${pathName}/all`}>
                 <Card>
                     <Stack direction="row" sx={{ alignItems: 'center', p: 2 }}>
