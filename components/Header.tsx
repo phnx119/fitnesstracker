@@ -1,4 +1,6 @@
-import { Box, Divider, Stack, Typography } from '@mui/material';
+import { Close } from '@mui/icons-material';
+import { Box, Divider, IconButton, Stack, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
 export default function Header({
@@ -7,6 +9,8 @@ export default function Header({
 }: PropsWithChildren<{
     title?: string;
 }>) {
+    const router = useRouter();
+
     return (
         <Stack>
             <Stack
@@ -24,6 +28,9 @@ export default function Header({
                 <Box sx={{ flex: 1 }} />
 
                 {children}
+                <IconButton onClick={() => router.back()}>
+                    <Close />
+                </IconButton>
             </Stack>
 
             <Divider />
