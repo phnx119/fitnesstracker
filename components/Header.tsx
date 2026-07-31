@@ -5,9 +5,11 @@ import { PropsWithChildren } from 'react';
 
 export default function Header({
     title,
+    showClose = false,
     children,
 }: PropsWithChildren<{
     title?: string;
+    showClose?: boolean;
 }>) {
     const router = useRouter();
 
@@ -18,19 +20,21 @@ export default function Header({
                 sx={{
                     gap: 1,
                     p: 1,
-                    pl: 2,
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
             >
-                <Typography variant="h6">{title}</Typography>
+                {title && <Typography variant="h6">{title}</Typography>}
 
                 <Box sx={{ flex: 1 }} />
 
                 {children}
-                <IconButton onClick={() => router.back()}>
-                    <Close />
-                </IconButton>
+
+                {showClose && (
+                    <IconButton onClick={() => router.back()}>
+                        <Close />
+                    </IconButton>
+                )}
             </Stack>
 
             <Divider />

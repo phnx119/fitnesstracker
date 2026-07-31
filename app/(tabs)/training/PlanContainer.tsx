@@ -15,7 +15,9 @@ export default function PlanContainer({
 }>) {
     return (
         <Stack sx={{ flex: 1 }}>
-            <Header title={title}>{headerButtons}</Header>
+            <Header title={title} showClose>
+                {headerButtons}
+            </Header>
 
             <TabContentStack>{children}</TabContentStack>
         </Stack>

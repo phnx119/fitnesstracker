@@ -1,5 +1,6 @@
 'use client';
 
+import Header from '@/components/Header';
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import { Button, Card, Dialog, Stack, Typography } from '@mui/material';
@@ -16,22 +17,28 @@ export default function ExercisePage() {
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray());
 
     return (
-        <TabContentStack sx={{ gap: 1 }}>
-            <Link href={`${pathName}/all`}>
-                <Card>
-                    <Stack direction="row" sx={{ alignItems: 'center', p: 2 }}>
-                        <Typography>All</Typography>
-                    </Stack>
-                </Card>
-            </Link>
-            {plans?.map((item) => (
-                <PlanCard key={item.id} plan={item} />
-            ))}
-            <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
-            <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
-                <EditPlanDialog onClose={closeAddPlanDialog} />
-            </Dialog>
-        </TabContentStack>
+        <Stack>
+            <Header title="Hier wird gemaust" />
+            <TabContentStack sx={{ gap: 1 }}>
+                <Link href={`${pathName}/all`}>
+                    <Card>
+                        <Stack
+                            direction="row"
+                            sx={{ alignItems: 'center', p: 2 }}
+                        >
+                            <Typography>All</Typography>
+                        </Stack>
+                    </Card>
+                </Link>
+                {plans?.map((item) => (
+                    <PlanCard key={item.id} plan={item} />
+                ))}
+                <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
+                <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
+                    <EditPlanDialog onClose={closeAddPlanDialog} />
+                </Dialog>
+            </TabContentStack>
+        </Stack>
     );
 
     function closeAddPlanDialog() {

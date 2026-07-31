@@ -1,6 +1,7 @@
 'use client';
 
 import { FIXED_NAV_ITEMS } from '@/app/components/navigation/BottomNav';
+import Header from '@/components/Header';
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import {
@@ -10,6 +11,7 @@ import {
     MenuItem,
     Select,
     SelectChangeEvent,
+    Stack,
     Switch,
 } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -21,35 +23,41 @@ export default function Settings() {
     const landingPage = settings?.landingPage ?? '/training';
 
     return (
-        <TabContentStack>
-            <SettingsGroup>
-                <FormControl>
-                    <InputLabel id="landingPageLabel">Landing Page</InputLabel>
-                    <Select
-                        label="Landing Page"
-                        labelId="landingPageLabel"
-                        value={landingPage}
-                        onChange={handleLandingPageSelect}
-                    >
-                        {FIXED_NAV_ITEMS.map((item) => (
-                            <MenuItem key={item.path} value={item.path}>
-                                {item.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+        <Stack>
+            <Header title="Hier wird gezwirbelt" />
 
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={showDbViewer}
-                            onChange={handleToggle}
-                        />
-                    }
-                    label="Show Database Viewer"
-                />
-            </SettingsGroup>
-        </TabContentStack>
+            <TabContentStack>
+                <SettingsGroup>
+                    <FormControl>
+                        <InputLabel id="landingPageLabel">
+                            Landing Page
+                        </InputLabel>
+                        <Select
+                            label="Landing Page"
+                            labelId="landingPageLabel"
+                            value={landingPage}
+                            onChange={handleLandingPageSelect}
+                        >
+                            {FIXED_NAV_ITEMS.map((item) => (
+                                <MenuItem key={item.path} value={item.path}>
+                                    {item.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={showDbViewer}
+                                onChange={handleToggle}
+                            />
+                        }
+                        label="Show Database Viewer"
+                    />
+                </SettingsGroup>
+            </TabContentStack>
+        </Stack>
     );
 
     async function handleLandingPageSelect(e: SelectChangeEvent) {
