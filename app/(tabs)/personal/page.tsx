@@ -37,8 +37,16 @@ export default function ExercisePage() {
                 <Collapse in={expanded}>
                     <Stack sx={{ gap: 1 }}>
                         <PersonalBiografieCard
+                            label={'Body Height'}
                             bioValue={personalData?.bodyHeight}
-                            lable={'Body Height'}
+                        />
+                        <PersonalBiografieCard
+                            label={'Body Weight'}
+                            bioValue={personalData?.bodyWeight}
+                        />
+                        <PersonalBiografieCard
+                            label={'Body Fat'}
+                            bioValue={personalData?.bodyFat}
                         />
                     </Stack>
                 </Collapse>
