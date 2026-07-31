@@ -1,13 +1,16 @@
 'use client';
 
 import TabContentStack from '@/components/TabContentStack';
+import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import PersonalBiografieCard from './PersonalBiografieCard';
 
 export default function ExercisePage() {
     const [expanded, setExpanded] = useState(false);
+    const personalData = useLiveQuery(() => dbInstance.PersonalData.get(1));
 
     return (
         <TabContentStack sx={{ gap: 1, overflow: 'auto' }}>
@@ -32,9 +35,11 @@ export default function ExercisePage() {
                     </IconButton>
                 </Stack>
                 <Collapse in={expanded}>
-                    {/* To do: make expand propmt more visually appealing */}
                     <Stack sx={{ gap: 1 }}>
-                        <PersonalBiografieCard />
+                        <PersonalBiografieCard
+                            bioValue={personalData?.bodyHeight}
+                            lable={'Body Height'}
+                        />
                     </Stack>
                 </Collapse>
             </Stack>

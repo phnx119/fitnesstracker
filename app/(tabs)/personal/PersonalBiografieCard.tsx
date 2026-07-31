@@ -1,4 +1,3 @@
-import { dbInstance } from '@/database/db';
 import {
     Button,
     Card,
@@ -7,17 +6,15 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 
-export default function PersonalBiografieCard() {
-    const personalData = useLiveQuery(() => dbInstance.PersonalData.get(1));
+export default function PersonalBiografieCard(bioValue: number, lable: string) {
     const [value, setValue] = useState('');
     return (
         <Card variant="outlined">
             <CardContent>
-                <Typography variant="h6">Body Height</Typography>
-                <TextField value={personalData?.bodyHeight} />
+                <Typography variant="h6">{lable}</Typography>
+                <TextField value={bioValue} />
             </CardContent>
             <CardActions>
                 <Button size="small">Edit</Button>
