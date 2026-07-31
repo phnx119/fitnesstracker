@@ -8,7 +8,7 @@ export default function Header({
     title?: string;
 }>) {
     return (
-        <Stack sx={{ mb: 2 }}>
+        <Stack>
             <Stack
                 direction="row"
                 sx={{
