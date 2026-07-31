@@ -20,7 +20,6 @@ export default function ExercisePage() {
                 <Box sx={{ flex: 1 }} />
             </Stack>
             <Stack sx={{ overflow: 'auto' }}>
-                {/* This Stack holds the expand/collaps Button for the cards-stack */}
                 <Stack direction="row">
                     <Typography variant="h6">Show Biometric Data</Typography>
                     <IconButton onClick={() => setExpanded(!expanded)}>
