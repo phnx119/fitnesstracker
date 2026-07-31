@@ -6,7 +6,7 @@ import {
     TextField,
     Typography,
 } from '@mui/material';
-import { JSX, useState } from 'react';
+import { JSX } from 'react';
 
 type Props = {
     label: string;
@@ -17,7 +17,6 @@ export default function PersonalBiografieCard({
     label,
     bioValue,
 }: Props): JSX.Element {
-    const [value, setValue] = useState('');
     return (
         <Card variant="outlined">
             <CardContent>
