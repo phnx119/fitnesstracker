@@ -1,8 +1,9 @@
 'use client';
 
 import { dbInstance } from '@/database/db';
-import { Button, Card, Dialog, Link, Stack, Typography } from '@mui/material';
+import { Button, Card, Dialog, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import EditPlanDialog from './EditPlanDialog';
