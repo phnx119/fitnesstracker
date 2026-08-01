@@ -47,15 +47,26 @@ const schemaDefinition = {
     },
 };
 
+function isIndexable(value: unknown): boolean {
+    if (value === null || value === undefined) return false;
+    if (value instanceof Blob) return false;
+
+    const type = typeof value;
+    return type === 'string' || type === 'number' || type === 'boolean';
+}
+
 export type SchemaTables = typeof schemaDefinition;
 
 export type Row<T extends keyof SchemaTables> = SchemaTables[T] & {
     id: number;
 };
-export type Insert<T extends keyof SchemaTables> = SchemaTables[T];
+
+export type Insert<T extends keyof SchemaTables> = SchemaTables[T] & {
+    id?: number;
+};
 
 type DerivedTables = {
-    [K in keyof SchemaTables]: EntityTable<Row<K>, 'id'>;
+    [K in keyof SchemaTables]: EntityTable<Row<K>, 'id', Insert<K>>;
 };
 
 class FitnessDatabase extends Dexie {
@@ -63,11 +74,21 @@ class FitnessDatabase extends Dexie {
         super('FitnessAppDB');
 
         const storesConfig: Record<string, string> = {};
+
         for (const tableName of Object.keys(
             schemaDefinition,
         ) as (keyof SchemaTables)[]) {
-            const fields = Object.keys(schemaDefinition[tableName]);
-            storesConfig[tableName] = '++id, ' + fields.join(', ');
+            const tableObj = schemaDefinition[tableName];
+
+            const indexableFields = Object.entries(tableObj)
+                .filter(([_, value]) => isIndexable(value))
+                .map(([key]) => key);
+
+            const indexes =
+                indexableFields.length > 0
+                    ? ', ' + indexableFields.join(', ')
+                    : '';
+            storesConfig[tableName] = '++id' + indexes;
         }
 
         this.version(version).stores(storesConfig);

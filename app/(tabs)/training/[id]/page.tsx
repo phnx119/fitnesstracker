@@ -14,9 +14,10 @@ export default function PlanDialog() {
     const { id: idString } = useParams<{ id: string }>();
     const planId = Number(idString);
 
-    const plan = useLiveQuery(() => dbInstance.WorkoutPlan.get(planId));
+    const planTable = dbInstance.WorkoutPlan;
+    const plan = useLiveQuery(() => planTable.get(planId));
     const [showEditDialog, setShowEditDialog] = useState(false);
-    return (
+    return plan ? (
         <PlanContainer
             title={plan?.name ?? ''}
             headerButtons={
@@ -27,7 +28,7 @@ export default function PlanDialog() {
         >
             <Button>maus?</Button>
 
-            <ImagePicker onSave={saveImage} />
+            <ImagePicker tableName="WorkoutPlan" dbRowId={plan.id} />
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 {showEditDialog && (
@@ -35,18 +36,7 @@ export default function PlanDialog() {
                 )}
             </Dialog>
         </PlanContainer>
-    );
-
-    async function saveImage(file: File) {
-        // 1. Update the Machine record in Dexie
-        if (!plan) {
-            return;
-        }
-
-        await dbInstance.WorkoutPlan.update(plan.id, {
-            imageBlob: file, // Storing the raw file directly
-        });
-    }
+    ) : null;
 
     function closeEditDialog() {
         setShowEditDialog(false);
