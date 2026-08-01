@@ -1,13 +1,16 @@
 'use client';
 
 import { SchemaTables, dbInstance } from '@/database/db';
-import { AddPhotoAlternate } from '@mui/icons-material';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import {
+    AddPhotoAlternate,
+    Close,
+    ImageNotSupported,
+} from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import type { Table } from 'dexie';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -26,6 +29,7 @@ export default function ImagePicker({
     tableName: TablesWithImage;
     dbRowId: number;
 }) {
+    const [showDialog, setShowDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isSaving, setIsSaving] = useState<boolean>(false);
 
@@ -55,77 +59,98 @@ export default function ImagePicker({
     }, [previewUri]);
 
     return (
-        <Stack sx={{ maxWidth: 800 }}>
-            <Card>
-                <Stack sx={{ p: 1, gap: 1 }}>
-                    {previewUri ? (
-                        <Box
-                            component="img"
-                            src={previewUri}
-                            sx={{
-                                width: '100%',
-                                aspectRatio: '1 / 1',
-                                objectFit: 'fill',
-                                borderRadius: 1,
-                                boxShadow: 3,
-                            }}
-                        />
-                    ) : (
-                        <Stack
-                            sx={{
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                aspectRatio: '1 / 1',
-                                flex: 1,
-                            }}
-                        >
-                            <AddPhotoAlternate fontSize="large" />
-                        </Stack>
-                    )}
-
-                    <Stack
-                        direction="row"
-                        sx={{ gap: 1, justifyContent: 'center' }}
-                    >
-                        <Button
-                            component="label"
-                            variant="contained"
-                            disabled={isSaving}
-                        >
-                            <CloudUploadIcon />
-                            <input
-                                type="file"
-                                accept="image/*"
-                                hidden
-                                onChange={handleFileChange}
+        <>
+            <Button
+                startIcon={<AddPhotoAlternate />}
+                onClick={() => setShowDialog(true)}
+            >
+                Select Image
+            </Button>
+            <Dialog open={showDialog} onClose={closeDialog}>
+                <DialogTitle>
+                    <Stack direction="row">
+                        Select an image
+                        <Box sx={{ flex: 1 }} />
+                        <IconButton onClick={closeDialog}>
+                            <Close />
+                        </IconButton>
+                    </Stack>
+                </DialogTitle>
+                <DialogContent>
+                    <Stack sx={{ gap: 1 }}>
+                        {previewUri ? (
+                            <Box
+                                component="img"
+                                src={previewUri}
+                                sx={{
+                                    width: '100%',
+                                    aspectRatio: '1 / 1',
+                                    objectFit: 'fill',
+                                    borderRadius: 1,
+                                    boxShadow: 3,
+                                }}
                             />
-                        </Button>
+                        ) : (
+                            <Stack
+                                sx={{
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    aspectRatio: '1 / 1',
+                                    flex: 1,
+                                }}
+                            >
+                                <ImageNotSupported fontSize="large" />
+                            </Stack>
+                        )}
 
-                        <Button
-                            variant="outlined"
-                            color="success"
-                            onClick={handleSaveClick}
-                            disabled={!selectedFile || isSaving}
+                        <Stack
+                            direction="row"
+                            sx={{ gap: 1, justifyContent: 'center' }}
                         >
-                            <SaveIcon />
-                        </Button>
-
-                        {(storedBlob !== undefined ||
-                            selectedFile !== null) && (
                             <Button
-                                variant="outlined"
-                                color="error"
-                                onClick={handleDeleteClick}
+                                component="label"
+                                variant="contained"
                                 disabled={isSaving}
                             >
-                                <DeleteIcon />
+                                <AddPhotoAlternate />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    hidden
+                                    onChange={handleFileChange}
+                                />
                             </Button>
-                        )}
+
+                            <Button
+                                variant="outlined"
+                                color="success"
+                                onClick={handleSaveClick}
+                                disabled={!selectedFile || isSaving}
+                            >
+                                <SaveIcon />
+                            </Button>
+
+                            {(storedBlob !== undefined ||
+                                selectedFile !== null) && (
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={handleDeleteClick}
+                                    disabled={isSaving}
+                                >
+                                    <DeleteIcon />
+                                </Button>
+                            )}
+                        </Stack>
                     </Stack>
-                </Stack>
-            </Card>
-        </Stack>
+                </DialogContent>
+            </Dialog>
+        </>
     );
+
+    function closeDialog() {
+        setShowDialog(false);
+    }
 
     function handleFileChange(event: ChangeEvent<HTMLInputElement>): void {
         const file = event.target.files?.[0];
