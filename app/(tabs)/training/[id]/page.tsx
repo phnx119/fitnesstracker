@@ -1,5 +1,6 @@
 'use client';
 
+import ImagePicker from '@/components/ImagePicker';
 import { dbInstance } from '@/database/db';
 import { Settings } from '@mui/icons-material';
 import { Button, Dialog, IconButton } from '@mui/material';
@@ -26,6 +27,8 @@ export default function PlanDialog() {
         >
             <Button>maus?</Button>
 
+            <ImagePicker onSave={saveImage} />
+
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 {showEditDialog && (
                     <EditPlanDialog onClose={closeEditDialog} plan={plan} />
@@ -33,6 +36,17 @@ export default function PlanDialog() {
             </Dialog>
         </PlanContainer>
     );
+
+    async function saveImage(file: File) {
+        // 1. Update the Machine record in Dexie
+        if (!plan) {
+            return;
+        }
+
+        await dbInstance.WorkoutPlan.update(plan.id, {
+            imageBlob: file, // Storing the raw file directly
+        });
+    }
 
     function closeEditDialog() {
         setShowEditDialog(false);
