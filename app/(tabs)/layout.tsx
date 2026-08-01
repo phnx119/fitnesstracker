@@ -1,6 +1,6 @@
 'use client';
 
-import BottomNav from '@/app/components/navigation/BottomNav';
+import BottomNav from '@/app/_helpers/navigation/BottomNav';
 import { dbInstance } from '@/database/db';
 import { Stack } from '@mui/material';
 import { useEffect } from 'react';

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import PwaRegister from './components/pwa-register';
-import ThemeRegistry from './components/ThemeRegistry';
+import PwaRegister from './_helpers/pwa-register';
+import ThemeRegistry from './_helpers/ThemeRegistry';
 import './globals.css';
 
 export const metadata: Metadata = {
