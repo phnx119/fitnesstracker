@@ -51,6 +51,7 @@ export default function EditPlanDialog({
         } else {
             dbInstance.WorkoutPlan.add({
                 name: planName,
+                imageBlob: undefined,
             });
         }
         onClose();
