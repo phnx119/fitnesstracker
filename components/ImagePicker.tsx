@@ -57,7 +57,7 @@ export default function ImagePicker({
     return (
         <Stack sx={{ maxWidth: 800 }}>
             <Card>
-                <Stack sx={{ p: 2, gap: 2 }}>
+                <Stack sx={{ p: 1, gap: 1 }}>
                     {previewUri ? (
                         <Box
                             component="img"
