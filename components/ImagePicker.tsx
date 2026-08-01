@@ -107,11 +107,7 @@ export default function ImagePicker({
                             direction="row"
                             sx={{ gap: 1, justifyContent: 'center' }}
                         >
-                            <Button
-                                component="label"
-                                variant="contained"
-                                disabled={isSaving}
-                            >
+                            <Button component="label" disabled={isSaving}>
                                 <AddPhotoAlternate />
                                 <input
                                     type="file"
@@ -122,7 +118,6 @@ export default function ImagePicker({
                             </Button>
 
                             <Button
-                                variant="outlined"
                                 color="success"
                                 onClick={handleSaveClick}
                                 disabled={!selectedFile || isSaving}
@@ -133,7 +128,6 @@ export default function ImagePicker({
                             {(storedBlob !== undefined ||
                                 selectedFile !== null) && (
                                 <Button
-                                    variant="outlined"
                                     color="error"
                                     onClick={handleDeleteClick}
                                     disabled={isSaving}
