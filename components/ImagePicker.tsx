@@ -1,6 +1,7 @@
 'use client';
 
 import { SchemaTables, dbInstance } from '@/database/db';
+import { AddPhotoAlternate } from '@mui/icons-material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
@@ -8,7 +9,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import type { Table } from 'dexie';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
@@ -22,13 +22,9 @@ type TablesWithImage = {
 export default function ImagePicker({
     tableName,
     dbRowId,
-    pickButtonLabel = 'Choose Image',
-    saveButtonLabel = 'Save to Database',
 }: {
     tableName: TablesWithImage;
     dbRowId: number;
-    pickButtonLabel?: string;
-    saveButtonLabel?: string;
 }) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -38,7 +34,6 @@ export default function ImagePicker({
         number
     >;
 
-    // 2. Fetch the row from the database
     const row = useLiveQuery(() => table.get(dbRowId), [dbRowId, table]);
     const storedBlob = row?.imageBlob;
 
@@ -60,37 +55,44 @@ export default function ImagePicker({
     }, [previewUri]);
 
     return (
-        <Stack>
+        <Stack sx={{ maxWidth: 800 }}>
             <Card>
                 <Stack sx={{ p: 2, gap: 2 }}>
                     {previewUri ? (
                         <Box
                             component="img"
                             src={previewUri}
-                            alt="Selected preview"
                             sx={{
                                 width: '100%',
-                                maxWidth: 250,
                                 aspectRatio: '1 / 1',
-                                objectFit: 'cover',
-                                borderRadius: 2,
+                                objectFit: 'fill',
+                                borderRadius: 1,
                                 boxShadow: 3,
                             }}
                         />
                     ) : (
-                        <Typography variant="body2" color="text.secondary">
-                            {'No image selected'}
-                        </Typography>
+                        <Stack
+                            sx={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                aspectRatio: '1 / 1',
+                                flex: 1,
+                            }}
+                        >
+                            <AddPhotoAlternate fontSize="large" />
+                        </Stack>
                     )}
 
-                    <Stack direction="row" spacing={1}>
+                    <Stack
+                        direction="row"
+                        sx={{ gap: 1, justifyContent: 'center' }}
+                    >
                         <Button
                             component="label"
                             variant="contained"
-                            startIcon={<CloudUploadIcon />}
                             disabled={isSaving}
                         >
-                            {pickButtonLabel}
+                            <CloudUploadIcon />
                             <input
                                 type="file"
                                 accept="image/*"
@@ -102,11 +104,10 @@ export default function ImagePicker({
                         <Button
                             variant="outlined"
                             color="success"
-                            startIcon={<SaveIcon />}
                             onClick={handleSaveClick}
                             disabled={!selectedFile || isSaving}
                         >
-                            {isSaving ? 'Saving...' : saveButtonLabel}
+                            <SaveIcon />
                         </Button>
 
                         {(storedBlob !== undefined ||
@@ -114,11 +115,10 @@ export default function ImagePicker({
                             <Button
                                 variant="outlined"
                                 color="error"
-                                startIcon={<DeleteIcon />}
                                 onClick={handleDeleteClick}
                                 disabled={isSaving}
                             >
-                                {'Delete'}
+                                <DeleteIcon />
                             </Button>
                         )}
                     </Stack>
