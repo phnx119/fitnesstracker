@@ -75,7 +75,7 @@ export default function BottomNav() {
     }, [pathname, NAV_ITEMS]);
 
     return (
-        <Stack>
+        <Stack sx={{ pb: 'env(safe-area-inset-bottom, 0)' }}>
             <Divider />
 
             <BottomNavigation
@@ -84,6 +84,7 @@ export default function BottomNav() {
                 showLabels
                 sx={{
                     backgroundColor: 'transparent',
+                    pb: 'env(safe-area-inset-bottom, 0)',
                 }}
             >
                 {NAV_ITEMS.map((item) => (
