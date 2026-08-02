@@ -71,9 +71,10 @@ const withPWA = require('next-pwa')({
             urlPattern: ({ request, url }: { request: Request; url: URL }) =>
                 request.destination === 'document' &&
                 url.origin === self.location.origin,
-            handler: 'CacheFirst',
+            handler: 'NetworkFirst',
             options: {
                 cacheName: 'pages',
+                networkTimeoutSeconds: 3,
                 expiration: {
                     maxEntries: 100,
                     maxAgeSeconds: 60 * 60 * 24 * 30,

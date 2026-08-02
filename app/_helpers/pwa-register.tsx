@@ -20,42 +20,25 @@ export default function PwaRegister() {
             try {
                 if (window.workbox?.register) {
                     await window.workbox.register({ scope: '/' });
-                    return;
+                } else {
+                    await navigator.serviceWorker.register('/sw.js', {
+                        scope: '/',
+                    });
                 }
 
-                await navigator.serviceWorker.register('/sw.js', {
-                    scope: '/',
-                });
+                try {
+                    sessionStorage.setItem('pwa-ready', 'true');
+                } catch {
+                    // Ignore storage failures.
+                }
             } catch (error) {
                 console.error('Service worker registration failed', error);
             }
         };
 
-        const markAppReady = () => {
-            try {
-                sessionStorage.setItem('pwa-ready', 'true');
-            } catch {
-                // Ignore storage failures.
-            }
-        };
+        void register();
 
-        const scheduleRegistration = () => {
-            if ('requestIdleCallback' in window) {
-                const handle = window.requestIdleCallback(() => {
-                    void register().then(markAppReady);
-                });
-
-                return () => window.cancelIdleCallback(handle);
-            }
-
-            const timeoutId = globalThis.setTimeout(() => {
-                void register().then(markAppReady);
-            }, 2000);
-
-            return () => globalThis.clearTimeout(timeoutId);
-        };
-
-        return scheduleRegistration();
+        return;
     }, []);
 
     return null;
