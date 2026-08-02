@@ -1,3 +1,5 @@
+'use client';
+
 import { Close } from '@mui/icons-material';
 import { Box, Divider, IconButton, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
@@ -41,3 +43,10 @@ export default function Header({
         </Stack>
     );
 }
+
+//mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
+// - has mui divider at the bottom (!may have the same color as background!)
+// - showClose displays a button at the far right for browser back
+// - other buttons can be passed as children and will be shown on the right, gap included
+// - do not put it into a stack with padding
+//mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus

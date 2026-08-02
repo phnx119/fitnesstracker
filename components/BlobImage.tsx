@@ -46,3 +46,9 @@ export function BlobImage({
         </Box>
     );
 }
+
+//mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
+// used to display blob images
+// stretches images to aspectratio 1:1 by default, can be changed with sx
+// image has to be stored like this:         {imageBlob: undefined as Blob | undefined,}
+//mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
