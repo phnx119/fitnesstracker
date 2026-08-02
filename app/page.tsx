@@ -17,12 +17,17 @@ export default function Home() {
         hasRedirected.current = true;
 
         const redirectToLandingPage = async () => {
+            router.replace('/training');
+
             try {
                 const settings = await dbInstance.Settings.get(1);
                 const destination = settings?.landingPage ?? '/training';
-                router.replace(destination);
+
+                if (destination !== '/training') {
+                    router.replace(destination);
+                }
             } catch {
-                router.replace('/training');
+                // Fall back to the default training route.
             }
         };
 

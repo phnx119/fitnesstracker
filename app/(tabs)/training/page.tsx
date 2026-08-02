@@ -5,11 +5,16 @@ import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import { Button, Card, Dialog, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import EditPlanDialog from './EditPlanDialog';
 import PlanCard from './PlanCard';
+
+const EditPlanDialog = dynamic(() => import('./EditPlanDialog'), {
+    ssr: false,
+    loading: () => null,
+});
 
 export default function ExercisePage() {
     const pathName = usePathname();

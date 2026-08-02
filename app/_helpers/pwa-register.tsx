@@ -2,6 +2,14 @@
 
 import { useEffect } from 'react';
 
+declare global {
+    interface Window {
+        workbox?: {
+            register?: (options?: { scope?: string }) => Promise<void>;
+        };
+    }
+}
+
 export default function PwaRegister() {
     useEffect(() => {
         if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
@@ -10,6 +18,11 @@ export default function PwaRegister() {
 
         const register = async () => {
             try {
+                if (window.workbox?.register) {
+                    await window.workbox.register({ scope: '/' });
+                    return;
+                }
+
                 await navigator.serviceWorker.register('/sw.js', {
                     scope: '/',
                 });
