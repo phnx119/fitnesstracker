@@ -29,7 +29,7 @@ import SettingsGroup from './SettingsGroup';
 
 export default function Settings() {
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
-    const showDbViewer = settings?.showDbViewer ?? false;
+    const showDbViewer = settings?.showDbViewer ?? true;
     const landingPage = settings?.landingPage ?? '/training';
     const [offlineStatus, setOfflineStatus] = useState<OfflineStatus>({
         ready: false,
