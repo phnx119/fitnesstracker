@@ -11,9 +11,8 @@ import {
     Divider,
     Stack,
 } from '@mui/material';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export const FIXED_NAV_ITEMS = [
     {
@@ -37,8 +36,28 @@ export default function BottomNav() {
     const router = useRouter();
     const pathname = usePathname();
 
-    const settings = useLiveQuery(() => dbInstance.Settings.get(1));
-    const showDbViewer = settings?.showDbViewer ?? true;
+    const [showDbViewer, setShowDbViewer] = useState(true);
+
+    useEffect(() => {
+        let mounted = true;
+
+        (async () => {
+            try {
+                const settings = await dbInstance.Settings.get(1);
+                if (mounted) {
+                    setShowDbViewer(settings?.showDbViewer ?? true);
+                }
+            } catch {
+                if (mounted) {
+                    setShowDbViewer(true);
+                }
+            }
+        })();
+
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
     const NAV_ITEMS = useMemo(() => {
         const dbItem = showDbViewer
