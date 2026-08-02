@@ -42,7 +42,7 @@ export default function Settings() {
     }, []);
 
     return (
-        <Stack>
+        <Stack sx={{ flex: 1 }}>
             <Header title="Hier wird gezwirbelt" />
 
             <TabContentStack>
