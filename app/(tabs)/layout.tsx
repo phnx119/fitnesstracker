@@ -9,7 +9,7 @@ export default function TabsLayout({
     children: React.ReactNode;
 }) {
     return (
-        <Stack sx={{ flex: 1, width: '100%', minHeight: 0 }}>
+        <Stack sx={{ height: '100%', width: '100%' }}>
             <Stack sx={{ flex: 1, minHeight: 0 }}>{children}</Stack>
             <BottomNav />
         </Stack>
