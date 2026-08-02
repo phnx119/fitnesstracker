@@ -1,6 +1,5 @@
 'use client';
 
-import { BlobImage } from '@/components/BlobImage';
 import ImagePicker from '@/components/ImagePicker';
 import { dbInstance, Row } from '@/database/db';
 import {
@@ -37,18 +36,17 @@ export default function EditPlanDialog({
             </DialogTitle>
             <DialogContent>
                 <Stack sx={{ pt: 1, flex: 1, gap: 1 }}>
-                    <BlobImage blob={activePlan?.imageBlob} />
-                    <TextField
-                        label="Name"
-                        value={planName}
-                        onChange={(e) => setPlanName(e.target.value)}
-                    />
                     {activePlan?.id && (
                         <ImagePicker
                             tableName="WorkoutPlan"
                             dbRowId={activePlan.id}
                         />
                     )}
+                    <TextField
+                        label="Name"
+                        value={planName}
+                        onChange={(e) => setPlanName(e.target.value)}
+                    />
                 </Stack>
             </DialogContent>
             <DialogActions>

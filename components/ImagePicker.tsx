@@ -25,9 +25,11 @@ type TablesWithImage = {
 export default function ImagePicker({
     tableName,
     dbRowId,
+    dialog = false,
 }: {
     tableName: TablesWithImage;
     dbRowId: number;
+    dialog?: boolean;
 }) {
     const [showDialog, setShowDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -58,7 +60,64 @@ export default function ImagePicker({
         };
     }, [previewUri]);
 
-    return (
+    const imagePickerContent = (
+        <Stack sx={{ gap: 1 }}>
+            {previewUri ? (
+                <Box
+                    component="img"
+                    src={previewUri}
+                    sx={{
+                        width: '100%',
+                        aspectRatio: '1 / 1',
+                        objectFit: 'fill',
+                        borderRadius: 1,
+                        boxShadow: 3,
+                    }}
+                />
+            ) : (
+                <Stack
+                    sx={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        aspectRatio: '1 / 1',
+                        flex: 1,
+                    }}
+                >
+                    <ImageNotSupported fontSize="large" />
+                </Stack>
+            )}
+
+            <Stack direction="row" sx={{ gap: 1, justifyContent: 'center' }}>
+                <Button component="label" disabled={isSaving}>
+                    <AddPhotoAlternate />
+                    <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={handleFileChange}
+                    />
+                </Button>
+
+                <Button
+                    color="success"
+                    onClick={handleSaveClick}
+                    disabled={!selectedFile || isSaving}
+                >
+                    <SaveIcon />
+                </Button>
+
+                <Button
+                    color="error"
+                    onClick={handleDeleteClick}
+                    disabled={storedBlob === undefined || isSaving}
+                >
+                    <DeleteIcon />
+                </Button>
+            </Stack>
+        </Stack>
+    );
+
+    return dialog ? (
         <>
             <Button
                 startIcon={<AddPhotoAlternate />}
@@ -76,70 +135,11 @@ export default function ImagePicker({
                         </IconButton>
                     </Stack>
                 </DialogTitle>
-                <DialogContent>
-                    <Stack sx={{ gap: 1 }}>
-                        {previewUri ? (
-                            <Box
-                                component="img"
-                                src={previewUri}
-                                sx={{
-                                    width: '100%',
-                                    aspectRatio: '1 / 1',
-                                    objectFit: 'fill',
-                                    borderRadius: 1,
-                                    boxShadow: 3,
-                                }}
-                            />
-                        ) : (
-                            <Stack
-                                sx={{
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    aspectRatio: '1 / 1',
-                                    flex: 1,
-                                }}
-                            >
-                                <ImageNotSupported fontSize="large" />
-                            </Stack>
-                        )}
-
-                        <Stack
-                            direction="row"
-                            sx={{ gap: 1, justifyContent: 'center' }}
-                        >
-                            <Button component="label" disabled={isSaving}>
-                                <AddPhotoAlternate />
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    hidden
-                                    onChange={handleFileChange}
-                                />
-                            </Button>
-
-                            <Button
-                                color="success"
-                                onClick={handleSaveClick}
-                                disabled={!selectedFile || isSaving}
-                            >
-                                <SaveIcon />
-                            </Button>
-
-                            {(storedBlob !== undefined ||
-                                selectedFile !== null) && (
-                                <Button
-                                    color="error"
-                                    onClick={handleDeleteClick}
-                                    disabled={isSaving}
-                                >
-                                    <DeleteIcon />
-                                </Button>
-                            )}
-                        </Stack>
-                    </Stack>
-                </DialogContent>
+                <DialogContent>{imagePickerContent}</DialogContent>
             </Dialog>
         </>
+    ) : (
+        <Stack sx={{ maxWidth: 800 }}>{imagePickerContent}</Stack>
     );
 
     function closeDialog() {
