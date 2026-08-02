@@ -1,11 +1,7 @@
 'use client';
 
+import BottomNav from '@/app/_helpers/navigation/BottomNav';
 import { Stack } from '@mui/material';
-import dynamic from 'next/dynamic';
-
-const BottomNav = dynamic(() => import('@/app/_helpers/navigation/BottomNav'), {
-    ssr: false,
-});
 
 export default function TabsLayout({
     children,

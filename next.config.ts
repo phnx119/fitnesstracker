@@ -41,13 +41,12 @@ const withPWA = require('next-pwa')({
             urlPattern: ({ url }: { url: URL }) =>
                 url.origin === self.location.origin &&
                 url.pathname.startsWith('/_next/data/'),
-            handler: 'NetworkFirst',
+            handler: 'CacheFirst',
             options: {
                 cacheName: 'data',
-                networkTimeoutSeconds: 3,
                 expiration: {
                     maxEntries: 100,
-                    maxAgeSeconds: 60 * 60 * 24 * 7,
+                    maxAgeSeconds: 60 * 60 * 24 * 30,
                 },
             },
         },
@@ -72,13 +71,12 @@ const withPWA = require('next-pwa')({
             urlPattern: ({ request, url }: { request: Request; url: URL }) =>
                 request.destination === 'document' &&
                 url.origin === self.location.origin,
-            handler: 'NetworkFirst',
+            handler: 'CacheFirst',
             options: {
                 cacheName: 'pages',
-                networkTimeoutSeconds: 3,
                 expiration: {
                     maxEntries: 100,
-                    maxAgeSeconds: 60 * 60 * 24 * 7,
+                    maxAgeSeconds: 60 * 60 * 24 * 30,
                 },
             },
         },

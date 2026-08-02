@@ -13,11 +13,7 @@ import {
 } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
-
-function isOnline() {
-    return typeof navigator !== 'undefined' && navigator.onLine;
-}
+import { useMemo } from 'react';
 
 export const FIXED_NAV_ITEMS = [
     {
@@ -42,25 +38,15 @@ export default function BottomNav() {
     const pathname = usePathname();
 
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
-    const [showDbViewer, setShowDbViewer] = useState(true);
-    const online = isOnline();
-
-    useEffect(() => {
-        if (settings?.showDbViewer !== undefined) {
-            setShowDbViewer(settings.showDbViewer);
-        } else if (!online) {
-            setShowDbViewer(true);
-        }
-    }, [online, settings?.showDbViewer]);
+    const showDbViewer = settings?.showDbViewer ?? true;
 
     const NAV_ITEMS = useMemo(() => {
-        const dbItem =
-            showDbViewer && online
-                ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
-                : [];
+        const dbItem = showDbViewer
+            ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
+            : [];
 
         return [...FIXED_NAV_ITEMS, ...dbItem];
-    }, [online, showDbViewer]);
+    }, [showDbViewer]);
 
     const activeIndex = useMemo(() => {
         const index = NAV_ITEMS.findIndex((item) =>
