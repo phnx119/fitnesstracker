@@ -1,5 +1,6 @@
 'use client';
 
+import { ensureOfflineReady } from '@/app/_helpers/offline-data';
 import GlobalLoading from '@/app/loading';
 import { dbInstance } from '@/database/db';
 import { useRouter } from 'next/navigation';
@@ -17,17 +18,13 @@ export default function Home() {
         hasRedirected.current = true;
 
         const redirectToLandingPage = async () => {
-            router.replace('/training');
-
             try {
+                void ensureOfflineReady();
                 const settings = await dbInstance.Settings.get(1);
                 const destination = settings?.landingPage ?? '/training';
-
-                if (destination !== '/training') {
-                    router.replace(destination);
-                }
+                router.replace(destination);
             } catch {
-                // Fall back to the default training route.
+                router.replace('/training');
             }
         };
 

@@ -15,6 +15,10 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
+function isOnline() {
+    return typeof navigator !== 'undefined' && navigator.onLine;
+}
+
 export const FIXED_NAV_ITEMS = [
     {
         label: 'Training',
@@ -37,17 +41,18 @@ export default function BottomNav() {
     const router = useRouter();
     const pathname = usePathname();
 
-    const showDbViewer =
-        useLiveQuery(() => dbInstance.Settings.get(1))?.showDbViewer ?? true;
+    const settings = useLiveQuery(() => dbInstance.Settings.get(1));
+    const showDbViewer = settings?.showDbViewer ?? true;
+    const online = isOnline();
 
     const NAV_ITEMS = useMemo(
         () => [
             ...FIXED_NAV_ITEMS,
-            ...(showDbViewer
+            ...(showDbViewer && online
                 ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
                 : []),
         ],
-        [showDbViewer],
+        [showDbViewer, online],
     );
 
     const activeIndex = useMemo(() => {

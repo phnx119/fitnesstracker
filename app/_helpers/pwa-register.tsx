@@ -31,17 +31,25 @@ export default function PwaRegister() {
             }
         };
 
+        const markAppReady = () => {
+            try {
+                sessionStorage.setItem('pwa-ready', 'true');
+            } catch {
+                // Ignore storage failures.
+            }
+        };
+
         const scheduleRegistration = () => {
             if ('requestIdleCallback' in window) {
                 const handle = window.requestIdleCallback(() => {
-                    void register();
+                    void register().then(markAppReady);
                 });
 
                 return () => window.cancelIdleCallback(handle);
             }
 
             const timeoutId = globalThis.setTimeout(() => {
-                void register();
+                void register().then(markAppReady);
             }, 2000);
 
             return () => globalThis.clearTimeout(timeoutId);
