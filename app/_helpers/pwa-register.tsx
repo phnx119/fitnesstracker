@@ -18,7 +18,23 @@ export default function PwaRegister() {
             }
         };
 
-        void register();
+        const scheduleRegistration = () => {
+            if ('requestIdleCallback' in window) {
+                const handle = window.requestIdleCallback(() => {
+                    void register();
+                });
+
+                return () => window.cancelIdleCallback(handle);
+            }
+
+            const timeoutId = globalThis.setTimeout(() => {
+                void register();
+            }, 2000);
+
+            return () => globalThis.clearTimeout(timeoutId);
+        };
+
+        return scheduleRegistration();
     }, []);
 
     return null;
