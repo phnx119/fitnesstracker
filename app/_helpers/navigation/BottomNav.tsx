@@ -58,16 +58,18 @@ export default function BottomNav() {
     }, [pathname, NAV_ITEMS]);
 
     return (
-        <Stack>
+        <Stack
+            sx={{
+                paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+                backgroundColor: (theme) => theme.palette.background.paper, // or transparent
+            }}
+        >
             <Divider />
-
             <BottomNavigation
                 value={activeIndex}
                 onChange={handleNavigation}
                 showLabels
-                sx={{
-                    backgroundColor: 'transparent',
-                }}
+                sx={{ backgroundColor: 'transparent' }}
             >
                 {NAV_ITEMS.map((item) => (
                     <BottomNavigationAction
