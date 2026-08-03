@@ -15,6 +15,9 @@ const withPWA = withPWAInit({
 const nextConfig: NextConfig = {
     devIndicators: false,
     reactStrictMode: true,
+    experimental: {
+        optimizePackageImports: ['@mui/material', '@mui/icons-material'],
+    },
     compiler: {
         removeConsole: process.env.NODE_ENV === 'production',
     },

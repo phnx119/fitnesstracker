@@ -8,7 +8,7 @@ export default function PwaRegister() {
             return;
         }
 
-        const register = async () => {
+        const registerSW = async () => {
             try {
                 await navigator.serviceWorker.register('/sw.js', {
                     scope: '/',
@@ -18,7 +18,11 @@ export default function PwaRegister() {
             }
         };
 
-        void register();
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(() => void registerSW());
+        } else {
+            setTimeout(() => void registerSW(), 1000);
+        }
     }, []);
 
     return null;
