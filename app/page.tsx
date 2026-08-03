@@ -1,3 +1,5 @@
+'use client';
+
 import GlobalLoading from '@/app/loading';
 import { dbInstance } from '@/database/db';
 import { useLiveQuery } from 'dexie-react-hooks';
