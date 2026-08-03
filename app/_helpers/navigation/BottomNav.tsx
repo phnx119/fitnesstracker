@@ -1,5 +1,4 @@
 'use client';
-// testing
 
 import { dbInstance } from '@/database/db';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
