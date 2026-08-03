@@ -75,6 +75,7 @@ export default function BottomNav() {
                         key={item.path}
                         label={item.label}
                         icon={item.icon}
+                        onTouchStart={() => router.prefetch(item.path)}
                     />
                 ))}
             </BottomNavigation>

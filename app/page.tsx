@@ -10,12 +10,16 @@ export default function Home() {
     const router = useRouter();
     const hasRedirected = useRef(false);
 
-    const settings = useLiveQuery(() => dbInstance.Settings.get(1));
+    useEffect(() => {
+        router.prefetch('/training');
+    }, [router]);
+
+    const settings = useLiveQuery(() => dbInstance.Settings.get(1), []);
 
     useEffect(() => {
         if (settings !== undefined && !hasRedirected.current) {
             hasRedirected.current = true;
-            const destination = settings?.landingPage ?? '/training';
+            const destination = settings?.landingPage || '/training';
             router.replace(destination);
         }
     }, [settings, router]);

@@ -17,3 +17,22 @@ body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer base {
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    html,
+    body {
+        overscroll-behavior-y: none;
+        touch-action: manipulation;
+        user-select: none;
+    }
+
+    input,
+    textarea {
+        user-select: text;
+    }
+}
