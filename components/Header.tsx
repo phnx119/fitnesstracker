@@ -24,6 +24,7 @@ export default function Header({
                     p: 1,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    minHeight: '56px',
                 }}
             >
                 {title && <Typography variant="h6">{title}</Typography>}
