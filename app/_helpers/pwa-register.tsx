@@ -4,9 +4,11 @@ import { useEffect } from 'react';
 
 export default function PwaRegister() {
     useEffect(() => {
-        if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
-            return;
-        }
+        // 1. Abort if no service worker support
+        if (!('serviceWorker' in navigator)) return;
+
+        // 2. Abort if in development mode to prevent caching conflicts
+        if (process.env.NODE_ENV === 'development') return;
 
         const registerSW = async () => {
             try {
