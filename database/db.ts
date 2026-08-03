@@ -5,57 +5,54 @@ const version = 5;
 
 // tableName: { rowName: defaultValue as type }
 // id is added automatically
+// index increases search performance (for example "where"), more indexed columns make the entire db slower. only index most important columns
 const schemaDefinition = {
     Settings: {
-        showDbViewer: true as boolean,
-        landingPage: '' as string,
+        showDbViewer: { default: true as boolean, index: false },
+        landingPage: { default: '' as string, index: false },
     },
-
     Machine: {
-        name: 'Mausmaschine' as string,
+        name: { default: 'Mausmaschine' as string, index: true },
     },
-
     WorkoutPlan: {
-        name: 'Mausplan' as string,
-        imageBlob: undefined as Blob | undefined,
+        name: { default: 'Mausplan' as string, index: false },
+        imageBlob: { default: undefined as Blob | undefined, index: false },
     },
-
     PlanMachine: {
-        planId: 0 as number,
-        machineId: 0 as number,
-        orderIndex: 0 as number,
+        planId: { default: 0 as number, index: true },
+        machineId: { default: 0 as number, index: true },
+        orderIndex: { default: 0 as number, index: false },
     },
-
     WorkoutSession: {
-        planId: 0 as number,
-        date: '' as string,
+        planId: { default: 0 as number, index: true },
+        date: { default: '' as string, index: true },
     },
-
     SetRecord: {
-        sessionId: 0 as number,
-        machineId: 0 as number,
-        setNumber: 0 as number,
-        weight: 0 as number,
-        reps: 0 as number,
+        sessionId: { default: 0 as number, index: true },
+        machineId: { default: 0 as number, index: true },
+        setNumber: { default: 0 as number, index: false },
+        weight: { default: 0 as number, index: false },
+        reps: { default: 0 as number, index: false },
     },
-
     PersonalData: {
-        bodyWeight: 0 as number,
-        bodyHeight: 0 as number,
-        bodyFat: 0 as number,
-        targetWeigt: 0 as number,
+        bodyWeight: { default: 0 as number, index: false },
+        bodyHeight: { default: 0 as number, index: false },
+        bodyFat: { default: 0 as number, index: false },
+        targetWeigt: { default: 0 as number, index: false },
     },
 };
 
-function isIndexable(value: unknown): boolean {
-    if (value === null || value === undefined) return false;
-    if (value instanceof Blob) return false;
+type ExtractDefault<T> = T extends { default: infer D } ? D : never;
 
-    const type = typeof value;
-    return type === 'string' || type === 'number' || type === 'boolean';
-}
+type SchemaRaw = typeof schemaDefinition;
 
-export type SchemaTables = typeof schemaDefinition;
+export type SchemaTables = {
+    [Table in keyof SchemaRaw]: {
+        [Field in keyof SchemaRaw[Table]]: ExtractDefault<
+            SchemaRaw[Table][Field]
+        >;
+    };
+};
 
 export type Row<T extends keyof SchemaTables> = SchemaTables[T] & {
     id: number;
@@ -80,18 +77,24 @@ class FitnessDatabase extends Dexie {
         ) as (keyof SchemaTables)[]) {
             const tableObj = schemaDefinition[tableName];
 
-            const indexableFields = Object.entries(tableObj)
-                .filter(([_, value]) => isIndexable(value))
+            const indexedKeys = Object.entries(tableObj)
+                .filter(([_, meta]) => meta.index)
                 .map(([key]) => key);
 
             const indexes =
-                indexableFields.length > 0
-                    ? ', ' + indexableFields.join(', ')
-                    : '';
+                indexedKeys.length > 0 ? ', ' + indexedKeys.join(', ') : '';
             storesConfig[tableName] = '++id' + indexes;
         }
 
         this.version(version).stores(storesConfig);
+
+        this.on('populate', (tx) => {
+            tx.table('Settings').add({
+                id: 1,
+                showDbViewer: true,
+                landingPage: '/training',
+            });
+        });
     }
 }
 

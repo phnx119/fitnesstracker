@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import {
+    Button,
     FormControl,
     FormControlLabel,
     InputLabel,
@@ -55,6 +56,8 @@ export default function Settings() {
                         }
                         label="Show Database Viewer"
                     />
+
+                    <Button onClick={setupSettings}>Initialize Settings</Button>
                 </SettingsGroup>
             </TabContentStack>
         </Stack>
@@ -71,6 +74,14 @@ export default function Settings() {
 
         await dbInstance.Settings.update(1, {
             showDbViewer: newValue,
+        });
+    }
+
+    async function setupSettings() {
+        await dbInstance.Settings.put({
+            id: 1,
+            showDbViewer: true,
+            landingPage: '/training',
         });
     }
 }

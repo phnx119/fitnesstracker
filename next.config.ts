@@ -1,8 +1,10 @@
 import type { NextConfig } from 'next';
+// @ts-expect-error - next-pwa does not ship official type declarations
+import withPWAInit from 'next-pwa';
 
-const withPWA = require('next-pwa')({
+const withPWA = withPWAInit({
     dest: 'public',
-    register: true,
+    register: false,
     skipWaiting: true,
     disable: process.env.NODE_ENV === 'development',
     fallbacks: {
@@ -11,8 +13,11 @@ const withPWA = require('next-pwa')({
 });
 
 const nextConfig: NextConfig = {
-    devIndicators: false, // Hides the Next.js dev badge
-    // Add any other Next.js config options here if needed
+    devIndicators: false,
+    reactStrictMode: true,
+    compiler: {
+        removeConsole: process.env.NODE_ENV === 'production',
+    },
 };
 
 export default withPWA(nextConfig);
