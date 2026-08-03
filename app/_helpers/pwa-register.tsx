@@ -10,8 +10,25 @@ export default function PwaRegister() {
 
         const registerSW = async () => {
             try {
-                await navigator.serviceWorker.register('/sw.js', {
+                const reg = await navigator.serviceWorker.register('/sw.js', {
                     scope: '/',
+                });
+
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    if (newWorker) {
+                        newWorker.addEventListener('statechange', () => {
+                            if (
+                                newWorker.state === 'installed' &&
+                                navigator.serviceWorker.controller
+                            ) {
+                                console.log(
+                                    'New app version available! Reloading...',
+                                );
+                                window.location.reload();
+                            }
+                        });
+                    }
                 });
             } catch (error) {
                 console.error('Service worker registration failed', error);

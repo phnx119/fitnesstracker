@@ -8,15 +8,9 @@
     "icons": [
         {
             "src": "/agentpatrick.png",
-            "sizes": "192x192",
+            "sizes": "192x192 512x512",
             "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/agentpatrick.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            "purpose": "any maskable"
         }
     ]
 }

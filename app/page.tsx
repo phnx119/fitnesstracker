@@ -6,12 +6,16 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
+const ALL_APP_ROUTES = ['/training', '/personal', '/settings', '/dbviewer'];
+
 export default function Home() {
     const router = useRouter();
     const hasRedirected = useRef(false);
 
     useEffect(() => {
-        router.prefetch('/training');
+        ALL_APP_ROUTES.forEach((route) => {
+            router.prefetch(route);
+        });
     }, [router]);
 
     const settings = useLiveQuery(() => dbInstance.Settings.get(1), []);

@@ -1,8 +1,8 @@
 'use client';
 
-import { Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 import Box, { type BoxProps } from '@mui/material/Box';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 export function BlobImage({
     blob,
@@ -13,37 +13,80 @@ export function BlobImage({
     blob: Blob | undefined | null;
     aspectRatio?: string | number;
 } & Omit<BoxProps<'img'>, 'src'>) {
-    const previewUri = useMemo(() => {
-        if (!blob) return null;
-        return URL.createObjectURL(blob);
-    }, [blob]);
+    const [previewUri, setPreviewUri] = useState<string | null>(null);
 
     useEffect(() => {
-        return () => {
-            if (previewUri) {
-                URL.revokeObjectURL(previewUri);
-            }
-        };
-    }, [previewUri]);
+        if (!blob) return;
 
-    return previewUri ? (
+        let isMounted = true;
+        const objectUrl = URL.createObjectURL(blob);
+
+        queueMicrotask(() => {
+            if (isMounted) {
+                setPreviewUri(objectUrl);
+            }
+        });
+
+        return () => {
+            isMounted = false;
+            URL.revokeObjectURL(objectUrl);
+            setPreviewUri(null);
+        };
+    }, [blob]);
+
+    const isLoading = Boolean(blob && !previewUri);
+
+    if (isLoading) {
+        return (
+            <Skeleton
+                variant="rounded"
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    aspectRatio: aspectRatio,
+                    borderRadius: 1,
+                    ...sx,
+                }}
+            />
+        );
+    }
+
+    if (!previewUri) {
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    aspectRatio: aspectRatio,
+                    bgcolor: 'action.hover',
+                    borderRadius: 1,
+                    ...sx,
+                }}
+            >
+                <Typography variant="caption" color="text.secondary">
+                    nix
+                </Typography>
+            </Box>
+        );
+    }
+
+    return (
         <Box
             component="img"
             src={previewUri}
+            decoding="async"
+            loading="lazy"
             sx={{
                 maxWidth: '100%',
                 maxHeight: '100%',
                 aspectRatio: aspectRatio,
-                objectFit: 'fill',
+                objectFit: 'cover',
                 borderRadius: 1,
                 ...sx,
             }}
             {...props}
         />
-    ) : (
-        <Box>
-            <Typography>nix</Typography>
-        </Box>
     );
 }
 
