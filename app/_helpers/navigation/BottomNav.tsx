@@ -61,7 +61,6 @@ export default function BottomNav() {
         <Stack
             sx={{
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-                backgroundColor: (theme) => theme.palette.background.paper, // or transparent
             }}
         >
             <Divider />
