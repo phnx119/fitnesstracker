@@ -1,54 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#000000" />
-        <title>Offline</title>
-        <style>
-            :root {
-                color-scheme: dark;
-            }
-            body {
-                font-family: Arial, sans-serif;
-                background: #121212;
-                color: #f5f5f5;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                margin: 0;
-                padding: 24px;
-                text-align: center;
-                box-sizing: border-box;
-            }
-            .card {
-                background: #1f1f1f;
-                border-radius: 16px;
-                padding: 24px;
-                max-width: 420px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            }
-            h1 {
-                margin: 0 0 12px;
-                font-size: 1.4rem;
-            }
-            p {
-                margin: 0 0 8px;
-                line-height: 1.5;
-                color: #d4d4d8;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="card">
-            <h1>Offline mode</h1>
-            <p>The app shell is available.</p>
-            <p>
-                If this page appears, the installation hasn’t finished caching
-                the app yet. Open it once while online and let it fully load
-                before testing offline again.
-            </p>
-        </div>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        color: #111;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 24px;
+        text-align: center;
+      }
+      .card {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        max-width: 420px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>You’re offline</h1>
+      <p>This app has been installed and can be opened offline.</p>
+      <p>Please reconnect to refresh content.</p>
+    </div>
+  </body>
 </html>

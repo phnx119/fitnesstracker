@@ -2,14 +2,6 @@
 
 import { useEffect } from 'react';
 
-declare global {
-    interface Window {
-        workbox?: {
-            register?: (options?: { scope?: string }) => Promise<void>;
-        };
-    }
-}
-
 export default function PwaRegister() {
     useEffect(() => {
         if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
@@ -18,27 +10,31 @@ export default function PwaRegister() {
 
         const register = async () => {
             try {
-                if (window.workbox?.register) {
-                    await window.workbox.register({ scope: '/' });
-                } else {
-                    await navigator.serviceWorker.register('/sw.js', {
-                        scope: '/',
-                    });
-                }
-
-                try {
-                    sessionStorage.setItem('pwa-ready', 'true');
-                } catch {
-                    // Ignore storage failures.
-                }
+                await navigator.serviceWorker.register('/sw.js', {
+                    scope: '/',
+                });
             } catch (error) {
                 console.error('Service worker registration failed', error);
             }
         };
 
-        void register();
+        const scheduleRegistration = () => {
+            if ('requestIdleCallback' in window) {
+                const handle = window.requestIdleCallback(() => {
+                    void register();
+                });
 
-        return;
+                return () => window.cancelIdleCallback(handle);
+            }
+
+            const timeoutId = globalThis.setTimeout(() => {
+                void register();
+            }, 2000);
+
+            return () => globalThis.clearTimeout(timeoutId);
+        };
+
+        return scheduleRegistration();
     }, []);
 
     return null;
