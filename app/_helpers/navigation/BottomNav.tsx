@@ -10,19 +10,19 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 
+export const FIXED_NAV_ITEMS = [
+    { label: 'Training', path: '/training', icon: <FitnessCenterIcon /> },
+    { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
+    { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+];
+
 export default function BottomNav() {
     const showDbViewer =
         useLiveQuery(() => dbInstance.Settings.get(1))?.showDbViewer ?? true;
 
     const NAV_ITEMS = useMemo(
         () => [
-            {
-                label: 'Training',
-                path: '/training',
-                icon: <FitnessCenterIcon />,
-            },
-            { label: 'Personal', path: '/personal', icon: <PersonIcon /> },
-            { label: 'Settings', path: '/settings', icon: <SettingsIcon /> },
+            ...FIXED_NAV_ITEMS,
             ...(showDbViewer
                 ? [{ label: 'DB', path: '/dbviewer', icon: <StorageIcon /> }]
                 : []),
