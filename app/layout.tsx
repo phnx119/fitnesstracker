@@ -9,7 +9,7 @@ export const viewport: Viewport = {
     initialScale: 1,
     maximumScale: 1,
     userScalable: false,
-    viewportFit: 'cover', // Ensures the PWA respects Android gesture bars and safe areas
+    viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -18,8 +18,11 @@ export const metadata: Metadata = {
     manifest: '/manifest.json',
     appleWebApp: {
         capable: true,
-        statusBarStyle: 'default',
-        title: 'Fitness Tracker',
+        statusBarStyle: 'black-translucent',
+        title: 'The Deep',
+    },
+    icons: {
+        apple: '/agentpatrick.png',
     },
 };
 
