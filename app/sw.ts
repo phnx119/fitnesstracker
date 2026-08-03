@@ -14,6 +14,17 @@ const serwist = new Serwist({
     clientsClaim: true,
     navigationPreload: true,
     runtimeCaching: defaultCache,
+    // Fallback für App Router Document-Requests:
+    fallbacks: {
+        entries: [
+            {
+                url: '/', // Nutzt den Root-Einstiegspunkt als Offline-Fallback Shell
+                matcher({ request }) {
+                    return request.destination === 'document';
+                },
+            },
+        ],
+    },
 });
 
 serwist.addEventListeners();

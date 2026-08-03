@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import PwaRegister from './_helpers/pwa-register';
 import ThemeRegistry from './_helpers/ThemeRegistry';
 import './globals.css';
 
@@ -34,10 +33,7 @@ export default function RootLayout({
     return (
         <html lang="en" className="h-full w-full">
             <body className="h-[100dvh] w-full flex flex-col m-0 p-0 overflow-hidden bg-zinc-50 dark:bg-black">
-                <ThemeRegistry>
-                    <PwaRegister />
-                    {children}
-                </ThemeRegistry>
+                <ThemeRegistry>{children}</ThemeRegistry>
             </body>
         </html>
     );
