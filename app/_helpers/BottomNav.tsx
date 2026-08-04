@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 export const FIXED_NAV_ITEMS = [
     {
         label: 'Training',
-        path: '/training',
+        path: '/training/plans',
         icon: <FitnessCenterIcon />,
     },
     {

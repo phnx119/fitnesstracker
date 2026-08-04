@@ -1,6 +1,6 @@
 import { CircularProgress, Stack, Typography } from '@mui/material';
 
-export default function Loading() {
+export default function GlobalLoading() {
     return (
         <Stack
             sx={{
