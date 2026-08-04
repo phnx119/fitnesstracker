@@ -21,7 +21,7 @@ import SettingsGroup from './SettingsGroup';
 export default function Settings() {
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
     const showDbViewer = settings?.showDbViewer ?? false;
-    const landingPage = settings?.landingPage ?? '/training';
+    const landingPage = settings?.landingPage ?? '/training/plans';
 
     return (
         <Stack>
@@ -84,7 +84,7 @@ export default function Settings() {
         await dbInstance.Settings.put({
             id: 1,
             showDbViewer: true,
-            landingPage: '/training',
+            landingPage: '/training/plans',
         });
     }
 }
