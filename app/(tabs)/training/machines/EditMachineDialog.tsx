@@ -1,5 +1,6 @@
 'use client';
 
+import ImagePicker from '@/components/ImagePicker';
 import { dbInstance, Row } from '@/database/db';
 import {
     Button,
@@ -22,10 +23,13 @@ export default function EditMachineDialog({
     return (
         <>
             <DialogTitle>
-                {machine?.id ? 'Edit Plan' : 'Add a Plan'}
+                {machine?.id ? 'Edit Machine' : 'Add a Machine'}
             </DialogTitle>
             <DialogContent>
-                <Stack sx={{ pt: 1, flex: 1 }}>
+                <Stack sx={{ gap: 1, flex: 1 }}>
+                    {machine?.id && (
+                        <ImagePicker dbRowId={machine.id} tableName="Machine" />
+                    )}
                     <TextField
                         label="Name"
                         value={machineName}
@@ -35,14 +39,7 @@ export default function EditMachineDialog({
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button
-                    onClick={savePlan}
-                    disabled={
-                        machineName === '' || machineName === machine?.name
-                    }
-                >
-                    Save
-                </Button>
+                <Button onClick={savePlan}>Save</Button>
             </DialogActions>
         </>
     );
@@ -55,6 +52,7 @@ export default function EditMachineDialog({
         } else {
             dbInstance.Machine.add({
                 name: machineName,
+                imageBlob: undefined,
             });
         }
         onClose();

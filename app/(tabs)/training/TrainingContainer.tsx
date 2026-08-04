@@ -5,13 +5,13 @@ import TabContentStack from '@/components/TabContentStack';
 import { Stack } from '@mui/material';
 import { PropsWithChildren, ReactNode } from 'react';
 
-export default function PlanContainer({
+export default function TrainingContainer({
     title,
-    headerButtons,
+    headerButtons = null,
     children,
 }: PropsWithChildren<{
     title: string;
-    headerButtons: ReactNode;
+    headerButtons?: ReactNode;
 }>) {
     return (
         <Stack sx={{ flex: 1 }}>
