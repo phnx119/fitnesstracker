@@ -8,7 +8,13 @@ import {
 } from '@mui/icons-material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
-import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import {
+    Card,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -61,7 +67,7 @@ export default function ImagePicker({
     }, [previewUri]);
 
     const imagePickerContent = (
-        <Stack sx={{ gap: 1 }}>
+        <Stack sx={{ gap: 1, p: 1 }}>
             {previewUri ? (
                 <Box
                     component="img"
@@ -139,7 +145,14 @@ export default function ImagePicker({
             </Dialog>
         </>
     ) : (
-        <Stack sx={{ maxWidth: 800 }}>{imagePickerContent}</Stack>
+        <Stack>
+            <Card
+                sx={{ maxWidth: 800, bgcolor: '#00000000' }}
+                variant="outlined"
+            >
+                {imagePickerContent}
+            </Card>
+        </Stack>
     );
 
     function closeDialog() {

@@ -28,37 +28,42 @@ export default function Settings() {
             <Header title="Hier wird gezwirbelt" />
 
             <TabContentStack>
-                <SettingsGroup>
-                    <FormControl>
-                        <InputLabel id="landingPageLabel">
-                            Landing Page
-                        </InputLabel>
-                        <Select
-                            label="Landing Page"
-                            labelId="landingPageLabel"
-                            value={landingPage}
-                            onChange={handleLandingPageSelect}
-                        >
-                            {FIXED_NAV_ITEMS.map((item) => (
-                                <MenuItem key={item.path} value={item.path}>
-                                    {item.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <Stack sx={{ overflow: 'auto', gap: 1 }}>
+                    <SettingsGroup>
+                        <FormControl>
+                            <InputLabel id="landingPageLabel">
+                                Landing Page
+                            </InputLabel>
+                            <Select
+                                label="Landing Page"
+                                labelId="landingPageLabel"
+                                value={landingPage}
+                                onChange={handleLandingPageSelect}
+                            >
+                                {FIXED_NAV_ITEMS.map((item) => (
+                                    <MenuItem key={item.path} value={item.path}>
+                                        {item.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
 
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={showDbViewer}
-                                onChange={handleToggle}
-                            />
-                        }
-                        label="Show Database Viewer"
-                    />
-
-                    <Button onClick={setupSettings}>Initialize Settings</Button>
-                </SettingsGroup>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={showDbViewer}
+                                    onChange={handleToggle}
+                                />
+                            }
+                            label="Show Database Viewer"
+                        />
+                    </SettingsGroup>
+                    <SettingsGroup>
+                        <Button onClick={setupSettings}>
+                            Initialize Settings
+                        </Button>
+                    </SettingsGroup>
+                </Stack>
             </TabContentStack>
         </Stack>
     );
