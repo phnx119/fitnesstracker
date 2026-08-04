@@ -5,9 +5,9 @@ import { Button, Card, Dialog, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import PlanContainer from '../PlanContainer';
-import EditMachineDialog from '../[id]/EditMachineDialog';
+import EditMachineDialog from '../plans/[id]/EditMachineDialog';
 
-export default function AllMachines() {
+export default function AllMachinesPage() {
     const allMachines = useLiveQuery(() => dbInstance.Machine.toArray()) ?? [];
     const [showEditDialog, setShowEditDialog] = useState(false);
     return (

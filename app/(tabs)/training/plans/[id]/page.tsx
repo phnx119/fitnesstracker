@@ -7,10 +7,10 @@ import { Button, Dialog, IconButton } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import EditPlanDialog from '../EditPlanDialog';
-import PlanContainer from '../PlanContainer';
+import EditPlanDialog from '../../EditPlanDialog';
+import PlanContainer from '../../PlanContainer';
 
-export default function PlanDialog() {
+export default function PlanPage() {
     const { id: idString } = useParams<{ id: string }>();
     const planId = Number(idString);
 
