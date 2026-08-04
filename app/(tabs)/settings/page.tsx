@@ -59,9 +59,7 @@ export default function Settings() {
                         />
                     </SettingsGroup>
                     <SettingsGroup>
-                        <Button onClick={setupSettings}>
-                            Initialize Settings
-                        </Button>
+                        <Button onClick={setupSettings}>Revert Settings</Button>
                     </SettingsGroup>
                 </Stack>
             </TabContentStack>
