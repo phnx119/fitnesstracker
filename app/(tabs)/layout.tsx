@@ -1,6 +1,6 @@
 'use client';
 
-import BottomNav from '@/app/_helpers/navigation/BottomNav';
+import BottomNav from '@/app/_helpers/BottomNav';
 import { Stack } from '@mui/material';
 
 export default function TabsLayout({
