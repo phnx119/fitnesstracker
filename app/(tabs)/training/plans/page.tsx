@@ -1,42 +1,41 @@
 'use client';
 
-import Header from '@/components/Header';
-import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
-import { Button, Card, Dialog, Stack, Typography } from '@mui/material';
+import { Apps } from '@mui/icons-material';
+import { Button, Dialog, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
 import { useState } from 'react';
 import EditPlanDialog from '../EditPlanDialog';
 import PlanCard from '../PlanCard';
+import TrainingContainer from '../TrainingContainer';
 
 export default function PlanListPage() {
     const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray()) ?? [];
 
     return (
-        <Stack>
-            <Header title="Hier wird gemaust" />
-            <TabContentStack sx={{ gap: 1 }}>
+        <TrainingContainer
+            title="Hier wird gemaust"
+            headerButtons={
                 <Link href={'/training/machines'}>
-                    <Card>
-                        <Stack
-                            direction="row"
-                            sx={{ alignItems: 'center', p: 2 }}
-                        >
-                            <Typography>All</Typography>
-                        </Stack>
-                    </Card>
+                    <IconButton>
+                        <Apps />
+                    </IconButton>
                 </Link>
+            }
+            showClose={false}
+        >
+            <Stack sx={{ overflow: 'auto', gap: 1 }}>
                 {plans.map((item) => (
                     <PlanCard key={item.id} plan={item} />
                 ))}
-                <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
-                <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
-                    <EditPlanDialog onClose={closeAddPlanDialog} />
-                </Dialog>
-            </TabContentStack>
-        </Stack>
+            </Stack>
+            <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
+            <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
+                <EditPlanDialog onClose={closeAddPlanDialog} />
+            </Dialog>
+        </TrainingContainer>
     );
 
     function closeAddPlanDialog() {
