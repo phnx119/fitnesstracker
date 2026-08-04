@@ -14,7 +14,7 @@ import PlanCard from './PlanCard';
 export default function ExercisePage() {
     const pathName = usePathname();
     const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);
-    const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray());
+    const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray()) ?? [];
 
     return (
         <Stack>
@@ -30,7 +30,7 @@ export default function ExercisePage() {
                         </Stack>
                     </Card>
                 </Link>
-                {plans?.map((item) => (
+                {plans.map((item) => (
                     <PlanCard key={item.id} plan={item} />
                 ))}
                 <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
