@@ -3,14 +3,7 @@
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-    Box,
-    Collapse,
-    IconButton,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import PersonalBiografieCard from './PersonalBiografieCard';
@@ -30,6 +23,7 @@ export default function ExercisePage() {
                 <Stack direction="row">
                     <Typography variant="h6">Show Biometric Data</Typography>
                     <IconButton onClick={() => setExpanded(!expanded)}>
+                        {/* New Button for savin all changes */}
                         <ExpandMoreIcon
                             sx={{
                                 transform: expanded
@@ -54,22 +48,26 @@ export default function ExercisePage() {
                             label={'Body Fat'}
                             bioValue={personalData?.bodyFat}
                         />
+                        <PersonalBiografieCard
+                            label={'Body Fat'}
+                            bioValue={personalData?.bodyFat}
+                        />
+                        <PersonalBiografieCard
+                            label={'Body Fat'}
+                            bioValue={personalData?.bodyFat}
+                        />
                     </Stack>
                 </Collapse>
-                <Stack>
-                    <Box>
-                        <TextField
-                            value={'Kalorie graph Placeholder'}
-                        ></TextField>
-                    </Box>
-                </Stack>
-                <Stack>
-                    <Box>
-                        <TextField
-                            value={'Kalorie subpage access / rerouting'}
-                        ></TextField>
-                    </Box>
-                </Stack>
+            </Stack>
+            <Stack>
+                <Box>
+                    <Typography>Kalorie graph Placeholder</Typography>
+                </Box>
+            </Stack>
+            <Stack>
+                <Box>
+                    <Typography>Kalorie subpage access / rerouting</Typography>
+                </Box>
             </Stack>
         </TabContentStack>
     );
