@@ -47,6 +47,14 @@ export default function ExercisePage() {
                             label={'Body Fat'}
                             bioValue={personalData?.bodyFat}
                         />
+                        <PersonalBiografieCard
+                            label={'Body Fat'}
+                            bioValue={personalData?.bodyFat}
+                        />
+                        <PersonalBiografieCard
+                            label={'Body Fat'}
+                            bioValue={personalData?.bodyFat}
+                        />
                     </Stack>
                 </Collapse>
                 <Stack>
