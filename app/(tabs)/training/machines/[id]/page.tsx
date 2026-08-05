@@ -33,13 +33,14 @@ export default function MachinePage() {
                 </IconButton>
             }
         >
-            <Stack sx={{ gap: 1, pt: 1, mt: -1, overflow: 'auto' }}>
+            <Stack sx={{ gap: 1, pt: 1, mt: -1, overflow: 'auto', flex: 1 }}>
                 {machineData
                     .find((item) => item.id === activeSessionId)
                     ?.setRecords.map((item) => (
                         <SetInput key={item.id} setId={item.id} />
                     ))}
             </Stack>
+
             <Stack direction="row">
                 <Button onClick={addSession}>+session</Button>
                 <Button onClick={removeSession}>+session</Button>
@@ -47,7 +48,12 @@ export default function MachinePage() {
                 <Button onClick={removeSet}>-set</Button>
             </Stack>
 
-            <Chart data={machineData} setActiveSessionId={setActiveSessionId} />
+            <Stack sx={{ flex: 2, overflow: 'auto' }}>
+                <Chart
+                    data={machineData}
+                    setActiveSessionId={setActiveSessionId}
+                />
+            </Stack>
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
