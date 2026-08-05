@@ -1,5 +1,6 @@
 'use client';
 
+import Chart from '@/components/Chart/Chart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
 import { Button, Dialog, IconButton, Stack } from '@mui/material';
@@ -8,7 +9,6 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import EditMachineDialog from '../EditMachineDialog';
-import ProgressChart from '../ProgressChart';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
@@ -43,7 +43,7 @@ export default function MachinePage() {
             <Button onClick={addSession}>Add session</Button>
             <Button onClick={addSet}>Add set</Button>
 
-            <ProgressChart machineData={machineData} />
+            <Chart data={machineData} />
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
