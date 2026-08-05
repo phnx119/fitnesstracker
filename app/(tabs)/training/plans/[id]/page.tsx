@@ -8,17 +8,18 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import EditPlanDialog from '../../EditPlanDialog';
-import PlanContainer from '../../PlanContainer';
+import TrainingContainer from '../../TrainingContainer';
 
 export default function PlanPage() {
+    const planTable = dbInstance.WorkoutPlan;
+
     const { id: idString } = useParams<{ id: string }>();
     const planId = Number(idString);
-
-    const planTable = dbInstance.WorkoutPlan;
     const plan = useLiveQuery(() => planTable.get(planId));
+
     const [showEditDialog, setShowEditDialog] = useState(false);
     return plan ? (
-        <PlanContainer
+        <TrainingContainer
             title={plan?.name ?? ''}
             headerButtons={
                 <IconButton onClick={() => setShowEditDialog(true)}>
@@ -35,7 +36,7 @@ export default function PlanPage() {
                     <EditPlanDialog onClose={closeEditDialog} plan={plan} />
                 )}
             </Dialog>
-        </PlanContainer>
+        </TrainingContainer>
     ) : null;
 
     function closeEditDialog() {
