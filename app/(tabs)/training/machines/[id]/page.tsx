@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import EditMachineDialog from '../EditMachineDialog';
+import SetInput from '../SetInput';
 
 export default function MachinePage() {
     const { id: idString } = useParams<{ id: string }>();
@@ -18,7 +19,7 @@ export default function MachinePage() {
 
     const machineData = useLiveQuery(getMachineData) ?? [];
 
-    const [activeSessionId, setActiveSessionId] = useState<number | null>(null);
+    const [activeSessionId, setActiveSessionId] = useState<number | null>(4);
 
     return machine ? (
         <TrainingContainer
@@ -29,6 +30,11 @@ export default function MachinePage() {
                 </IconButton>
             }
         >
+            {machineData
+                .find((item) => item.id === activeSessionId)
+                ?.setRecords.map((item) => (
+                    <SetInput key={item.id} setId={item.id} />
+                ))}
             <Button onClick={addSession}>Add session</Button>
             <Button onClick={addSet}>Add set</Button>
 
@@ -77,39 +83,38 @@ export default function MachinePage() {
     async function getMachineData() {
         if (!machineId) return [];
 
-        // 1. Fetch sessions for the specified machine
-        const sessions = await dbInstance.MachineSession.where('machineId')
-            .equals(machineId)
-            .toArray();
-
-        if (sessions.length === 0) return [];
-
-        // 2. Pre-allocate Map and Session IDs
         const sessionMap = new Map<
             number,
-            Row<'MachineSession'> & {
-                setRecords: Row<'SetRecord'>[];
-            }
+            Row<'MachineSession'> & { setRecords: Row<'SetRecord'>[] }
         >();
-        const sessionIds: number[] = new Array(sessions.length);
+        const sessionIds: number[] = [];
 
-        for (let i = 0; i < sessions.length; i++) {
-            const s = sessions[i];
-            sessionIds[i] = s.id;
-            sessionMap.set(s.id, { ...s, setRecords: [] });
-        }
+        await dbInstance.MachineSession.where('machineId')
+            .equals(machineId)
+            .each((session) => {
+                sessionIds.push(session.id);
+                sessionMap.set(session.id, { ...session, setRecords: [] });
+            });
 
-        // 3. Single-pass cursor stream over indexed SetRecords using 'anyOf'
+        if (sessionIds.length === 0) return [];
+
+        let cachedId: number | null = null;
+        let cachedSession:
+            | (Row<'MachineSession'> & { setRecords: Row<'SetRecord'>[] })
+            | undefined;
+
         await dbInstance.SetRecord.where('sessionId')
             .anyOf(sessionIds)
             .each((record) => {
-                const session = sessionMap.get(record.sessionId);
-                if (session) {
-                    session.setRecords.push(record);
+                if (record.sessionId !== cachedId) {
+                    cachedId = record.sessionId;
+                    cachedSession = sessionMap.get(record.sessionId);
+                }
+                if (cachedSession) {
+                    cachedSession.setRecords.push(record);
                 }
             });
 
-        // 4. In-place sort of the small set arrays (~3 items each)
         const result = Array.from(sessionMap.values());
         for (let i = 0; i < result.length; i++) {
             result[i].setRecords.sort((a, b) => a.setNumber - b.setNumber);
