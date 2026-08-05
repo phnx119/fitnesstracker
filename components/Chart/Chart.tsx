@@ -8,7 +8,7 @@ export default function Chart({
 }: {
     data: ({
         machineId: number;
-        date: string;
+        date: number;
     } & {
         id: number;
     } & {
@@ -39,16 +39,18 @@ export default function Chart({
                                     gap: 1,
                                     height: '100%',
                                     bgcolor: 'green',
+                                    alignItems: 'flex-end',
                                 }}
                                 direction="row"
                             >
                                 {session.setRecords.map((set) => {
-                                    const calculatedHeight = 1;
+                                    const calculatedHeight =
+                                        (set.weight / maxWeight) * 100;
                                     return (
                                         <Stack
                                             key={set.id}
                                             sx={{
-                                                height: '100%',
+                                                height: `${calculatedHeight}%`,
                                                 bgcolor: 'red',
                                             }}
                                         >

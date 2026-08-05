@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 // INCREMENT AFTER EVERY SCHEMA CHANGE
-const version = 7;
+const version = 8;
 
 // tableName: { rowName: defaultValue as type }
 // id is added automatically
@@ -26,7 +26,7 @@ const schemaDefinition = {
     },
     MachineSession: {
         machineId: { default: 0 as number, index: true },
-        date: { default: '' as string, index: true },
+        date: { default: 0 as number, index: true },
     },
     SetRecord: {
         sessionId: { default: 0 as number, index: true },

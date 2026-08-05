@@ -71,11 +71,7 @@ export default function MachinePage() {
 
         dbInstance.MachineSession.add({
             machineId: machine?.id,
-            date: new Date().toLocaleDateString('de-DE', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-            }),
+            date: Date.now(),
         }).then((id) => setActiveSessionId(id));
     }
 
