@@ -1,11 +1,9 @@
 'use client';
-
 import { Row } from '@/database/db';
-import { Box, Card, Typography, useTheme } from '@mui/material';
+import { Box, Card, useTheme } from '@mui/material';
 import type { EChartsOption } from 'echarts';
 import ReactECharts from 'echarts-for-react';
 
-// Exact type structure derived from your Dexie db query
 export type MachineSessionWithSets = Row<'MachineSession'> & {
     setRecords: Row<'SetRecord'>[];
 };
@@ -16,11 +14,13 @@ interface MachineProgressChartProps {
     selectedSessionId?: number;
 }
 
-interface CustomChartDataItem {
-    value: number;
+interface SetChartDataItem {
+    value: number; // weight
+    reps: number;
+    setNumber: number;
     sessionId: number;
-    repSummary: string;
-    totalSets: number;
+    date: string;
+    isFirstInSession: boolean;
     symbolSize: number;
     itemStyle: {
         color: string;
@@ -48,114 +48,159 @@ export default function MachineProgressChart({
 }: MachineProgressChartProps) {
     const theme = useTheme();
 
-    const dates = machineData.map((session) => session.date);
+    // 1. Flatten every set into an individual point on the chart
+    const flatSetData: SetChartDataItem[] = [];
+    const sessionSeparators: number[] = [];
 
-    const chartData: CustomChartDataItem[] = machineData.map((session) => {
-        // Sort sets by setNumber to ensure chronological rep string
+    let globalIndex = 0;
+    const sessionStartIndexMap: number[] = [];
+
+    machineData.forEach((session, sessionIdx) => {
         const sortedSets = [...session.setRecords].sort(
             (a, b) => a.setNumber - b.setNumber,
         );
 
-        // Find the max weight lifted during this session
-        const topSet = sortedSets.reduce(
-            (max, curr) => (curr.weight > max.weight ? curr : max),
-            sortedSets[0] || { weight: 0, reps: 0 },
-        );
+        const isSessionSelected = session.id === selectedSessionId;
+        sessionStartIndexMap.push(globalIndex);
 
-        const repSummary = sortedSets.map((set) => set.reps).join(' • ');
-        const isSelected = session.id === selectedSessionId;
+        sortedSets.forEach((set, setIdx) => {
+            flatSetData.push({
+                value: set.weight,
+                reps: set.reps,
+                setNumber: set.setNumber,
+                sessionId: session.id,
+                date: session.date,
+                isFirstInSession: setIdx === 0,
+                symbolSize: isSessionSelected ? 10 : 7,
+                itemStyle: {
+                    color: isSessionSelected
+                        ? theme.palette.primary.main
+                        : theme.palette.info.main,
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                },
+            });
 
-        return {
-            value: topSet.weight,
-            sessionId: session.id,
-            repSummary,
-            totalSets: sortedSets.length,
-            symbolSize: isSelected ? 12 : 8,
-            itemStyle: {
-                color: isSelected
-                    ? theme.palette.primary.main
-                    : theme.palette.info.main,
-                borderColor: isSelected
-                    ? theme.palette.primary.light
-                    : theme.palette.info.dark,
-                borderWidth: 2,
-            },
-        };
+            // Mark vertical line boundary between sessions
+            if (
+                setIdx === sortedSets.length - 1 &&
+                sessionIdx < machineData.length - 1
+            ) {
+                sessionSeparators.push(globalIndex + 0.5);
+            }
+
+            globalIndex++;
+        });
     });
+
+    // 2. Compute dataZoom start/end indices for last 3 sessions
+    const totalSessions = machineData.length;
+    const targetSessionIndex = Math.max(0, totalSessions - 3);
+    const zoomStartIndex = sessionStartIndexMap[targetSessionIndex] ?? 0;
+    const zoomEndIndex = Math.max(0, flatSetData.length - 1);
+
+    // 3. Vertical markLines for session separation
+    const markLineData = sessionSeparators.map((sepIndex) => ({
+        xAxis: sepIndex,
+        lineStyle: {
+            color: '#475569',
+            type: 'dashed' as const,
+            width: 1.5,
+        },
+        label: { show: false },
+    }));
 
     const option: EChartsOption = {
         backgroundColor: 'transparent',
         grid: {
             left: '4%',
             right: '6%',
-            bottom: '14%',
-            top: '18%',
+            bottom: '18%',
+            top: '12%',
             containLabel: true,
         },
         tooltip: {
-            trigger: 'axis',
-            backgroundColor: theme.palette.background.paper,
-            borderColor: theme.palette.divider,
-            textStyle: { color: theme.palette.text.primary },
+            trigger: 'item',
+            backgroundColor: '#0f172a',
+            borderColor: '#334155',
+            textStyle: { color: '#ffffff' },
             formatter: (params: unknown) => {
-                const paramArray = (
-                    Array.isArray(params) ? params : [params]
-                ) as ChartCallbackParams[];
-                const data = paramArray[0]?.data as
-                    | CustomChartDataItem
-                    | undefined;
+                const p = params as ChartCallbackParams;
+                const data = p.data as SetChartDataItem | undefined;
                 if (!data) return '';
 
                 return `
-          <div style="font-weight: 600; margin-bottom: 4px;">${paramArray[0].axisValue ?? ''}</div>
-          <div>Top Weight: <strong style="color: ${theme.palette.primary.main}">${data.value} kg</strong></div>
-          <div style="color: ${theme.palette.text.secondary}; font-size: 11px; margin-top: 2px;">
-            Reps per set: <strong>${data.repSummary}</strong>
+          <div style="font-weight: 600; color: #ffffff;">${data.date}</div>
+          <div style="color: #94a3b8; font-size: 11px;">Set ${data.setNumber}</div>
+          <div style="margin-top: 4px; color: #ffffff;">
+            Weight: <strong style="color: ${theme.palette.info.main}">${data.value}</strong>
           </div>
+          <div style="color: #ffffff;">Reps: <strong>${data.reps}</strong></div>
         `;
             },
         },
         xAxis: {
             type: 'category',
-            data: dates,
-            axisLine: { lineStyle: { color: theme.palette.divider } },
-            axisLabel: {
-                color: theme.palette.text.secondary,
-                fontSize: 11,
-                margin: 12,
-            },
+            data: flatSetData.map((d) => d.date),
+            axisLine: { lineStyle: { color: '#475569' } },
             axisTick: { show: false },
+            axisLabel: {
+                interval: 0,
+                margin: 10,
+                formatter: (_value: string, index: number) => {
+                    const item = flatSetData[index];
+                    if (!item) return '';
+
+                    // First line: Rep count for this set
+                    // Second line: Date (only displayed on the first set of each session)
+                    const repsLine = `{r|${item.reps}}`;
+                    const dateLine = item.isFirstInSession
+                        ? `{d|${item.date}}`
+                        : '';
+
+                    return `${repsLine}\n${dateLine}`;
+                },
+                rich: {
+                    r: {
+                        color: '#94a3b8',
+                        fontSize: 10,
+                        lineHeight: 14,
+                        align: 'center',
+                    },
+                    d: {
+                        color: '#f8fafc',
+                        fontSize: 10,
+                        lineHeight: 14,
+                        align: 'center',
+                    },
+                },
+            },
         },
         yAxis: {
             type: 'value',
-            name: 'Weight (kg)',
-            nameTextStyle: {
-                color: theme.palette.text.secondary,
-                fontSize: 10,
-                align: 'right',
-            },
+            nameTextStyle: { color: '#94a3b8', fontSize: 10, align: 'right' },
             scale: true,
-            splitLine: {
-                lineStyle: { color: theme.palette.divider, type: 'dashed' },
-            },
-            axisLabel: { color: theme.palette.text.secondary, fontSize: 10 },
+            splitLine: { lineStyle: { color: '#334155', type: 'dashed' } },
+            axisLabel: { color: '#f8fafc', fontSize: 10 },
         },
         dataZoom: [
             {
                 type: 'inside',
                 xAxisIndex: 0,
                 filterMode: 'none',
+                startValue: zoomStartIndex,
+                endValue: zoomEndIndex,
             },
         ],
         series: [
             {
-                name: 'Weight Progression',
+                name: 'Set Progress',
                 type: 'line',
-                smooth: 0.3,
-                data: chartData,
+                smooth: 0.2,
+                data: flatSetData,
                 lineStyle: {
                     color: theme.palette.info.main,
-                    width: 3,
+                    width: 2.5,
                 },
                 areaStyle: {
                     color: {
@@ -167,7 +212,7 @@ export default function MachineProgressChart({
                         colorStops: [
                             {
                                 offset: 0,
-                                color: `${theme.palette.info.main}40`,
+                                color: `${theme.palette.info.main}30`,
                             },
                             {
                                 offset: 1,
@@ -176,26 +221,26 @@ export default function MachineProgressChart({
                         ],
                     },
                 },
+                markLine: {
+                    silent: true,
+                    symbol: ['none', 'none'],
+                    data: markLineData,
+                },
                 label: {
                     show: true,
                     position: 'top',
                     distance: 6,
                     formatter: (params: unknown) => {
                         const p = params as ChartCallbackParams;
-                        const data = p.data as CustomChartDataItem;
-                        return `{w|${p.value}kg}\n{r|${data.repSummary}}`;
+                        const data = p.data as SetChartDataItem;
+                        // Display only raw weight number above the node
+                        return `{w|${data.value}}`;
                     },
                     rich: {
                         w: {
-                            color: theme.palette.text.primary,
-                            fontSize: 12,
+                            color: '#ffffff',
+                            fontSize: 11,
                             fontWeight: 'bold',
-                            lineHeight: 14,
-                        },
-                        r: {
-                            color: theme.palette.text.secondary,
-                            fontSize: 9,
-                            lineHeight: 12,
                         },
                     },
                 },
@@ -204,7 +249,7 @@ export default function MachineProgressChart({
     };
 
     const handleChartClick = (params: ChartCallbackParams): void => {
-        const data = params.data as CustomChartDataItem | undefined;
+        const data = params.data as SetChartDataItem | undefined;
         if (data?.sessionId !== undefined) {
             onSelectSession(data.sessionId);
         }
@@ -220,19 +265,6 @@ export default function MachineProgressChart({
                 bgcolor: 'background.paper',
             }}
         >
-            <Box sx={{ mb: 1 }}>
-                <Typography
-                    variant="h6"
-                    component="h3"
-                    sx={{ fontWeight: 700 }}
-                >
-                    Progress Trajectory
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                    Pinch or drag to zoom across workout dates
-                </Typography>
-            </Box>
-
             <Box sx={{ width: '100%', height: 320 }}>
                 <ReactECharts
                     option={option}
