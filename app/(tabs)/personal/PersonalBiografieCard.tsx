@@ -17,6 +17,7 @@ export default function PersonalBiografieCard({
                 <Typography variant="h6">{label}</Typography>
                 <NumberField value={bioValue ?? 0}></NumberField>
                 {/* Icons / Bilder zum ausfüllen des leeren Platzes */}
+                {/* alternativ könntest du auch das label neben dem input anzeigen bspw links label rechts input, dann werden die karten allgemein auch kleiner und sind nicht so leer */}
             </CardContent>
         </Card>
     );
