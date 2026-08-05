@@ -34,7 +34,7 @@ export default function ExercisePage() {
                     </IconButton>
                 </Stack>
                 <Collapse in={expanded}>
-                    <Stack sx={{ gap: 1, overflow: 'auto' }}>
+                    <Stack sx={{ gap: 1 }}>
                         <PersonalBiografieCard
                             label={'Body Height'}
                             bioValue={personalData?.bodyHeight}
