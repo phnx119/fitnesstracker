@@ -2,7 +2,7 @@
 
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
-import { Button, Dialog, IconButton } from '@mui/material';
+import { Button, Dialog, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -30,11 +30,13 @@ export default function MachinePage() {
                 </IconButton>
             }
         >
-            {machineData
-                .find((item) => item.id === activeSessionId)
-                ?.setRecords.map((item) => (
-                    <SetInput key={item.id} setId={item.id} />
-                ))}
+            <Stack sx={{ gap: 1, pt: 1, mt: -1, overflow: 'auto' }}>
+                {machineData
+                    .find((item) => item.id === activeSessionId)
+                    ?.setRecords.map((item) => (
+                        <SetInput key={item.id} setId={item.id} />
+                    ))}
+            </Stack>
             <Button onClick={addSession}>Add session</Button>
             <Button onClick={addSet}>Add set</Button>
 
