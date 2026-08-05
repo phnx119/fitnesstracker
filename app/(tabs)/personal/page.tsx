@@ -19,7 +19,7 @@ export default function ExercisePage() {
                 <Typography>Overview</Typography>
                 <Box sx={{ flex: 1 }} />
             </Stack>
-            <Stack sx={{ overflow: 'auto' }}>
+            <Stack sx={{ overflow: 'auto', gap: 1 }}>
                 <Stack direction="row">
                     <Typography variant="h6">Show Biometric Data</Typography>
                     <IconButton onClick={() => setExpanded(!expanded)}>
@@ -49,6 +49,18 @@ export default function ExercisePage() {
                         />
                     </Stack>
                 </Collapse>
+                <Stack>
+                    <Box>
+                        <Typography>Kalorie graph Placeholder</Typography>
+                    </Box>
+                </Stack>
+                <Stack>
+                    <Box>
+                        <Typography>
+                            Kalorie subpage access / rerouting
+                        </Typography>
+                    </Box>
+                </Stack>
             </Stack>
         </TabContentStack>
     );
