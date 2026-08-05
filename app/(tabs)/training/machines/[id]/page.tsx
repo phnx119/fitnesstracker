@@ -22,6 +22,8 @@ export default function MachinePage() {
 
     const [activeSessionId, setActiveSessionId] = useState<number | null>(4);
 
+    const session = machineData.find((item) => item.id === activeSessionId);
+
     return machine ? (
         <TrainingContainer
             title={machine.name}
@@ -41,11 +43,7 @@ export default function MachinePage() {
             <Button onClick={addSession}>Add session</Button>
             <Button onClick={addSet}>Add set</Button>
 
-            <ProgressChart
-                machineData={machineData}
-                onSelectSession={setActiveSessionId}
-                selectedSessionId={activeSessionId ?? undefined}
-            />
+            <ProgressChart machineData={machineData} />
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
@@ -72,7 +70,7 @@ export default function MachinePage() {
     }
 
     function addSet() {
-        if (!machine?.id || !activeSessionId) {
+        if (!machine?.id || !activeSessionId || !session) {
             return;
         }
 
@@ -80,7 +78,7 @@ export default function MachinePage() {
             machineId: machine.id,
             sessionId: activeSessionId,
             reps: 12,
-            setNumber: 1,
+            setNumber: session.setRecords.length,
             weight: 50,
         });
     }
