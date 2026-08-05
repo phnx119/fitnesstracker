@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import EditMachineDialog from '../EditMachineDialog';
+import ProgressChart from '../ProgressChart';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
@@ -39,6 +40,12 @@ export default function MachinePage() {
             </Stack>
             <Button onClick={addSession}>Add session</Button>
             <Button onClick={addSet}>Add set</Button>
+
+            <ProgressChart
+                machineData={machineData}
+                onSelectSession={setActiveSessionId}
+                selectedSessionId={activeSessionId ?? undefined}
+            />
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
