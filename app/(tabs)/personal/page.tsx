@@ -3,14 +3,7 @@
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-    Box,
-    Collapse,
-    IconButton,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import PersonalBiografieCard from './PersonalBiografieCard';
@@ -58,16 +51,14 @@ export default function ExercisePage() {
                 </Collapse>
                 <Stack>
                     <Box>
-                        <TextField
-                            value={'Kalorie graph Placeholder'}
-                        ></TextField>
+                        <Typography>Kalorie graph Placeholder</Typography>
                     </Box>
                 </Stack>
                 <Stack>
                     <Box>
-                        <TextField
-                            value={'Kalorie subpage access / rerouting'}
-                        ></TextField>
+                        <Typography>
+                            Kalorie subpage access / rerouting
+                        </Typography>
                     </Box>
                 </Stack>
             </Stack>
