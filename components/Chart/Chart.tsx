@@ -1,5 +1,5 @@
 import { Row } from '@/database/db';
-import { Card, Stack, Typography } from '@mui/material';
+import { Card, Divider, Stack, Typography } from '@mui/material';
 import { Dispatch, SetStateAction } from 'react';
 
 export default function Chart({
@@ -23,10 +23,11 @@ export default function Chart({
     );
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
-            <Card sx={{ flex: 1, overflow: 'auto' }}>
+            <Card sx={{ flex: 1, overflow: 'auto', p: 1 }}>
                 <Stack
                     sx={{ flex: 1, gap: 1, overflow: 'auto', height: '100%' }}
                     direction="row"
+                    divider={<Divider orientation="vertical" />}
                 >
                     {data.map((session) => (
                         <Stack

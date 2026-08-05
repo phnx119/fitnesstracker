@@ -43,7 +43,7 @@ export default function MachinePage() {
 
             <Stack direction="row">
                 <Button onClick={addSession}>+session</Button>
-                <Button onClick={removeSession}>+session</Button>
+                <Button onClick={removeSession}>-session</Button>
                 <Button onClick={addSet}>+set</Button>
                 <Button onClick={removeSet}>-set</Button>
             </Stack>
