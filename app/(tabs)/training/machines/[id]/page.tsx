@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import EditMachineDialog from '../EditMachineDialog';
+import ProgressChart from '../ProgressChart';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
@@ -20,6 +21,8 @@ export default function MachinePage() {
     const machineData = useLiveQuery(getMachineData) ?? [];
 
     const [activeSessionId, setActiveSessionId] = useState<number | null>(4);
+
+    const session = machineData.find((item) => item.id === activeSessionId);
 
     return machine ? (
         <TrainingContainer
@@ -39,6 +42,8 @@ export default function MachinePage() {
             </Stack>
             <Button onClick={addSession}>Add session</Button>
             <Button onClick={addSet}>Add set</Button>
+
+            <ProgressChart machineData={machineData} />
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
@@ -65,7 +70,7 @@ export default function MachinePage() {
     }
 
     function addSet() {
-        if (!machine?.id || !activeSessionId) {
+        if (!machine?.id || !activeSessionId || !session) {
             return;
         }
 
@@ -73,7 +78,7 @@ export default function MachinePage() {
             machineId: machine.id,
             sessionId: activeSessionId,
             reps: 12,
-            setNumber: 1,
+            setNumber: session.setRecords.length,
             weight: 50,
         });
     }
