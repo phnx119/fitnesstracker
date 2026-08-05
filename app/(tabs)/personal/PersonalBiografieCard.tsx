@@ -1,11 +1,5 @@
 import NumberField from '@/components/NumberField';
-import {
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    Typography,
-} from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import { JSX } from 'react';
 
 type Props = {
@@ -21,15 +15,9 @@ export default function PersonalBiografieCard({
         <Card variant="outlined">
             <CardContent>
                 <Typography variant="h6">{label}</Typography>
-                <NumberField
-                    value={bioValue ?? 0}
-                    readOnly
-                    disabled
-                ></NumberField>
+                <NumberField value={bioValue ?? 0}></NumberField>
+                {/* Icons / Bilder zum ausfüllen des leeren Platzes */}
             </CardContent>
-            <CardActions>
-                <Button size="small">Edit</Button>
-            </CardActions>
         </Card>
     );
 }

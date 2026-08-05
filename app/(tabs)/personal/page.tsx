@@ -23,6 +23,7 @@ export default function ExercisePage() {
                 <Stack direction="row">
                     <Typography variant="h6">Show Biometric Data</Typography>
                     <IconButton onClick={() => setExpanded(!expanded)}>
+                        {/* New Button for savin all changes */}
                         <ExpandMoreIcon
                             sx={{
                                 transform: expanded
