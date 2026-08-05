@@ -40,10 +40,14 @@ export default function MachinePage() {
                         <SetInput key={item.id} setId={item.id} />
                     ))}
             </Stack>
-            <Button onClick={addSession}>Add session</Button>
-            <Button onClick={addSet}>Add set</Button>
+            <Stack direction="row">
+                <Button onClick={addSession}>+session</Button>
+                <Button onClick={removeSession}>+session</Button>
+                <Button onClick={addSet}>+set</Button>
+                <Button onClick={removeSet}>-set</Button>
+            </Stack>
 
-            <Chart data={machineData} />
+            <Chart data={machineData} setActiveSessionId={setActiveSessionId} />
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
@@ -69,6 +73,16 @@ export default function MachinePage() {
         }).then((id) => setActiveSessionId(id));
     }
 
+    function removeSession() {
+        if (!machine?.id || !activeSessionId) {
+            return;
+        }
+
+        dbInstance.MachineSession.delete(activeSessionId).then(() =>
+            setActiveSessionId(null),
+        );
+    }
+
     function addSet() {
         if (!machine?.id || !activeSessionId || !session) {
             return;
@@ -81,6 +95,16 @@ export default function MachinePage() {
             setNumber: session.setRecords.length,
             weight: 50,
         });
+    }
+
+    function removeSet() {
+        if (!machine?.id || !activeSessionId || !session) {
+            return;
+        }
+
+        const targetId = session.setRecords[session.setRecords.length - 1].id;
+
+        dbInstance.SetRecord.delete(targetId);
     }
 
     function closeEditDialog() {

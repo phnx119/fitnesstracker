@@ -1,8 +1,10 @@
 import { Row } from '@/database/db';
 import { Card, Stack, Typography } from '@mui/material';
+import { Dispatch, SetStateAction } from 'react';
 
 export default function Chart({
     data,
+    setActiveSessionId,
 }: {
     data: ({
         machineId: number;
@@ -12,6 +14,7 @@ export default function Chart({
     } & {
         setRecords: Row<'SetRecord'>[];
     })[];
+    setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
@@ -21,7 +24,11 @@ export default function Chart({
                     direction="row"
                 >
                     {data.map((session) => (
-                        <Stack key={session.id} sx={{ height: '100%' }}>
+                        <Stack
+                            key={session.id}
+                            sx={{ height: '100%' }}
+                            onClick={() => setActiveSessionId(session.id)}
+                        >
                             <Stack
                                 sx={{
                                     gap: 1,
