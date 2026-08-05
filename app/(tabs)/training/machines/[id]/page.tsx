@@ -1,5 +1,6 @@
 'use client';
 
+import Chart from '@/components/Chart/Chart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
 import { Button, Dialog, IconButton, Stack } from '@mui/material';
@@ -8,7 +9,6 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import EditMachineDialog from '../EditMachineDialog';
-import ProgressChart from '../ProgressChart';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
@@ -33,17 +33,27 @@ export default function MachinePage() {
                 </IconButton>
             }
         >
-            <Stack sx={{ gap: 1, pt: 1, mt: -1, overflow: 'auto' }}>
+            <Stack sx={{ gap: 1, pt: 1, mt: -1, overflow: 'auto', flex: 1 }}>
                 {machineData
                     .find((item) => item.id === activeSessionId)
                     ?.setRecords.map((item) => (
                         <SetInput key={item.id} setId={item.id} />
                     ))}
             </Stack>
-            <Button onClick={addSession}>Add session</Button>
-            <Button onClick={addSet}>Add set</Button>
 
-            <ProgressChart machineData={machineData} />
+            <Stack direction="row">
+                <Button onClick={addSession}>+session</Button>
+                <Button onClick={removeSession}>+session</Button>
+                <Button onClick={addSet}>+set</Button>
+                <Button onClick={removeSet}>-set</Button>
+            </Stack>
+
+            <Stack sx={{ flex: 2, overflow: 'auto' }}>
+                <Chart
+                    data={machineData}
+                    setActiveSessionId={setActiveSessionId}
+                />
+            </Stack>
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
                 <EditMachineDialog
@@ -61,12 +71,18 @@ export default function MachinePage() {
 
         dbInstance.MachineSession.add({
             machineId: machine?.id,
-            date: new Date().toLocaleDateString('de-DE', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-            }),
+            date: Date.now(),
         }).then((id) => setActiveSessionId(id));
+    }
+
+    function removeSession() {
+        if (!machine?.id || !activeSessionId) {
+            return;
+        }
+
+        dbInstance.MachineSession.delete(activeSessionId).then(() =>
+            setActiveSessionId(null),
+        );
     }
 
     function addSet() {
@@ -81,6 +97,16 @@ export default function MachinePage() {
             setNumber: session.setRecords.length,
             weight: 50,
         });
+    }
+
+    function removeSet() {
+        if (!machine?.id || !activeSessionId || !session) {
+            return;
+        }
+
+        const targetId = session.setRecords[session.setRecords.length - 1].id;
+
+        dbInstance.SetRecord.delete(targetId);
     }
 
     function closeEditDialog() {
