@@ -16,6 +16,11 @@ export default function Chart({
     })[];
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
+    const maxWeight = Math.max(
+        ...data.flatMap((item) =>
+            item.setRecords.map((record) => record.weight),
+        ),
+    );
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
             <Card sx={{ flex: 1, overflow: 'auto' }}>
@@ -37,17 +42,22 @@ export default function Chart({
                                 }}
                                 direction="row"
                             >
-                                {session.setRecords.map((set) => (
-                                    <Stack
-                                        key={set.id}
-                                        sx={{
-                                            height: '100%',
-                                            bgcolor: 'red',
-                                        }}
-                                    >
-                                        <Typography>{set.weight}</Typography>
-                                    </Stack>
-                                ))}
+                                {session.setRecords.map((set) => {
+                                    const calculatedHeight = 1;
+                                    return (
+                                        <Stack
+                                            key={set.id}
+                                            sx={{
+                                                height: '100%',
+                                                bgcolor: 'red',
+                                            }}
+                                        >
+                                            <Typography>
+                                                {set.weight}
+                                            </Typography>
+                                        </Stack>
+                                    );
+                                })}
                             </Stack>
                             <Typography
                                 sx={{ fontSize: 10, textAlign: 'center' }}
