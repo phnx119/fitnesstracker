@@ -42,6 +42,11 @@ export default function Chart({
                                     </Stack>
                                 ))}
                             </Stack>
+                            <Typography
+                                sx={{ fontSize: 10, textAlign: 'center' }}
+                            >
+                                {session.date}
+                            </Typography>
                         </Stack>
                     ))}
                 </Stack>
