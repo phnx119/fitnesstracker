@@ -34,7 +34,7 @@ export default function ExercisePage() {
                     </IconButton>
                 </Stack>
                 <Collapse in={expanded}>
-                    <Stack sx={{ gap: 1 }}>
+                    <Stack sx={{ gap: 1, overflow: 'auto' }}>
                         <PersonalBiografieCard
                             label={'Body Height'}
                             bioValue={personalData?.bodyHeight}
@@ -57,18 +57,16 @@ export default function ExercisePage() {
                         />
                     </Stack>
                 </Collapse>
-                <Stack>
-                    <Box>
-                        <Typography>Kalorie graph Placeholder</Typography>
-                    </Box>
-                </Stack>
-                <Stack>
-                    <Box>
-                        <Typography>
-                            Kalorie subpage access / rerouting
-                        </Typography>
-                    </Box>
-                </Stack>
+            </Stack>
+            <Stack>
+                <Box>
+                    <Typography>Kalorie graph Placeholder</Typography>
+                </Box>
+            </Stack>
+            <Stack>
+                <Box>
+                    <Typography>Kalorie subpage access / rerouting</Typography>
+                </Box>
             </Stack>
         </TabContentStack>
     );
