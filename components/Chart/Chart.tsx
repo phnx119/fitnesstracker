@@ -64,7 +64,14 @@ export default function Chart({
                             <Typography
                                 sx={{ fontSize: 10, textAlign: 'center' }}
                             >
-                                {session.date}
+                                {new Date(session.date).toLocaleDateString(
+                                    'de-DE',
+                                    {
+                                        day: '2-digit',
+                                        month: '2-digit',
+                                        year: '2-digit',
+                                    },
+                                )}
                             </Typography>
                         </Stack>
                     ))}
