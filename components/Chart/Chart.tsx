@@ -53,10 +53,19 @@ export default function Chart({
                                             sx={{
                                                 height: `${calculatedHeight}%`,
                                                 bgcolor: 'red',
+                                                justifyContent: 'flex-end',
+                                                alignItems: 'center',
+                                                minWidth: 25,
+                                                gap: 1,
+                                                pb: 1,
                                             }}
                                         >
                                             <Typography>
                                                 {set.weight}
+                                            </Typography>
+
+                                            <Typography sx={{ fontSize: 13 }}>
+                                                {set.reps}
                                             </Typography>
                                         </Stack>
                                     );
