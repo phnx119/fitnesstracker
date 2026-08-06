@@ -1,51 +1,58 @@
 import { Row } from '@/database/db';
 import { Card, Divider, Stack, Typography } from '@mui/material';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
 
-export default function Chart({
-    data,
-    setActiveSessionId,
-}: {
-    data: ({
-        machineId: number;
-        date: number;
-    } & {
-        id: number;
-    } & {
-        setRecords: Row<'SetRecord'>[];
-    })[];
+const CHART_CONFIG = {
+    MAX_BAR_HEIGHT_PERCENT: 98, // Scaled down to prevent clipping at top
+    MIN_BAR_WIDTH: 25,
+    LINE_COLOR: '#fafbfb',
+    LINE_WIDTH: 2.5,
+    POINT_RADIUS: 4,
+} as const;
+
+export type SessionWithSets = {
+    id: number;
+    machineId: number;
+    date: number;
+    setRecords: Row<'SetRecord'>[];
+};
+
+interface ChartProps {
+    data: SessionWithSets[];
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
-}) {
+    maxHeightPercent?: number;
+}
+
+function useChartOverlay(data: SessionWithSets[]) {
     const containerRef = useRef<HTMLDivElement>(null);
     const barsRef = useRef<Map<number, HTMLDivElement>>(new Map());
     const [points, setPoints] = useState<
         { id: number; x: number; y: number }[]
     >([]);
-    const [svgSize, setSvgSize] = useState<{ width: number; height: number }>({
-        width: 0,
-        height: 0,
-    });
+    const [svgSize, setSvgSize] = useState({ width: 0, height: 0 });
 
-    const maxWeight = Math.max(
-        0,
-        ...data.flatMap((item) =>
-            item.setRecords.map((record) => record.weight),
-        ),
-    );
+    const registerBarRef = (id: number, el: HTMLDivElement | null) => {
+        if (el) barsRef.current.set(id, el);
+        else barsRef.current.delete(id);
+    };
 
     useEffect(() => {
-        function updatePoints() {
+        const updatePoints = () => {
             const container = containerRef.current;
             if (!container) return;
 
             const containerRect = container.getBoundingClientRect();
-            const scrollLeft = container.scrollLeft;
-            const scrollTop = container.scrollTop;
+            const { scrollLeft, scrollTop, scrollWidth, scrollHeight } =
+                container;
 
-            setSvgSize({
-                width: container.scrollWidth,
-                height: container.scrollHeight,
-            });
+            setSvgSize({ width: scrollWidth, height: scrollHeight });
 
             const newPoints: { id: number; x: number; y: number }[] = [];
 
@@ -54,19 +61,21 @@ export default function Chart({
                     const el = barsRef.current.get(set.id);
                     if (el) {
                         const rect = el.getBoundingClientRect();
-                        const x =
-                            rect.left -
-                            containerRect.left +
-                            scrollLeft +
-                            rect.width / 2;
-                        const y = rect.top - containerRect.top + scrollTop;
-                        newPoints.push({ id: set.id, x, y });
+                        newPoints.push({
+                            id: set.id,
+                            x:
+                                rect.left -
+                                containerRect.left +
+                                scrollLeft +
+                                rect.width / 2,
+                            y: rect.top - containerRect.top + scrollTop,
+                        });
                     }
                 });
             });
 
             setPoints(newPoints);
-        }
+        };
 
         updatePoints();
         const container = containerRef.current;
@@ -78,7 +87,28 @@ export default function Chart({
         return () => observer.disconnect();
     }, [data]);
 
-    const polylinePoints = points.map((p) => `${p.x},${p.y}`).join(' ');
+    return { containerRef, registerBarRef, points, svgSize };
+}
+
+export default function Chart({
+    data,
+    setActiveSessionId,
+    maxHeightPercent = CHART_CONFIG.MAX_BAR_HEIGHT_PERCENT,
+}: ChartProps) {
+    const { containerRef, registerBarRef, points, svgSize } =
+        useChartOverlay(data);
+
+    const maxWeight = useMemo(() => {
+        return Math.max(
+            0,
+            ...data.flatMap((item) => item.setRecords.map((r) => r.weight)),
+        );
+    }, [data]);
+
+    const polylinePoints = useMemo(
+        () => points.map((p) => `${p.x},${p.y}`).join(' '),
+        [points],
+    );
 
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
@@ -95,6 +125,7 @@ export default function Chart({
                     direction="row"
                     divider={<Divider orientation="vertical" />}
                 >
+                    {/* Overlay Line Chart */}
                     {svgSize.width > 0 && (
                         <svg
                             style={{
@@ -110,8 +141,8 @@ export default function Chart({
                             {points.length > 1 && (
                                 <polyline
                                     fill="none"
-                                    stroke="#1976d2"
-                                    strokeWidth="2.5"
+                                    stroke={CHART_CONFIG.LINE_COLOR}
+                                    strokeWidth={CHART_CONFIG.LINE_WIDTH}
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
                                     points={polylinePoints}
@@ -122,13 +153,14 @@ export default function Chart({
                                     key={p.id}
                                     cx={p.x}
                                     cy={p.y}
-                                    r="4"
-                                    fill="#1976d2"
+                                    r={CHART_CONFIG.POINT_RADIUS}
+                                    fill={CHART_CONFIG.LINE_COLOR}
                                 />
                             ))}
                         </svg>
                     )}
 
+                    {/* Bars & Sessions */}
                     {data.map((session) => (
                         <Stack
                             key={session.id}
@@ -147,29 +179,23 @@ export default function Chart({
                                 {session.setRecords.map((set) => {
                                     const calculatedHeight =
                                         maxWeight > 0
-                                            ? (set.weight / maxWeight) * 100
+                                            ? (set.weight / maxWeight) *
+                                              maxHeightPercent
                                             : 0;
 
                                     return (
                                         <Stack
                                             key={set.id}
-                                            ref={(el) => {
-                                                if (el)
-                                                    barsRef.current.set(
-                                                        set.id,
-                                                        el,
-                                                    );
-                                                else
-                                                    barsRef.current.delete(
-                                                        set.id,
-                                                    );
-                                            }}
+                                            ref={(el) =>
+                                                registerBarRef(set.id, el)
+                                            }
                                             sx={{
                                                 height: `${calculatedHeight}%`,
                                                 bgcolor: 'red',
                                                 justifyContent: 'flex-end',
                                                 alignItems: 'center',
-                                                minWidth: 25,
+                                                minWidth:
+                                                    CHART_CONFIG.MIN_BAR_WIDTH,
                                                 gap: 1,
                                                 pb: 1,
                                             }}
