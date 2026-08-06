@@ -1,6 +1,6 @@
 'use client';
 
-import Chart from '@/components/Chart/Chart';
+import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
 import { Button, Dialog, IconButton, Stack } from '@mui/material';
@@ -12,6 +12,8 @@ import EditMachineDialog from '../EditMachineDialog';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
+    const settings = useLiveQuery(() => dbInstance.Settings.get(1));
+
     const { id: idString } = useParams<{ id: string }>();
     const machineId = Number(idString);
     const machine = useLiveQuery(() => dbInstance.Machine.get(machineId));
@@ -20,7 +22,7 @@ export default function MachinePage() {
 
     const machineData = useLiveQuery(getMachineData) ?? [];
 
-    const [activeSessionId, setActiveSessionId] = useState<number | null>(4);
+    const [activeSessionId, setActiveSessionId] = useState<number | null>(null);
 
     const session = machineData.find((item) => item.id === activeSessionId);
 
@@ -33,7 +35,15 @@ export default function MachinePage() {
                 </IconButton>
             }
         >
-            <Stack sx={{ gap: 1, pt: 1, mt: -1, overflow: 'auto', flex: 1 }}>
+            <Stack
+                sx={{
+                    gap: 1,
+                    pt: 1,
+                    mt: -1,
+                    overflow: 'auto',
+                    flex: settings?.bigScreenMode ? 1 : 3,
+                }}
+            >
                 {machineData
                     .find((item) => item.id === activeSessionId)
                     ?.setRecords.map((item) => (
@@ -43,13 +53,15 @@ export default function MachinePage() {
 
             <Stack direction="row">
                 <Button onClick={addSession}>+session</Button>
-                <Button onClick={removeSession}>+session</Button>
+                <Button onClick={removeSession}>-session</Button>
                 <Button onClick={addSet}>+set</Button>
                 <Button onClick={removeSet}>-set</Button>
             </Stack>
 
-            <Stack sx={{ flex: 2, overflow: 'auto' }}>
-                <Chart
+            <Stack
+                sx={{ flex: settings?.bigScreenMode ? 2 : 5, overflow: 'auto' }}
+            >
+                <MachineChart
                     data={machineData}
                     setActiveSessionId={setActiveSessionId}
                 />
