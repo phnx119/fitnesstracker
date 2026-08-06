@@ -21,6 +21,7 @@ import SettingsGroup from './SettingsGroup';
 export default function Settings() {
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
     const showDbViewer = settings?.showDbViewer ?? false;
+    const bigScreenMode = settings?.bigScreenMode ?? true;
     const landingPage = settings?.landingPage ?? '/training/plans';
 
     return (
@@ -52,10 +53,20 @@ export default function Settings() {
                             control={
                                 <Switch
                                     checked={showDbViewer}
-                                    onChange={handleToggle}
+                                    onChange={toggleDbViewer}
                                 />
                             }
                             label="Show Database Viewer"
+                        />
+
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={!bigScreenMode}
+                                    onChange={toggleBigScreen}
+                                />
+                            }
+                            label="Small Screen Mode"
                         />
                     </SettingsGroup>
                     <SettingsGroup>
@@ -72,7 +83,7 @@ export default function Settings() {
         });
     }
 
-    async function handleToggle(event: React.ChangeEvent<HTMLInputElement>) {
+    async function toggleDbViewer(event: React.ChangeEvent<HTMLInputElement>) {
         const newValue = event.target.checked;
 
         await dbInstance.Settings.update(1, {
@@ -80,10 +91,19 @@ export default function Settings() {
         });
     }
 
+    async function toggleBigScreen(event: React.ChangeEvent<HTMLInputElement>) {
+        const newValue = !event.target.checked;
+
+        await dbInstance.Settings.update(1, {
+            bigScreenMode: newValue,
+        });
+    }
+
     async function setupSettings() {
         await dbInstance.Settings.put({
             id: 1,
             showDbViewer: true,
+            bigScreenMode: true,
             landingPage: '/training/plans',
         });
     }

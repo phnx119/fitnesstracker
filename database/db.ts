@@ -9,6 +9,7 @@ const version = 8;
 const schemaDefinition = {
     Settings: {
         showDbViewer: { default: true as boolean, index: false },
+        bigScreenMode: { default: true as boolean, index: false },
         landingPage: { default: '' as string, index: false },
     },
     Machine: {
