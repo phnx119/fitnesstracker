@@ -33,42 +33,41 @@ export default function Chart({
         ),
     );
 
-    const updatePoints = () => {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const containerRect = container.getBoundingClientRect();
-        const scrollLeft = container.scrollLeft;
-        const scrollTop = container.scrollTop;
-
-        setSvgSize({
-            width: container.scrollWidth,
-            height: container.scrollHeight,
-        });
-
-        const newPoints: { id: number; x: number; y: number }[] = [];
-
-        data.forEach((session) => {
-            session.setRecords.forEach((set) => {
-                const el = barsRef.current.get(set.id);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    // Exact top-center coordinate relative to full scrollable container area
-                    const x =
-                        rect.left -
-                        containerRect.left +
-                        scrollLeft +
-                        rect.width / 2;
-                    const y = rect.top - containerRect.top + scrollTop;
-                    newPoints.push({ id: set.id, x, y });
-                }
-            });
-        });
-
-        setPoints(newPoints);
-    };
-
     useEffect(() => {
+        function updatePoints() {
+            const container = containerRef.current;
+            if (!container) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const scrollLeft = container.scrollLeft;
+            const scrollTop = container.scrollTop;
+
+            setSvgSize({
+                width: container.scrollWidth,
+                height: container.scrollHeight,
+            });
+
+            const newPoints: { id: number; x: number; y: number }[] = [];
+
+            data.forEach((session) => {
+                session.setRecords.forEach((set) => {
+                    const el = barsRef.current.get(set.id);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        const x =
+                            rect.left -
+                            containerRect.left +
+                            scrollLeft +
+                            rect.width / 2;
+                        const y = rect.top - containerRect.top + scrollTop;
+                        newPoints.push({ id: set.id, x, y });
+                    }
+                });
+            });
+
+            setPoints(newPoints);
+        }
+
         updatePoints();
         const container = containerRef.current;
         if (!container) return;
