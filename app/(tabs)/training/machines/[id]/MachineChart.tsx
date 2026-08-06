@@ -10,7 +10,7 @@ export type SessionWithSets = {
     setRecords: Row<'SetRecord'>[];
 };
 
-export default function Chart({
+export default function MachineChart({
     data,
     setActiveSessionId,
 }: {

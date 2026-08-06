@@ -1,6 +1,6 @@
 'use client';
 
-import Chart from '@/components/Chart/Chart';
+import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
 import { Button, Dialog, IconButton, Stack } from '@mui/material';
@@ -61,7 +61,7 @@ export default function MachinePage() {
             <Stack
                 sx={{ flex: settings?.bigScreenMode ? 2 : 5, overflow: 'auto' }}
             >
-                <Chart
+                <MachineChart
                     data={machineData}
                     setActiveSessionId={setActiveSessionId}
                 />
