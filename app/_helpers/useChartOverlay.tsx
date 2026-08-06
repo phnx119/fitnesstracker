@@ -1,5 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+// USAGE:
+// const { containerRef, registerPointRef, overlay } = useChartOverlay(
+//    pointIds,
+//    {
+//        lineColor: '#ffffff',
+//        lineWidth: 2.5,
+//        pointRadius: 3,
+//    },
+// );
+//
+// put containerRef onto the outer Stack that contains the elements
+// put registerPointRef() onto each column:
+//     ref={(el) => registerPointRef(set.id, el)}
+// put {overlay} into the outer stack or with same size and pos
+
 export function useChartOverlay(
     pointIds: (string | number)[],
     options: {
