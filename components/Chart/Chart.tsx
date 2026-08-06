@@ -10,17 +10,13 @@ export type SessionWithSets = {
     setRecords: Row<'SetRecord'>[];
 };
 
-interface ChartProps {
-    data: SessionWithSets[];
-    setActiveSessionId: Dispatch<SetStateAction<number | null>>;
-    maxHeightPercent?: number;
-}
-
 export default function Chart({
     data,
     setActiveSessionId,
-    maxHeightPercent = 95,
-}: ChartProps) {
+}: {
+    data: SessionWithSets[];
+    setActiveSessionId: Dispatch<SetStateAction<number | null>>;
+}) {
     const pointIds = useMemo(
         () =>
             data.flatMap((session) => session.setRecords.map((set) => set.id)),
@@ -30,9 +26,9 @@ export default function Chart({
     const { containerRef, registerPointRef, overlay } = useChartOverlay(
         pointIds,
         {
-            lineColor: '#1976d2',
+            lineColor: '#ffffff',
             lineWidth: 2.5,
-            pointRadius: 4,
+            pointRadius: 3,
         },
     );
 
@@ -42,6 +38,8 @@ export default function Chart({
             ...data.flatMap((item) => item.setRecords.map((r) => r.weight)),
         );
     }, [data]);
+
+    const maxHeightPercent = 98;
 
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
