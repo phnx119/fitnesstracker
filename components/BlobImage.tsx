@@ -81,7 +81,7 @@ export function BlobImage({
                 maxWidth: '100%',
                 maxHeight: '100%',
                 aspectRatio: aspectRatio,
-                objectFit: 'cover',
+                objectFit: 'fill',
                 borderRadius: 1,
                 ...sx,
             }}
