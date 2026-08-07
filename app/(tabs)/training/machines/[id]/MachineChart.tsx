@@ -30,6 +30,8 @@ export default function MachineChart({
             lineWidth: 2.5,
             pointRadius: 3,
             tension: 1,
+            fillBelowBackground:
+                'linear-gradient(0deg,rgba(0, 0, 0, 0) 20%, rgba(0, 212, 255, 1) 100%)',
         },
     );
 
@@ -50,7 +52,7 @@ export default function MachineChart({
                         flex: 1,
                         height: '100%',
                         position: 'relative',
-                        overflow: 'hidden',
+                        overflow: 'auto',
                     }}
                 >
                     <Stack

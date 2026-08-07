@@ -1,5 +1,6 @@
 import {
     useCallback,
+    useId,
     useLayoutEffect,
     useMemo,
     useRef,
@@ -17,6 +18,7 @@ import {
 //        pointRadius: 3,
 //        zIndex: 999,
 //        tension: 0,
+//        fillBelowBackground: 'linear-gradient(0deg,rgba(0, 0, 0, 0) 20%, rgba(0, 212, 255, 1) 100%)',
 //    },
 // );
 //
@@ -34,35 +36,34 @@ export type OverlayPoint = {
 };
 
 export type ChartOverlayOptions = {
-    /** Line color... @default '#1976d2' */
+    /** Stroke color for the line and point fills. @default '#1976d2' */
     lineColor?: string;
-    /** Line Widht in pixels. @default 2.5 */
+    /** Stroke width of the connecting line in pixels. @default 2.5 */
     lineWidth?: number;
     /** Radius of the point markers in pixels. @default 4 */
     pointRadius?: number;
-    /** Stack order index for the SVG element. Usually not needed @default 2 */
+    /** Stack order index for the SVG element. @default 2 */
     zIndex?: number;
-    /** Curvature intensity: 0 = straight, 0.5 = smooth, 1.0 = more curved. Above that goes crazy @default 0 */
+    /** Curvature intensity: 0 = straight lines, 0.5 = smooth spline, 1.0 = pronounced curve. @default 0 */
     tension?: number;
+    /** Any valid CSS `background` value below the curve (e.g. gradients, images, colors). */
+    fillBelowBackground?: string;
+    /** Any valid CSS `background` value above the curve. */
+    fillAboveBackground?: string;
 };
 
 export type UseChartOverlayReturn<
     TContainer extends HTMLElement = HTMLDivElement,
 > = {
-    /** Ref to attach to the scrollable container (`position: relative` required) */
     containerRef: RefObject<TContainer | null>;
-    /** Callback ref to register each target point node */
     registerPointRef: (id: PointId, el: HTMLElement | null) => void;
-    /** Pre-rendered SVG overlay element */
     overlay: ReactNode;
-    /** Raw computed coordinates for custom renders or tooltips */
     points: OverlayPoint[];
 };
 
 function getSplinePath(points: OverlayPoint[], tension: number = 0): string {
     if (points.length < 2) return '';
 
-    // Fallback to straight lines if tension is 0 or only two points exist
     if (tension <= 0 || points.length === 2) {
         return points.reduce(
             (acc, p, i) =>
@@ -76,42 +77,31 @@ function getSplinePath(points: OverlayPoint[], tension: number = 0): string {
     const dy: number[] = new Array(n - 1);
     const slope: number[] = new Array(n - 1);
 
-    // 1. Compute secant slopes between consecutive points
     for (let i = 0; i < n - 1; i++) {
         dx[i] = points[i + 1].x - points[i].x;
         dy[i] = points[i + 1].y - points[i].y;
         slope[i] = dx[i] === 0 ? 0 : dy[i] / dx[i];
     }
 
-    // 2. Compute point tangents (m_i)
     const m: number[] = new Array(n);
-
-    // Endpoints match initial secants
     m[0] = slope[0];
     m[n - 1] = slope[n - 2];
 
-    // Internal points
     for (let i = 1; i < n - 1; i++) {
         const sPrev = slope[i - 1];
         const sNext = slope[i];
 
-        // Zero out tangent if segment is flat or changes direction (local peak/trough)
         if (sPrev * sNext <= 0) {
             m[i] = 0;
         } else {
-            // Harmonic mean prevents monotonicity violation and overshoot
             m[i] = (2 * sPrev * sNext) / (sPrev + sNext);
         }
     }
 
-    // Ensure flat boundary tangents if adjacent segment is flat
     if (slope[0] === 0) m[0] = 0;
     if (slope[n - 2] === 0) m[n - 1] = 0;
 
-    // 3. Construct Cubic Bezier path
     let path = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
-
-    // Scale control point reach with tension (0.5 is full standard monotone curve)
     const smoothness = tension * 0.5;
 
     for (let i = 0; i < n - 1; i++) {
@@ -135,7 +125,7 @@ function computePointCoordinates(
     container: HTMLElement,
     pointIds: PointId[],
     nodesMap: Map<PointId, HTMLElement>,
-): OverlayPoint[] {
+): { points: OverlayPoint[]; containerWidth: number; containerHeight: number } {
     const containerRect = container.getBoundingClientRect();
     const newPoints: OverlayPoint[] = [];
 
@@ -155,7 +145,11 @@ function computePointCoordinates(
         });
     }
 
-    return newPoints;
+    return {
+        points: newPoints,
+        containerWidth: container.scrollWidth,
+        containerHeight: container.scrollHeight,
+    };
 }
 
 export function useChartOverlay<
@@ -170,11 +164,27 @@ export function useChartOverlay<
         pointRadius = 4,
         zIndex = 2,
         tension = 0,
+        fillBelowBackground,
+        fillAboveBackground,
     } = options;
+
+    const rawClipBelowId = useId();
+    const rawClipAboveId = useId();
+    const clipBelowId = `clip-below-${rawClipBelowId.replace(/:/g, '')}`;
+    const clipAboveId = `clip-above-${rawClipAboveId.replace(/:/g, '')}`;
 
     const containerRef = useRef<TContainer | null>(null);
     const nodesRef = useRef<Map<PointId, HTMLElement>>(new Map());
-    const [points, setPoints] = useState<OverlayPoint[]>([]);
+
+    const [{ points, containerWidth, containerHeight }, setState] = useState<{
+        points: OverlayPoint[];
+        containerWidth: number;
+        containerHeight: number;
+    }>({
+        points: [],
+        containerWidth: 0,
+        containerHeight: 0,
+    });
 
     const registerPointRef = useCallback(
         (id: PointId, el: HTMLElement | null) => {
@@ -203,12 +213,12 @@ export function useChartOverlay<
         let rafId: number | null = null;
 
         const updatePoints = () => {
-            const calculated = computePointCoordinates(
+            const result = computePointCoordinates(
                 container,
                 pointIds,
                 nodesRef.current,
             );
-            setPoints(calculated);
+            setState(result);
         };
 
         const handleResize = () => {
@@ -233,44 +243,130 @@ export function useChartOverlay<
         [points, tension],
     );
 
+    const areaBelowPathD = useMemo(() => {
+        if (!pathD || !fillBelowBackground || points.length < 2) return '';
+        const first = points[0];
+        const last = points[points.length - 1];
+        return `${pathD} L ${last.x.toFixed(2)} ${containerHeight} L ${first.x.toFixed(2)} ${containerHeight} Z`;
+    }, [pathD, fillBelowBackground, points, containerHeight]);
+
+    const areaAbovePathD = useMemo(() => {
+        if (!pathD || !fillAboveBackground || points.length < 2) return '';
+        const first = points[0];
+        const last = points[points.length - 1];
+        return `${pathD} L ${last.x.toFixed(2)} 0 L ${first.x.toFixed(2)} 0 Z`;
+    }, [pathD, fillAboveBackground, points]);
+
     const overlay = useMemo(() => {
         if (points.length === 0) return null;
 
         return (
-            <svg
+            <div
                 style={{
                     position: 'absolute',
                     top: 0,
                     left: 0,
-                    width: '100%',
-                    height: '100%',
+                    width: containerWidth,
+                    height: containerHeight,
                     pointerEvents: 'none',
                     zIndex,
-                    overflow: 'visible',
                 }}
             >
-                {pathD && (
-                    <path
-                        d={pathD}
-                        fill="none"
-                        stroke={lineColor}
-                        strokeWidth={lineWidth}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                {/* HTML Background Layer Below */}
+                {fillBelowBackground && areaBelowPathD && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            background: fillBelowBackground,
+                            clipPath: `url(#${clipBelowId})`,
+                            WebkitClipPath: `url(#${clipBelowId})`,
+                        }}
                     />
                 )}
-                {points.map((p) => (
-                    <circle
-                        key={p.id}
-                        cx={p.x}
-                        cy={p.y}
-                        r={pointRadius}
-                        fill={lineColor}
+
+                {/* HTML Background Layer Above */}
+                {fillAboveBackground && areaAbovePathD && (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            background: fillAboveBackground,
+                            clipPath: `url(#${clipAboveId})`,
+                            WebkitClipPath: `url(#${clipAboveId})`,
+                        }}
                     />
-                ))}
-            </svg>
+                )}
+
+                {/* SVG Overlay Layer */}
+                <svg
+                    style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'visible',
+                    }}
+                >
+                    <defs>
+                        {areaBelowPathD && (
+                            <clipPath id={clipBelowId}>
+                                <path d={areaBelowPathD} />
+                            </clipPath>
+                        )}
+                        {areaAbovePathD && (
+                            <clipPath id={clipAboveId}>
+                                <path d={areaAbovePathD} />
+                            </clipPath>
+                        )}
+                    </defs>
+
+                    {pathD && (
+                        <path
+                            d={pathD}
+                            fill="none"
+                            stroke={lineColor}
+                            strokeWidth={lineWidth}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    )}
+
+                    {points.map((p) => (
+                        <circle
+                            key={p.id}
+                            cx={p.x}
+                            cy={p.y}
+                            r={pointRadius}
+                            fill={lineColor}
+                        />
+                    ))}
+                </svg>
+            </div>
         );
-    }, [points, pathD, lineColor, lineWidth, pointRadius, zIndex]);
+    }, [
+        points,
+        pathD,
+        areaBelowPathD,
+        areaAbovePathD,
+        containerWidth,
+        containerHeight,
+        lineColor,
+        lineWidth,
+        pointRadius,
+        zIndex,
+        fillBelowBackground,
+        fillAboveBackground,
+        clipBelowId,
+        clipAboveId,
+    ]);
 
     return {
         containerRef,
