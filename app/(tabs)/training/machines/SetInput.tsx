@@ -8,15 +8,15 @@ export default function SetInput({ setId }: { setId: number }) {
     return (
         <Stack direction="row" sx={{ gap: 2 }}>
             <NumberField
-                label="Weight"
-                value={setData?.weight ?? 0}
-                onValueChange={(e) => updateWeight(e)}
-                showButtons
-            />
-            <NumberField
                 label="Reps"
                 value={setData?.reps ?? 12}
                 onValueChange={(e) => updateReps(e)}
+                showButtons
+            />
+            <NumberField
+                label="Weight"
+                value={setData?.weight ?? 0}
+                onValueChange={(e) => updateWeight(e)}
                 showButtons
             />
         </Stack>

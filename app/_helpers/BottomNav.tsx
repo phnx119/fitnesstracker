@@ -17,6 +17,11 @@ import { useMemo } from 'react';
 
 export const FIXED_NAV_ITEMS = [
     {
+        label: 'Settings',
+        path: '/settings',
+        icon: <SettingsIcon />,
+    },
+    {
         label: 'Training',
         path: '/training/plans',
         icon: <FitnessCenterIcon />,
@@ -25,11 +30,6 @@ export const FIXED_NAV_ITEMS = [
         label: 'Personal',
         path: '/personal',
         icon: <PersonIcon />,
-    },
-    {
-        label: 'Settings',
-        path: '/settings',
-        icon: <SettingsIcon />,
     },
 ];
 
@@ -54,7 +54,7 @@ export default function BottomNav() {
         const index = NAV_ITEMS.findIndex((item) =>
             pathname.startsWith(item.path),
         );
-        return index !== -1 ? index : 0;
+        return index !== -1 ? index : 1;
     }, [pathname, NAV_ITEMS]);
 
     return (

@@ -16,12 +16,14 @@ export default function NumberField({
     showButtons = false,
     value,
     onValueChange,
+    fullWidth = false, // Added fullWidth prop (defaults to false or set to true)
     ...other
 }: BaseNumberField.Root.Props & {
     label?: React.ReactNode;
     size?: 'small' | 'medium';
     error?: boolean;
     showButtons?: boolean;
+    fullWidth?: boolean;
     value?: number | null;
     onValueChange?: (value: number | null, event: Event) => void;
 }) {
@@ -34,6 +36,7 @@ export default function NumberField({
         <BaseNumberField.Root
             value={value}
             onValueChange={onValueChange}
+            style={{ width: fullWidth ? '100%' : undefined }} // Ensure root node stretches
             {...other}
             render={(props, state) => (
                 <FormControl
@@ -43,7 +46,9 @@ export default function NumberField({
                     required={state.required}
                     error={error}
                     variant="outlined"
+                    fullWidth={fullWidth} // Pass fullWidth to MUI FormControl
                     sx={{
+                        width: fullWidth ? '100%' : undefined,
                         '& .MuiButton-root': {
                             borderColor: 'divider',
                             minWidth: 0,
@@ -84,7 +89,12 @@ export default function NumberField({
                         </InputLabel>
                     )}
 
-                    <Box sx={{ display: 'flex' }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            width: fullWidth ? '100%' : 'auto',
+                        }}
+                    >
                         {showButtons && (
                             <BaseNumberField.Decrement
                                 render={
@@ -109,6 +119,7 @@ export default function NumberField({
 
                         <BaseNumberField.Input
                             id={id}
+                            style={{ flex: 1, minWidth: 0 }} // Allow input to grow and collapse inside flex container
                             render={(inputProps, state) => (
                                 <OutlinedInput
                                     inputRef={inputProps.ref}
@@ -122,15 +133,7 @@ export default function NumberField({
                                     slotProps={{
                                         input: {
                                             ...inputProps,
-                                            size:
-                                                Math.max(
-                                                    (
-                                                        other.min?.toString() ||
-                                                        ''
-                                                    ).length,
-                                                    state.inputValue.length ||
-                                                        1,
-                                                ) + 1,
+                                            // Removed dynamic size attribute calculation so it can freely stretch to 100%
                                             sx: {
                                                 textAlign: 'center',
                                             },
@@ -140,6 +143,7 @@ export default function NumberField({
                                         pr: 0,
                                         borderRadius: showButtons ? 0 : 1,
                                         flex: 1,
+                                        width: '100%',
                                         ...(showButtons && {
                                             '& fieldset legend': {
                                                 margin: '0 auto',
