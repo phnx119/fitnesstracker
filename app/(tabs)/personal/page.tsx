@@ -90,13 +90,14 @@ export default function ExercisePage() {
                 bodyWeight: 100,
                 bodyHeight: 100,
                 bodyFat: 100,
+                targetWeight: 100,
             });
         } else {
             dbInstance.PersonalData.add({
-                bodyWeight: 100,
-                bodyHeight: 100,
-                bodyFat: 100,
-                targetWeigt: 100,
+                bodyWeight: 33,
+                bodyHeight: 33,
+                bodyFat: 33,
+                targetWeight: 33,
             });
         }
     }
