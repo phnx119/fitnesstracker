@@ -43,30 +43,26 @@ export default function ExercisePage() {
                 <Collapse in={expanded}>
                     <Button
                         sx={{ marginBottom: 1 }}
-                        onClick={() => updatePersonalData}
+                        onClick={() => updatePersonalData()}
                     >
                         Save
                     </Button>
                     <Stack sx={{ gap: 1 }}>
                         <PersonalBiografieCard
-                            label={'Body Height'}
-                            bioValue={personalData?.bodyHeight}
-                        />
-                        <PersonalBiografieCard
                             label={'Body Weight'}
                             bioValue={personalData?.bodyWeight}
                         />
                         <PersonalBiografieCard
-                            label={'Body Fat'}
-                            bioValue={personalData?.bodyFat}
+                            label={'Body Height'}
+                            bioValue={personalData?.bodyHeight}
                         />
                         <PersonalBiografieCard
                             label={'Body Fat'}
                             bioValue={personalData?.bodyFat}
                         />
                         <PersonalBiografieCard
-                            label={'Body Fat'}
-                            bioValue={personalData?.bodyFat}
+                            label={'Target Weight'}
+                            bioValue={personalData?.targetWeight}
                         />
                     </Stack>
                 </Collapse>
@@ -87,7 +83,7 @@ export default function ExercisePage() {
     function updatePersonalData() {
         if (personalData?.id) {
             dbInstance.PersonalData.update(personalData.id, {
-                bodyWeight: 100,
+                bodyWeight: 200,
                 bodyHeight: 100,
                 bodyFat: 100,
                 targetWeight: 100,
