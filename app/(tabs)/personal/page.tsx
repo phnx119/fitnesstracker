@@ -5,12 +5,23 @@ import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PersonalBiografieCard from './PersonalBiografieCard';
 
 export default function ExercisePage() {
     const [expanded, setExpanded] = useState(false);
     const personalData = useLiveQuery(() => dbInstance.PersonalData.get(1));
+    useEffect(() => {
+        if (!personalData?.id) {
+            dbInstance.PersonalData.add({
+                id: 1,
+                bodyWeight: 0,
+                bodyHeight: 0,
+                bodyFat: 0,
+                targetWeight: 0,
+            });
+        }
+    }, [personalData]);
 
     return (
         <TabContentStack sx={{ gap: 1, overflow: 'auto' }}>
@@ -23,7 +34,6 @@ export default function ExercisePage() {
                 <Stack direction="row">
                     <Typography variant="h6">Show Biometric Data</Typography>
                     <IconButton onClick={() => setExpanded(!expanded)}>
-                        {/* New Button for savin all changes */}
                         <ExpandMoreIcon
                             sx={{
                                 transform: expanded
@@ -37,24 +47,24 @@ export default function ExercisePage() {
                 <Collapse in={expanded}>
                     <Stack sx={{ gap: 1 }}>
                         <PersonalBiografieCard
-                            label={'Body Height'}
-                            bioValue={personalData?.bodyHeight}
-                        />
-                        <PersonalBiografieCard
                             label={'Body Weight'}
+                            attName="bodyWeight"
                             bioValue={personalData?.bodyWeight}
                         />
                         <PersonalBiografieCard
-                            label={'Body Fat'}
-                            bioValue={personalData?.bodyFat}
+                            label={'Body Height'}
+                            attName="bodyHeight"
+                            bioValue={personalData?.bodyHeight}
                         />
                         <PersonalBiografieCard
                             label={'Body Fat'}
+                            attName="bodyFat"
                             bioValue={personalData?.bodyFat}
                         />
                         <PersonalBiografieCard
-                            label={'Body Fat'}
-                            bioValue={personalData?.bodyFat}
+                            label={'Target Weight'}
+                            attName="targetWeight"
+                            bioValue={personalData?.targetWeight}
                         />
                     </Stack>
                 </Collapse>
