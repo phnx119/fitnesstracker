@@ -66,20 +66,20 @@ export default function PlanPage() {
     function closeMachineSelect() {
         setShowMachineSelect(false);
     }
-}
 
-export async function getPlanMachines(planId: number) {
-    const planMachines = await dbInstance.PlanMachine.where('planId')
-        .equals(planId)
-        .toArray();
+    async function getPlanMachines(planId: number) {
+        const planMachines = await dbInstance.PlanMachine.where('planId')
+            .equals(planId)
+            .toArray();
 
-    if (planMachines.length === 0) {
-        return [];
+        if (planMachines.length === 0) {
+            return [];
+        }
+
+        const machines = await Promise.all(
+            planMachines.map((pm) => dbInstance.Machine.get(pm.machineId)),
+        );
+
+        return machines.filter((m) => m !== undefined);
     }
-
-    const machines = await Promise.all(
-        planMachines.map((pm) => dbInstance.Machine.get(pm.machineId)),
-    );
-
-    return machines.filter((m) => m !== undefined);
 }
