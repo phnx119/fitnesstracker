@@ -17,23 +17,14 @@ export default function MachineChart({
     data: SessionWithSets[];
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
-    const pointIds = useMemo(
-        () =>
-            data.flatMap((session) => session.setRecords.map((set) => set.id)),
-        [data],
-    );
-
-    const { containerRef, registerPointRef, overlay } = useChartOverlay(
-        pointIds,
-        {
-            lineColor: '#ffffff',
-            lineWidth: 2.5,
-            pointRadius: 3,
-            tension: 1,
-            fillBelowBackground:
-                'linear-gradient(0deg,rgba(0, 0, 0, 0) 20%, rgba(0, 212, 255, 1) 100%)',
-        },
-    );
+    const { containerRef, registerPointRef, overlay } = useChartOverlay({
+        lineColor: '#ffffff',
+        lineWidth: 2.5,
+        pointRadius: 3,
+        tension: 1,
+        fillBelowBackground:
+            'linear-gradient(0deg,rgba(0, 0, 0, 0) 20%, rgba(0, 212, 255, 1) 100%)',
+    });
 
     const maxWeight = useMemo(() => {
         return Math.max(
@@ -65,6 +56,7 @@ export default function MachineChart({
                             height: '100%',
                             gap: 1,
                             minWidth: 'max-content',
+                            width: 'max-content',
                         }}
                         direction="row"
                         divider={<Divider orientation="vertical" flexItem />}

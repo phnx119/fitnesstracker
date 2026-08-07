@@ -1,3 +1,19 @@
+// USAGE:
+// const { containerRef, registerPointRef, overlay } = useChartOverlay(
+//    {
+//        lineColor: '#ffffff',
+//        lineWidth: 2.5,
+//        pointRadius: 3,
+//        zIndex: 999,
+//        tension: 0,
+//        fillBelowBackground: 'linear-gradient(0deg,rgba(0, 0, 0, 0) 20%, rgba(0, 212, 255, 1) 100%)',
+//    }
+// );
+//
+// put containerRef onto the outer Stack that contains the elements
+// put registerPointRef() onto each column:
+//     ref={(el) => registerPointRef(set.id, el)}
+// put {overlay} into the stack that contains the scrolling items THE STACK HAS TO BE POSITION RELATIVE
 import {
     useCallback,
     useId,
@@ -9,24 +25,6 @@ import {
     type RefObject,
 } from 'react';
 
-// USAGE:
-// const { containerRef, registerPointRef, overlay } = useChartOverlay(
-//    pointIds,
-//    {
-//        lineColor: '#ffffff',
-//        lineWidth: 2.5,
-//        pointRadius: 3,
-//        zIndex: 999,
-//        tension: 0,
-//        fillBelowBackground: 'linear-gradient(0deg,rgba(0, 0, 0, 0) 20%, rgba(0, 212, 255, 1) 100%)',
-//    },
-// );
-//
-// put containerRef onto the outer Stack that contains the elements
-// put registerPointRef() onto each column:
-//     ref={(el) => registerPointRef(set.id, el)}
-// put {overlay} into the stack that contains the scrolling items THE STACK HAS TO BE POSITION RELATIVE
-
 export type PointId = string | number;
 
 export type OverlayPoint = {
@@ -35,20 +33,17 @@ export type OverlayPoint = {
     y: number;
 };
 
-export type ChartOverlayOptions = {
-    /** Stroke color for the line and point fills. @default '#1976d2' */
+export type ChartOverlayOptions<
+    TContainer extends HTMLElement = HTMLDivElement,
+> = {
+    containerRef?: RefObject<TContainer | null>;
+    attributeName?: string;
     lineColor?: string;
-    /** Stroke width of the connecting line in pixels. @default 2.5 */
     lineWidth?: number;
-    /** Radius of the point markers in pixels. @default 4 */
     pointRadius?: number;
-    /** Stack order index for the SVG element. @default 2 */
     zIndex?: number;
-    /** Curvature intensity: 0 = straight lines, 0.5 = smooth spline, 1.0 = pronounced curve. @default 0 */
     tension?: number;
-    /** Any valid CSS `background` value below the curve (e.g. gradients, images, colors). */
     fillBelowBackground?: string;
-    /** Any valid CSS `background` value above the curve. */
     fillAboveBackground?: string;
 };
 
@@ -121,44 +116,14 @@ function getSplinePath(points: OverlayPoint[], tension: number = 0): string {
     return path;
 }
 
-function computePointCoordinates(
-    container: HTMLElement,
-    pointIds: PointId[],
-    nodesMap: Map<PointId, HTMLElement>,
-): { points: OverlayPoint[]; containerWidth: number; containerHeight: number } {
-    const containerRect = container.getBoundingClientRect();
-    const newPoints: OverlayPoint[] = [];
-
-    for (const id of pointIds) {
-        const el = nodesMap.get(id);
-        if (!el) continue;
-
-        const rect = el.getBoundingClientRect();
-        newPoints.push({
-            id,
-            x:
-                rect.left -
-                containerRect.left +
-                container.scrollLeft +
-                rect.width / 2,
-            y: rect.top - containerRect.top + container.scrollTop,
-        });
-    }
-
-    return {
-        points: newPoints,
-        containerWidth: container.scrollWidth,
-        containerHeight: container.scrollHeight,
-    };
-}
-
 export function useChartOverlay<
     TContainer extends HTMLElement = HTMLDivElement,
 >(
-    pointIds: PointId[],
-    options: ChartOverlayOptions = {},
+    options: ChartOverlayOptions<TContainer> = {},
 ): UseChartOverlayReturn<TContainer> {
     const {
+        containerRef: externalContainerRef,
+        attributeName = 'data-chart-point',
         lineColor = '#1976d2',
         lineWidth = 2.5,
         pointRadius = 4,
@@ -173,8 +138,8 @@ export function useChartOverlay<
     const clipBelowId = `clip-below-${rawClipBelowId.replace(/:/g, '')}`;
     const clipAboveId = `clip-above-${rawClipAboveId.replace(/:/g, '')}`;
 
-    const containerRef = useRef<TContainer | null>(null);
-    const nodesRef = useRef<Map<PointId, HTMLElement>>(new Map());
+    const internalContainerRef = useRef<TContainer | null>(null);
+    const containerRef = externalContainerRef ?? internalContainerRef;
 
     const [{ points, containerWidth, containerHeight }, setState] = useState<{
         points: OverlayPoint[];
@@ -189,36 +154,58 @@ export function useChartOverlay<
     const registerPointRef = useCallback(
         (id: PointId, el: HTMLElement | null) => {
             if (el) {
-                nodesRef.current.set(id, el);
-            } else {
-                nodesRef.current.delete(id);
+                el.setAttribute(attributeName, String(id));
             }
         },
-        [],
+        [attributeName],
     );
-
-    const serializedPointIds = useMemo(() => pointIds.join(','), [pointIds]);
 
     useLayoutEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
-        const activeIds = new Set(pointIds);
-        Array.from(nodesRef.current.keys()).forEach((key) => {
-            if (!activeIds.has(key)) {
-                nodesRef.current.delete(key);
-            }
-        });
-
         let rafId: number | null = null;
 
         const updatePoints = () => {
-            const result = computePointCoordinates(
-                container,
-                pointIds,
-                nodesRef.current,
+            const elements = Array.from(
+                container.querySelectorAll<HTMLElement>(`[${attributeName}]`),
             );
-            setState(result);
+
+            const containerRect = container.getBoundingClientRect();
+            const newPoints: OverlayPoint[] = [];
+
+            elements.forEach((el) => {
+                const id = el.getAttribute(attributeName);
+                if (!id) return;
+
+                const rect = el.getBoundingClientRect();
+                newPoints.push({
+                    id,
+                    x:
+                        rect.left -
+                        containerRect.left +
+                        container.scrollLeft +
+                        rect.width / 2,
+                    y: rect.top - containerRect.top + container.scrollTop,
+                });
+            });
+
+            // Target the content Stack sibling (last child) to measure actual un-clipped dimensions
+            const contentEl = container.lastElementChild as HTMLElement | null;
+
+            const contentWidth = contentEl
+                ? Math.max(container.clientWidth, contentEl.scrollWidth)
+                : container.scrollWidth || container.clientWidth;
+
+            const contentHeight = contentEl
+                ? Math.max(container.clientHeight, contentEl.scrollHeight)
+                : container.scrollHeight || container.clientHeight;
+
+            setState({
+                points: newPoints,
+                containerWidth: contentWidth,
+                containerHeight: contentHeight,
+            });
         };
 
         const handleResize = () => {
@@ -228,15 +215,29 @@ export function useChartOverlay<
 
         updatePoints();
 
-        const observer = new ResizeObserver(handleResize);
-        observer.observe(container);
-        nodesRef.current.forEach((node) => observer.observe(node));
+        const resizeObserver = new ResizeObserver(handleResize);
+        resizeObserver.observe(container);
+
+        // Observe the inner content stack so additions/deletions trigger recalculations immediately
+        const contentEl = container.lastElementChild;
+        if (contentEl && contentEl !== container) {
+            resizeObserver.observe(contentEl);
+        }
+
+        const mutationObserver = new MutationObserver(handleResize);
+        mutationObserver.observe(container, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['style', 'class', attributeName],
+        });
 
         return () => {
             if (rafId !== null) cancelAnimationFrame(rafId);
-            observer.disconnect();
+            resizeObserver.disconnect();
+            mutationObserver.disconnect();
         };
-    }, [pointIds, serializedPointIds]);
+    }, [containerRef, attributeName]);
 
     const pathD = useMemo(
         () => getSplinePath(points, tension),
@@ -272,7 +273,6 @@ export function useChartOverlay<
                     zIndex,
                 }}
             >
-                {/* HTML Background Layer Below */}
                 {fillBelowBackground && areaBelowPathD && (
                     <div
                         style={{
@@ -288,7 +288,6 @@ export function useChartOverlay<
                     />
                 )}
 
-                {/* HTML Background Layer Above */}
                 {fillAboveBackground && areaAbovePathD && (
                     <div
                         style={{
@@ -304,7 +303,6 @@ export function useChartOverlay<
                     />
                 )}
 
-                {/* SVG Overlay Layer */}
                 <svg
                     style={{
                         position: 'absolute',
