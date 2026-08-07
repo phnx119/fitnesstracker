@@ -54,7 +54,7 @@ export default function BottomNav() {
         const index = NAV_ITEMS.findIndex((item) =>
             pathname.startsWith(item.path),
         );
-        return index !== -1 ? index : 0;
+        return index !== -1 ? index : 1;
     }, [pathname, NAV_ITEMS]);
 
     return (
