@@ -18,7 +18,7 @@ export default function MachineList({
     selectedIds?: number[];
 }) {
     return (
-        <ImageList cols={2}>
+        <ImageList cols={2} gap={8}>
             {machines.map((item) => (
                 <ImageListItem key={item.id} onClick={() => onClick(item.id)}>
                     <BlobImage blob={item.imageBlob} />
