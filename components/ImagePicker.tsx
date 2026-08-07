@@ -64,7 +64,7 @@ export default function ImagePicker({
                         width: '100%',
                         maxHeight: 300,
                         aspectRatio: '1 / 1',
-                        objectFit: 'contain',
+                        objectFit: 'fill',
                         borderRadius: 1,
                         boxShadow: 3,
                         contain: 'paint layout',
