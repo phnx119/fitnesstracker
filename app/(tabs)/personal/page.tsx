@@ -90,6 +90,7 @@ export default function ExercisePage() {
             });
         } else {
             dbInstance.PersonalData.add({
+                id: 1,
                 bodyWeight: 33,
                 bodyHeight: 33,
                 bodyFat: 33,
