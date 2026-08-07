@@ -5,7 +5,7 @@ import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PersonalBiografieCard from './PersonalBiografieCard';
 
 export default function ExercisePage() {
@@ -17,6 +17,17 @@ export default function ExercisePage() {
         bodyFat: personalData?.bodyFat,
         targetWeight: personalData?.targetWeight,
     };
+    useEffect(() => {
+        if (!personalData?.id) {
+            dbInstance.PersonalData.add({
+                id: 1,
+                bodyWeight: 0,
+                bodyHeight: 0,
+                bodyFat: 0,
+                targetWeight: 0,
+            });
+        }
+    }, [personalData]);
 
     return (
         <TabContentStack sx={{ gap: 1, overflow: 'auto' }}>
