@@ -1,7 +1,7 @@
 import { useChartOverlay } from '@/app/_helpers/useChartOverlay';
 import { Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
-import { Dispatch, SetStateAction, useMemo } from 'react';
+import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
 
 export type SessionWithSets = {
     id: number;
@@ -17,20 +17,34 @@ export default function MachineChart({
     data: SessionWithSets[];
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
-    const pointIds = useMemo(
-        () =>
-            data.flatMap((session) => session.setRecords.map((set) => set.id)),
-        [data],
-    );
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    const { containerRef, registerPointRef, overlay } = useChartOverlay(
-        pointIds,
-        {
-            lineColor: '#ffffff',
-            lineWidth: 2.5,
-            pointRadius: 3,
-        },
-    );
+    const chart1 = useChartOverlay({
+        containerRef,
+        attributeName: 'data-set-0',
+        lineColor: '#00e676',
+        tension: 1,
+        fillBelowBackground:
+            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+    });
+
+    const chart2 = useChartOverlay({
+        containerRef,
+        attributeName: 'data-set-1',
+        lineColor: '#29b6f6',
+        tension: 1,
+        fillBelowBackground:
+            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+    });
+
+    const chart3 = useChartOverlay({
+        containerRef,
+        attributeName: 'data-set-2',
+        lineColor: '#ff1744',
+        tension: 1,
+        fillBelowBackground:
+            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+    });
 
     const maxWeight = useMemo(() => {
         return Math.max(
@@ -39,31 +53,44 @@ export default function MachineChart({
         );
     }, [data]);
 
-    const maxHeightPercent = 98;
+    const maxHeightPercent = 99;
+
+    function getRegisterRef(setIndex: number) {
+        if (setIndex === 0) return chart1.registerPointRef;
+        if (setIndex === 1) return chart2.registerPointRef;
+        if (setIndex === 2) return chart3.registerPointRef;
+        return null;
+    }
 
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
             <Card sx={{ flex: 1, p: 1, overflow: 'hidden' }}>
                 <Box
+                    ref={containerRef}
                     sx={{
                         flex: 1,
                         height: '100%',
                         position: 'relative',
-                        overflow: 'hidden',
+                        overflow: 'auto',
                     }}
                 >
-                    {overlay}
+                    {chart1.backgroundOverlay}
+                    {chart2.backgroundOverlay}
+                    {chart3.backgroundOverlay}
+
+                    {chart1.linesOverlay}
+                    {chart2.linesOverlay}
+                    {chart3.linesOverlay}
 
                     <Stack
-                        ref={containerRef}
                         sx={{
-                            flex: 1,
-                            gap: 1,
-                            overflow: 'auto',
                             height: '100%',
+                            gap: 1,
+                            minWidth: '100%',
+                            width: 'max-content',
                         }}
                         direction="row"
-                        divider={<Divider orientation="vertical" />}
+                        divider={<Divider orientation="vertical" flexItem />}
                     >
                         {data.map((session) => (
                             <Stack
@@ -73,14 +100,16 @@ export default function MachineChart({
                             >
                                 <Stack
                                     sx={{
+                                        flex: 1,
+                                        minHeight: 0,
                                         gap: 1,
-                                        height: '100%',
-                                        bgcolor: 'green',
                                         alignItems: 'flex-end',
                                     }}
                                     direction="row"
                                 >
-                                    {session.setRecords.map((set) => {
+                                    {session.setRecords.map((set, setIndex) => {
+                                        const registerRef =
+                                            getRegisterRef(setIndex);
                                         const calculatedHeight =
                                             maxWeight > 0
                                                 ? (set.weight / maxWeight) *
@@ -91,23 +120,26 @@ export default function MachineChart({
                                             <Stack
                                                 key={set.id}
                                                 ref={(el) =>
-                                                    registerPointRef(set.id, el)
+                                                    registerRef?.(set.id, el)
                                                 }
                                                 sx={{
                                                     height: `${calculatedHeight}%`,
-                                                    bgcolor: 'red',
+                                                    minHeight: 0,
                                                     justifyContent: 'flex-end',
                                                     alignItems: 'center',
                                                     minWidth: 25,
-                                                    gap: 1,
-                                                    pb: 1,
+                                                    gap: 0.5,
+                                                    pb: 0.5,
+                                                    overflow: 'hidden',
                                                 }}
                                             >
-                                                <Typography>
+                                                <Typography
+                                                    sx={{ fontSize: 14 }}
+                                                >
                                                     {set.weight}
                                                 </Typography>
                                                 <Typography
-                                                    sx={{ fontSize: 13 }}
+                                                    sx={{ fontSize: 10 }}
                                                 >
                                                     {set.reps}
                                                 </Typography>
@@ -116,7 +148,11 @@ export default function MachineChart({
                                     })}
                                 </Stack>
                                 <Typography
-                                    sx={{ fontSize: 10, textAlign: 'center' }}
+                                    sx={{
+                                        fontSize: 10,
+                                        textAlign: 'center',
+                                        py: 0.5,
+                                    }}
                                 >
                                     {new Date(session.date).toLocaleDateString(
                                         'de-DE',
