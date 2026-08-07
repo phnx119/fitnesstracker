@@ -42,12 +42,14 @@ export default function MachineChart({
         );
     }, [data]);
 
-    const maxHeightPercent = 98;
+    const maxHeightPercent = 99;
 
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
             <Card sx={{ flex: 1, p: 1, overflow: 'hidden' }}>
+                {/* Scroll container ref attached here */}
                 <Box
+                    ref={containerRef}
                     sx={{
                         flex: 1,
                         height: '100%',
@@ -55,19 +57,18 @@ export default function MachineChart({
                         overflow: 'auto',
                     }}
                 >
+                    {/* Overlay rendered as sibling to Stack so Stack dividers ignore it */}
+                    {overlay}
+
                     <Stack
-                        ref={containerRef}
                         sx={{
-                            flex: 1,
-                            gap: 1,
-                            overflow: 'auto',
                             height: '100%',
-                            position: 'relative',
+                            gap: 1,
+                            minWidth: 'max-content',
                         }}
                         direction="row"
-                        divider={<Divider orientation="vertical" />}
+                        divider={<Divider orientation="vertical" flexItem />}
                     >
-                        {overlay}
                         {data.map((session) => (
                             <Stack
                                 key={session.id}
@@ -76,8 +77,9 @@ export default function MachineChart({
                             >
                                 <Stack
                                     sx={{
+                                        flex: 1,
+                                        minHeight: 0,
                                         gap: 1,
-                                        height: '100%',
                                         bgcolor: 'green',
                                         alignItems: 'flex-end',
                                     }}
@@ -98,19 +100,23 @@ export default function MachineChart({
                                                 }
                                                 sx={{
                                                     height: `${calculatedHeight}%`,
+                                                    minHeight: 0,
                                                     bgcolor: 'red',
                                                     justifyContent: 'flex-end',
                                                     alignItems: 'center',
                                                     minWidth: 25,
-                                                    gap: 1,
-                                                    pb: 1,
+                                                    gap: 0.5,
+                                                    pb: 0.5,
+                                                    overflow: 'hidden',
                                                 }}
                                             >
-                                                <Typography>
+                                                <Typography
+                                                    sx={{ fontSize: 11 }}
+                                                >
                                                     {set.weight}
                                                 </Typography>
                                                 <Typography
-                                                    sx={{ fontSize: 13 }}
+                                                    sx={{ fontSize: 10 }}
                                                 >
                                                     {set.reps}
                                                 </Typography>
@@ -119,7 +125,11 @@ export default function MachineChart({
                                     })}
                                 </Stack>
                                 <Typography
-                                    sx={{ fontSize: 10, textAlign: 'center' }}
+                                    sx={{
+                                        fontSize: 10,
+                                        textAlign: 'center',
+                                        py: 0.5,
+                                    }}
                                 >
                                     {new Date(session.date).toLocaleDateString(
                                         'de-DE',
