@@ -34,15 +34,15 @@ export type OverlayPoint = {
 };
 
 export type ChartOverlayOptions = {
-    /** Stroke color for the line and point fills. @default '#1976d2' */
+    /** Line color... @default '#1976d2' */
     lineColor?: string;
-    /** Stroke width of the connecting line in pixels. @default 2.5 */
+    /** Line Widht in pixels. @default 2.5 */
     lineWidth?: number;
     /** Radius of the point markers in pixels. @default 4 */
     pointRadius?: number;
-    /** Stack order index for the SVG element. @default 2 */
+    /** Stack order index for the SVG element. Usually not needed @default 2 */
     zIndex?: number;
-    /** Curvature intensity: 0 = straight lines, 0.5 = smooth spline, 1.0 = pronounced curve. @default 0 */
+    /** Curvature intensity: 0 = straight, 0.5 = smooth, 1.0 = more curved. Above that goes crazy @default 0 */
     tension?: number;
 };
 
@@ -62,6 +62,7 @@ export type UseChartOverlayReturn<
 function getSplinePath(points: OverlayPoint[], tension: number = 0): string {
     if (points.length < 2) return '';
 
+    // Fallback to straight lines if tension is 0 or only two points exist
     if (tension <= 0 || points.length === 2) {
         return points.reduce(
             (acc, p, i) =>
@@ -70,21 +71,61 @@ function getSplinePath(points: OverlayPoint[], tension: number = 0): string {
         );
     }
 
-    let path = `M ${points[0].x} ${points[0].y}`;
+    const n = points.length;
+    const dx: number[] = new Array(n - 1);
+    const dy: number[] = new Array(n - 1);
+    const slope: number[] = new Array(n - 1);
 
-    for (let i = 0; i < points.length - 1; i++) {
-        const p0 = points[i === 0 ? i : i - 1];
+    // 1. Compute secant slopes between consecutive points
+    for (let i = 0; i < n - 1; i++) {
+        dx[i] = points[i + 1].x - points[i].x;
+        dy[i] = points[i + 1].y - points[i].y;
+        slope[i] = dx[i] === 0 ? 0 : dy[i] / dx[i];
+    }
+
+    // 2. Compute point tangents (m_i)
+    const m: number[] = new Array(n);
+
+    // Endpoints match initial secants
+    m[0] = slope[0];
+    m[n - 1] = slope[n - 2];
+
+    // Internal points
+    for (let i = 1; i < n - 1; i++) {
+        const sPrev = slope[i - 1];
+        const sNext = slope[i];
+
+        // Zero out tangent if segment is flat or changes direction (local peak/trough)
+        if (sPrev * sNext <= 0) {
+            m[i] = 0;
+        } else {
+            // Harmonic mean prevents monotonicity violation and overshoot
+            m[i] = (2 * sPrev * sNext) / (sPrev + sNext);
+        }
+    }
+
+    // Ensure flat boundary tangents if adjacent segment is flat
+    if (slope[0] === 0) m[0] = 0;
+    if (slope[n - 2] === 0) m[n - 1] = 0;
+
+    // 3. Construct Cubic Bezier path
+    let path = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+
+    // Scale control point reach with tension (0.5 is full standard monotone curve)
+    const smoothness = tension * 0.5;
+
+    for (let i = 0; i < n - 1; i++) {
         const p1 = points[i];
         const p2 = points[i + 1];
-        const p3 = points[i + 2 < points.length ? i + 2 : i + 1];
+        const spanX = dx[i];
 
-        const cp1x = p1.x + ((p2.x - p0.x) / 3) * tension;
-        const cp1y = p1.y + ((p2.y - p0.y) / 3) * tension;
+        const cp1x = p1.x + spanX * smoothness;
+        const cp1y = p1.y + m[i] * spanX * smoothness;
 
-        const cp2x = p2.x - ((p3.x - p1.x) / 3) * tension;
-        const cp2y = p2.y - ((p3.y - p1.y) / 3) * tension;
+        const cp2x = p2.x - spanX * smoothness;
+        const cp2y = p2.y - m[i + 1] * spanX * smoothness;
 
-        path += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x} ${p2.y}`;
+        path += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
     }
 
     return path;
