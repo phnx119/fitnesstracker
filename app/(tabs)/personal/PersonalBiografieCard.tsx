@@ -1,5 +1,5 @@
 import NumberField from '@/components/NumberField';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { JSX } from 'react';
 
 type Props = {
@@ -14,10 +14,16 @@ export default function PersonalBiografieCard({
     return (
         <Card variant="outlined">
             <CardContent>
-                <Typography variant="h6">{label}</Typography>
-                <NumberField value={bioValue ?? 0}></NumberField>
-                {/* Icons / Bilder zum ausfüllen des leeren Platzes */}
-                {/* alternativ könntest du auch das label neben dem input anzeigen bspw links label rechts input, dann werden die karten allgemein auch kleiner und sind nicht so leer */}
+                <Stack sx={{ gap: 1 }} direction={'row'}>
+                    <Box sx={{ flex: 1 }}>
+                        <Typography variant="h6" sx={{}}>
+                            {label}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ flex: 1 }}>
+                        <NumberField value={bioValue ?? 0}></NumberField>
+                    </Box>
+                </Stack>
             </CardContent>
         </Card>
     );
