@@ -16,7 +16,7 @@ export default function TrainingContainer({
     showClose?: boolean;
 }>) {
     return (
-        <Stack sx={{ flex: 1 }}>
+        <Stack sx={{ flex: 1, overflow: 'auto' }}>
             <Header title={title} showClose={showClose}>
                 {headerButtons}
             </Header>

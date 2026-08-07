@@ -1,6 +1,6 @@
 'use client';
 
-import { dbInstance } from '@/database/db';
+import { dbInstance, Row } from '@/database/db';
 import { Button, Card, Dialog, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
@@ -32,8 +32,8 @@ export default function AllMachinesPage() {
         </TrainingContainer>
     );
 
-    function handleMachineClick(id: number) {
-        router.push(`${pathName}/${id}`);
+    function handleMachineClick(machine: Row<'Machine'>) {
+        router.push(`${pathName}/${machine.id}`);
     }
 
     function closeEditDialog() {

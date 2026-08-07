@@ -6,9 +6,9 @@ import { Button, Dialog, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
 import { useState } from 'react';
-import EditPlanDialog from '../EditPlanDialog';
-import PlanCard from '../PlanCard';
 import TrainingContainer from '../TrainingContainer';
+import EditPlanDialog from './EditPlanDialog';
+import PlanCard from './PlanCard';
 
 export default function PlanListPage() {
     const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);

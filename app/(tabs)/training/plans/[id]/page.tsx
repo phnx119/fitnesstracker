@@ -1,45 +1,85 @@
 'use client';
 
-import ImagePicker from '@/components/ImagePicker';
-import { dbInstance } from '@/database/db';
-import { Settings } from '@mui/icons-material';
-import { Button, Dialog, IconButton } from '@mui/material';
+import { dbInstance, Row } from '@/database/db';
+import { DashboardCustomize, Settings } from '@mui/icons-material';
+import { Dialog, IconButton } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import EditPlanDialog from '../../EditPlanDialog';
+import MachineList from '../../machines/MachineList';
 import TrainingContainer from '../../TrainingContainer';
+import EditPlanDialog from '../EditPlanDialog';
+import MachineSelect from './MachineSelect';
 
 export default function PlanPage() {
+    const router = useRouter();
     const planTable = dbInstance.WorkoutPlan;
 
     const { id: idString } = useParams<{ id: string }>();
     const planId = Number(idString);
     const plan = useLiveQuery(() => planTable.get(planId));
 
-    const [showEditDialog, setShowEditDialog] = useState(false);
+    const machines =
+        useLiveQuery(() => getPlanMachines(planId), [planId]) ?? [];
+
+    const [showEditPlanDialog, setShowEditPlanDialog] = useState(false);
+    const [showMachineSelect, setShowMachineSelect] = useState(false);
+
     return plan ? (
         <TrainingContainer
             title={plan?.name ?? ''}
             headerButtons={
-                <IconButton onClick={() => setShowEditDialog(true)}>
-                    <Settings />
-                </IconButton>
+                <>
+                    <IconButton onClick={() => setShowMachineSelect(true)}>
+                        <DashboardCustomize />
+                    </IconButton>
+                    <IconButton onClick={() => setShowEditPlanDialog(true)}>
+                        <Settings />
+                    </IconButton>
+                </>
             }
         >
-            <Button>maus?</Button>
+            <MachineList machines={machines} onClick={handleMachineClick} />
 
-            <ImagePicker tableName="WorkoutPlan" dbRowId={plan.id} />
-
-            <Dialog open={showEditDialog} onClose={closeEditDialog}>
-                {showEditDialog && (
+            <Dialog open={showEditPlanDialog} onClose={closeEditDialog}>
+                {showEditPlanDialog && (
                     <EditPlanDialog onClose={closeEditDialog} plan={plan} />
+                )}
+            </Dialog>
+
+            <Dialog open={showMachineSelect} onClose={closeMachineSelect}>
+                {showMachineSelect && (
+                    <MachineSelect onClose={closeMachineSelect} plan={plan} />
                 )}
             </Dialog>
         </TrainingContainer>
     ) : null;
 
-    function closeEditDialog() {
-        setShowEditDialog(false);
+    function handleMachineClick(machine: Row<'Machine'>) {
+        router.push(`/training/machines/${machine.id}`);
     }
+
+    function closeEditDialog() {
+        setShowEditPlanDialog(false);
+    }
+
+    function closeMachineSelect() {
+        setShowMachineSelect(false);
+    }
+}
+
+export async function getPlanMachines(planId: number) {
+    const planMachines = await dbInstance.PlanMachine.where('planId')
+        .equals(planId)
+        .toArray();
+
+    if (planMachines.length === 0) {
+        return [];
+    }
+
+    const machines = await Promise.all(
+        planMachines.map((pm) => dbInstance.Machine.get(pm.machineId)),
+    );
+
+    return machines.filter((m) => m !== undefined);
 }

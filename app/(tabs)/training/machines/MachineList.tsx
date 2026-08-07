@@ -14,33 +14,35 @@ export default function MachineList({
     selectedIds = [],
 }: {
     machines: Row<'Machine'>[];
-    onClick(id: number): void;
+    onClick(machine: Row<'Machine'>): void;
     selectedIds?: number[];
 }) {
     return (
-        <ImageList cols={2} gap={8}>
-            {machines.map((item) => (
-                <ImageListItem key={item.id} onClick={() => onClick(item.id)}>
-                    <BlobImage blob={item.imageBlob} />
+        <Stack sx={{ flex: 1, overflow: 'auto' }}>
+            <ImageList cols={2} gap={8} sx={{ overflow: 'auto', flex: 1 }}>
+                {machines.map((item) => (
+                    <ImageListItem key={item.id} onClick={() => onClick(item)}>
+                        <BlobImage blob={item.imageBlob} />
 
-                    {selectedIds.some((selId) => selId === item.id) && (
-                        <Stack
-                            sx={{
-                                position: 'absolute',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                                width: '100%',
-                                bgcolor: '#000000A0',
-                            }}
-                        >
-                            <CheckBox sx={{ fontSize: 40 }} />
-                        </Stack>
-                    )}
+                        {selectedIds.some((selId) => selId === item.id) && (
+                            <Stack
+                                sx={{
+                                    position: 'absolute',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    width: '100%',
+                                    bgcolor: '#000000A0',
+                                }}
+                            >
+                                <CheckBox sx={{ fontSize: 40 }} />
+                            </Stack>
+                        )}
 
-                    <ImageListItemBar title={item.name} />
-                </ImageListItem>
-            ))}
-        </ImageList>
+                        <ImageListItemBar title={item.name} />
+                    </ImageListItem>
+                ))}
+            </ImageList>
+        </Stack>
     );
 }
