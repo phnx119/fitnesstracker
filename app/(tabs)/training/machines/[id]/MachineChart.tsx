@@ -1,3 +1,5 @@
+'use client';
+
 import { useChartOverlay } from '@/app/_helpers/useChartOverlay';
 import { Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';

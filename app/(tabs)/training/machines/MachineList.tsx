@@ -1,3 +1,5 @@
+'use client';
+
 import { BlobImage } from '@/components/BlobImage';
 import { Row } from '@/database/db';
 import { CheckBox } from '@mui/icons-material';

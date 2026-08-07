@@ -1,3 +1,5 @@
+'use client';
+
 import NumberField from '@/components/NumberField';
 import { dbInstance } from '@/database/db';
 import { Stack } from '@mui/material';
