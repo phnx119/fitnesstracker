@@ -15,7 +15,7 @@ export default function PersonalBiografieCard({
         <Card variant="outlined">
             <CardContent>
                 <Stack sx={{ gap: 1 }} direction={'row'}>
-                    <Box sx={{ flex: 1 }}>
+                    <Box sx={{ flex: 1, alignSelf: 'center' }}>
                         <Typography variant="h6" sx={{}}>
                             {label}
                         </Typography>
