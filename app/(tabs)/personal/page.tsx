@@ -3,7 +3,14 @@
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Box, Collapse, IconButton, Stack, Typography } from '@mui/material';
+import {
+    Box,
+    Button,
+    Collapse,
+    IconButton,
+    Stack,
+    Typography,
+} from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 import PersonalBiografieCard from './PersonalBiografieCard';
@@ -23,7 +30,6 @@ export default function ExercisePage() {
                 <Stack direction="row">
                     <Typography variant="h6">Show Biometric Data</Typography>
                     <IconButton onClick={() => setExpanded(!expanded)}>
-                        {/* New Button for savin all changes */}
                         <ExpandMoreIcon
                             sx={{
                                 transform: expanded
@@ -35,6 +41,7 @@ export default function ExercisePage() {
                     </IconButton>
                 </Stack>
                 <Collapse in={expanded}>
+                    <Button sx={{ marginBottom: 1 }}>Save</Button>
                     <Stack sx={{ gap: 1 }}>
                         <PersonalBiografieCard
                             label={'Body Height'}
