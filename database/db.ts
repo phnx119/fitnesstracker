@@ -93,7 +93,7 @@ class FitnessDatabase extends Dexie {
         this.on('populate', (tx) => {
             tx.table('Settings').add({
                 id: 1,
-                showDbViewer: true,
+                showDbViewer: false,
                 landingPage: '/training',
             });
         });

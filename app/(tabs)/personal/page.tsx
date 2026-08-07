@@ -11,6 +11,19 @@ import PersonalBiografieCard from './PersonalBiografieCard';
 export default function ExercisePage() {
     const [expanded, setExpanded] = useState(false);
     const personalData = useLiveQuery(() => dbInstance.PersonalData.get(1));
+    //mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
+    // einen useEffect dafür zu benutzen funktioniert zwar, ist aber so sehr schnell problematisch
+    // ein useEffect löst IMMER nach dem rendern aus und dann nochmal wenn sie die abhängigkeit ändert.
+    // bedeutet: so wird bei jedem aufruf der seite ein dbAdd ausgeführt, was nicht geht, weil ja die id schon vorhanden ist,
+    //   die DB bekommt intern einen fehler und bricht die transaktion ab, deshalb passiert hier nichts
+    // zusätzlich wird noch bei jeder einzelnen eingabe erstmal das data objekt geprüft und es besteht immer das risiko, dass die nochmal auslöst.
+    //
+    // Empfehlung:
+    //   Das personalData objekt sollte im normalfall niemals gelöscht werden, außer man macht sich am dbviewer zu schaffen.
+    //   Deshalb reicht es, beim ersten start der app direkt das objekt zu erzeugen. Das habe ich auch mit den settings so gemacht (siehe db zeile 93)
+    //   Um sicherzugehen, dass es nicht zu einer kaputten db kommen kann, würde ich in den settings einen "revert personal" button hinzufügen,
+    //     so wie es ja schon einen da gibt
+    //mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
     useEffect(() => {
         if (!personalData?.id) {
             dbInstance.PersonalData.add({
