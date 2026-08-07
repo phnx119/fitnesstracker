@@ -29,6 +29,7 @@ export default function MachineChart({
             lineColor: '#ffffff',
             lineWidth: 2.5,
             pointRadius: 3,
+            tension: 1,
         },
     );
 
