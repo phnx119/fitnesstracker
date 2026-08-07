@@ -51,31 +51,23 @@ export default function ImagePicker({
 
     const activeBlob = selectedFile ?? storedBlob;
 
-    const previewUri = useMemo(() => {
-        if (!activeBlob) return null;
-        return URL.createObjectURL(activeBlob);
-    }, [activeBlob]);
-
-    useEffect(() => {
-        if (!previewUri) return;
-
-        return () => {
-            URL.revokeObjectURL(previewUri);
-        };
-    }, [previewUri]);
+    const previewUri = useObjectUrl(activeBlob);
 
     const imagePickerContent = (
         <Stack sx={{ gap: 1, p: 1 }}>
             {previewUri ? (
                 <Box
                     component="img"
+                    key={previewUri}
                     src={previewUri}
                     sx={{
                         width: '100%',
+                        maxHeight: 300,
                         aspectRatio: '1 / 1',
-                        objectFit: 'fill',
+                        objectFit: 'contain',
                         borderRadius: 1,
                         boxShadow: 3,
+                        contain: 'paint layout',
                     }}
                 />
             ) : (
@@ -84,6 +76,7 @@ export default function ImagePicker({
                         justifyContent: 'center',
                         alignItems: 'center',
                         aspectRatio: '1 / 1',
+                        maxHeight: 300,
                         flex: 1,
                     }}
                 >
@@ -164,7 +157,6 @@ export default function ImagePicker({
         }
 
         setSelectedFile(file);
-
         event.target.value = '';
     }
 
@@ -195,4 +187,26 @@ export default function ImagePicker({
             setIsSaving(false);
         }
     }
+}
+
+function useObjectUrl(blob: Blob | File | null | undefined): string | null {
+    const blobKey = blob
+        ? `${blob.size}-${blob.type}-${(blob as File).lastModified ?? 0}`
+        : null;
+
+    const url = useMemo(() => {
+        if (!blob) return null;
+        return URL.createObjectURL(blob);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [blobKey]);
+
+    useEffect(() => {
+        if (!url) return;
+
+        return () => {
+            URL.revokeObjectURL(url);
+        };
+    }, [url]);
+
+    return url;
 }
