@@ -52,6 +52,8 @@ export type UseChartOverlayReturn<
 > = {
     containerRef: RefObject<TContainer | null>;
     registerPointRef: (id: PointId, el: HTMLElement | null) => void;
+    backgroundOverlay: ReactNode;
+    linesOverlay: ReactNode;
     overlay: ReactNode;
     points: OverlayPoint[];
 };
@@ -190,7 +192,6 @@ export function useChartOverlay<
                 });
             });
 
-            // Target the content Stack sibling (last child) to measure actual un-clipped dimensions
             const contentEl = container.lastElementChild as HTMLElement | null;
 
             const contentWidth = contentEl
@@ -218,7 +219,6 @@ export function useChartOverlay<
         const resizeObserver = new ResizeObserver(handleResize);
         resizeObserver.observe(container);
 
-        // Observe the inner content stack so additions/deletions trigger recalculations immediately
         const contentEl = container.lastElementChild;
         if (contentEl && contentEl !== container) {
             resizeObserver.observe(contentEl);
@@ -258,8 +258,13 @@ export function useChartOverlay<
         return `${pathD} L ${last.x.toFixed(2)} 0 L ${first.x.toFixed(2)} 0 Z`;
     }, [pathD, fillAboveBackground, points]);
 
-    const overlay = useMemo(() => {
-        if (points.length === 0) return null;
+    const backgroundOverlay = useMemo(() => {
+        if (
+            points.length === 0 ||
+            (!fillBelowBackground && !fillAboveBackground)
+        ) {
+            return null;
+        }
 
         return (
             <div
@@ -273,6 +278,28 @@ export function useChartOverlay<
                     zIndex,
                 }}
             >
+                <svg
+                    style={{
+                        position: 'absolute',
+                        width: 0,
+                        height: 0,
+                        overflow: 'hidden',
+                    }}
+                >
+                    <defs>
+                        {areaBelowPathD && (
+                            <clipPath id={clipBelowId}>
+                                <path d={areaBelowPathD} />
+                            </clipPath>
+                        )}
+                        {areaAbovePathD && (
+                            <clipPath id={clipAboveId}>
+                                <path d={areaAbovePathD} />
+                            </clipPath>
+                        )}
+                    </defs>
+                </svg>
+
                 {fillBelowBackground && areaBelowPathD && (
                     <div
                         style={{
@@ -302,7 +329,36 @@ export function useChartOverlay<
                         }}
                     />
                 )}
+            </div>
+        );
+    }, [
+        points.length,
+        containerWidth,
+        containerHeight,
+        zIndex,
+        fillBelowBackground,
+        fillAboveBackground,
+        areaBelowPathD,
+        areaAbovePathD,
+        clipBelowId,
+        clipAboveId,
+    ]);
 
+    const linesOverlay = useMemo(() => {
+        if (points.length === 0) return null;
+
+        return (
+            <div
+                style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: containerWidth,
+                    height: containerHeight,
+                    pointerEvents: 'none',
+                    zIndex: zIndex + 1,
+                }}
+            >
                 <svg
                     style={{
                         position: 'absolute',
@@ -313,19 +369,6 @@ export function useChartOverlay<
                         overflow: 'visible',
                     }}
                 >
-                    <defs>
-                        {areaBelowPathD && (
-                            <clipPath id={clipBelowId}>
-                                <path d={areaBelowPathD} />
-                            </clipPath>
-                        )}
-                        {areaAbovePathD && (
-                            <clipPath id={clipAboveId}>
-                                <path d={areaAbovePathD} />
-                            </clipPath>
-                        )}
-                    </defs>
-
                     {pathD && (
                         <path
                             d={pathD}
@@ -352,23 +395,29 @@ export function useChartOverlay<
     }, [
         points,
         pathD,
-        areaBelowPathD,
-        areaAbovePathD,
         containerWidth,
         containerHeight,
         lineColor,
         lineWidth,
         pointRadius,
         zIndex,
-        fillBelowBackground,
-        fillAboveBackground,
-        clipBelowId,
-        clipAboveId,
     ]);
+
+    const overlay = useMemo(
+        () => (
+            <>
+                {backgroundOverlay}
+                {linesOverlay}
+            </>
+        ),
+        [backgroundOverlay, linesOverlay],
+    );
 
     return {
         containerRef,
         registerPointRef,
+        backgroundOverlay,
+        linesOverlay,
         overlay,
         points,
     };
