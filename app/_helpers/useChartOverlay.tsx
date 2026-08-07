@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 // put containerRef onto the outer Stack that contains the elements
 // put registerPointRef() onto each column:
 //     ref={(el) => registerPointRef(set.id, el)}
-// put {overlay} into the outer stack or with same size and pos
+// put {overlay} into the stack that contains the scrolling items THE STACK HAS TO BE POSITION RELATIVE
 
 export function useChartOverlay(
     pointIds: (string | number)[],
@@ -62,8 +62,12 @@ export function useChartOverlay(
                     const rect = el.getBoundingClientRect();
                     newPoints.push({
                         id,
-                        x: rect.left - containerRect.left + rect.width / 2,
-                        y: rect.top - containerRect.top,
+                        x:
+                            rect.left -
+                            containerRect.left +
+                            container.scrollLeft +
+                            rect.width / 2,
+                        y: rect.top - containerRect.top + container.scrollTop,
                     });
                 }
             });
@@ -77,11 +81,9 @@ export function useChartOverlay(
 
         const observer = new ResizeObserver(updatePoints);
         observer.observe(container);
-        container.addEventListener('scroll', updatePoints, { passive: true });
 
         return () => {
             observer.disconnect();
-            container.removeEventListener('scroll', updatePoints);
         };
     }, [pointIds, pointKeysSerialized]);
 
@@ -101,6 +103,7 @@ export function useChartOverlay(
                     height: '100%',
                     pointerEvents: 'none',
                     zIndex,
+                    overflow: 'visible',
                 }}
             >
                 {points.length > 1 && (

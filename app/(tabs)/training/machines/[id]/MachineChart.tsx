@@ -52,8 +52,6 @@ export default function MachineChart({
                         overflow: 'hidden',
                     }}
                 >
-                    {overlay}
-
                     <Stack
                         ref={containerRef}
                         sx={{
@@ -61,10 +59,12 @@ export default function MachineChart({
                             gap: 1,
                             overflow: 'auto',
                             height: '100%',
+                            position: 'relative',
                         }}
                         direction="row"
                         divider={<Divider orientation="vertical" />}
                     >
+                        {overlay}
                         {data.map((session) => (
                             <Stack
                                 key={session.id}
