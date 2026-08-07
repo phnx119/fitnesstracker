@@ -6,7 +6,7 @@ import { Settings } from '@mui/icons-material';
 import { Button, Dialog, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import EditMachineDialog from '../EditMachineDialog';
 import SetInput from '../SetInput';
@@ -20,7 +20,50 @@ export default function MachinePage() {
 
     const [showEditDialog, setShowEditDialog] = useState(false);
 
-    const machineData = useLiveQuery(getMachineData) ?? [];
+    const getMachineData = useCallback(async () => {
+        if (!machineId) return [];
+
+        const sessionMap = new Map<
+            number,
+            Row<'MachineSession'> & { setRecords: Row<'SetRecord'>[] }
+        >();
+        const sessionIds: number[] = [];
+
+        await dbInstance.MachineSession.where('machineId')
+            .equals(machineId)
+            .each((session) => {
+                sessionIds.push(session.id);
+                sessionMap.set(session.id, { ...session, setRecords: [] });
+            });
+
+        if (sessionIds.length === 0) return [];
+
+        let cachedId: number | null = null;
+        let cachedSession:
+            | (Row<'MachineSession'> & { setRecords: Row<'SetRecord'>[] })
+            | undefined;
+
+        await dbInstance.SetRecord.where('sessionId')
+            .anyOf(sessionIds)
+            .each((record) => {
+                if (record.sessionId !== cachedId) {
+                    cachedId = record.sessionId;
+                    cachedSession = sessionMap.get(record.sessionId);
+                }
+                if (cachedSession) {
+                    cachedSession.setRecords.push(record);
+                }
+            });
+
+        const result = Array.from(sessionMap.values());
+        for (let i = 0; i < result.length; i++) {
+            result[i].setRecords.sort((a, b) => a.setNumber - b.setNumber);
+        }
+
+        return result;
+    }, [machineId]);
+
+    const machineData = useLiveQuery(getMachineData, [getMachineData]) ?? [];
 
     const [activeSessionId, setActiveSessionId] = useState<number | null>(null);
 
@@ -123,48 +166,5 @@ export default function MachinePage() {
 
     function closeEditDialog() {
         setShowEditDialog(false);
-    }
-
-    async function getMachineData() {
-        if (!machineId) return [];
-
-        const sessionMap = new Map<
-            number,
-            Row<'MachineSession'> & { setRecords: Row<'SetRecord'>[] }
-        >();
-        const sessionIds: number[] = [];
-
-        await dbInstance.MachineSession.where('machineId')
-            .equals(machineId)
-            .each((session) => {
-                sessionIds.push(session.id);
-                sessionMap.set(session.id, { ...session, setRecords: [] });
-            });
-
-        if (sessionIds.length === 0) return [];
-
-        let cachedId: number | null = null;
-        let cachedSession:
-            | (Row<'MachineSession'> & { setRecords: Row<'SetRecord'>[] })
-            | undefined;
-
-        await dbInstance.SetRecord.where('sessionId')
-            .anyOf(sessionIds)
-            .each((record) => {
-                if (record.sessionId !== cachedId) {
-                    cachedId = record.sessionId;
-                    cachedSession = sessionMap.get(record.sessionId);
-                }
-                if (cachedSession) {
-                    cachedSession.setRecords.push(record);
-                }
-            });
-
-        const result = Array.from(sessionMap.values());
-        for (let i = 0; i < result.length; i++) {
-            result[i].setRecords.sort((a, b) => a.setNumber - b.setNumber);
-        }
-
-        return result;
     }
 }

@@ -52,17 +52,15 @@ export default function ImagePicker({
     const activeBlob = selectedFile ?? storedBlob;
 
     const previewUri = useMemo(() => {
-        if (!activeBlob) {
-            return null;
-        }
+        if (!activeBlob) return null;
         return URL.createObjectURL(activeBlob);
     }, [activeBlob]);
 
     useEffect(() => {
+        if (!previewUri) return;
+
         return () => {
-            if (previewUri) {
-                URL.revokeObjectURL(previewUri);
-            }
+            URL.revokeObjectURL(previewUri);
         };
     }, [previewUri]);
 
