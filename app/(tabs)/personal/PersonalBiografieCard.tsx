@@ -1,14 +1,17 @@
 import NumberField from '@/components/NumberField';
+import { dbInstance } from '@/database/db';
 import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import { JSX } from 'react';
 
 type Props = {
     label: string;
+    attName: string;
     bioValue?: number;
 };
 
 export default function PersonalBiografieCard({
     label,
+    attName,
     bioValue,
 }: Props): JSX.Element {
     return (
@@ -21,7 +24,14 @@ export default function PersonalBiografieCard({
                         </Typography>
                     </Box>
                     <Box sx={{ flex: 1 }}>
-                        <NumberField value={bioValue ?? 0}></NumberField>
+                        <NumberField
+                            onValueChange={(newValue) => {
+                                dbInstance.PersonalData.update(1, {
+                                    [attName]: newValue,
+                                });
+                            }}
+                            value={bioValue ?? 0}
+                        ></NumberField>
                     </Box>
                 </Stack>
             </CardContent>
