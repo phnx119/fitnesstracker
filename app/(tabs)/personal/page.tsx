@@ -11,12 +11,6 @@ import PersonalBiografieCard from './PersonalBiografieCard';
 export default function ExercisePage() {
     const [expanded, setExpanded] = useState(false);
     const personalData = useLiveQuery(() => dbInstance.PersonalData.get(1));
-    const values = {
-        bodyWeight: personalData?.bodyWeight,
-        bodyHeight: personalData?.bodyHeight,
-        bodyFat: personalData?.bodyFat,
-        targetWeight: personalData?.targetWeight,
-    };
     useEffect(() => {
         if (!personalData?.id) {
             dbInstance.PersonalData.add({
@@ -60,17 +54,17 @@ export default function ExercisePage() {
                         <PersonalBiografieCard
                             label={'Body Height'}
                             attName="bodyHeight"
-                            bioValue={values.bodyHeight}
+                            bioValue={personalData?.bodyHeight}
                         />
                         <PersonalBiografieCard
                             label={'Body Fat'}
                             attName="bodyFat"
-                            bioValue={values.bodyFat}
+                            bioValue={personalData?.bodyFat}
                         />
                         <PersonalBiografieCard
                             label={'Target Weight'}
                             attName="targetWeight"
-                            bioValue={values.targetWeight}
+                            bioValue={personalData?.targetWeight}
                         />
                     </Stack>
                 </Collapse>
