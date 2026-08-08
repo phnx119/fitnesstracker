@@ -3,22 +3,22 @@
 import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
-import { Button, Dialog, IconButton, Stack } from '@mui/material';
+import { Button, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useParams } from 'next/navigation';
+import Link from 'next/link';
+import { useParams, usePathname } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
-import EditMachineDialog from '../EditMachineDialog';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
+    const pathName = usePathname();
+
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
 
     const { id: idString } = useParams<{ id: string }>();
     const machineId = Number(idString);
     const machine = useLiveQuery(() => dbInstance.Machine.get(machineId));
-
-    const [showEditDialog, setShowEditDialog] = useState(false);
 
     const getMachineData = useCallback(async () => {
         if (!machineId) return [];
@@ -73,9 +73,11 @@ export default function MachinePage() {
         <TrainingContainer
             title={machine.name}
             headerButtons={
-                <IconButton onClick={() => setShowEditDialog(true)}>
-                    <Settings />
-                </IconButton>
+                <Link href={`${pathName}/settings`}>
+                    <IconButton>
+                        <Settings />
+                    </IconButton>
+                </Link>
             }
         >
             <Stack
@@ -109,13 +111,6 @@ export default function MachinePage() {
                     setActiveSessionId={setActiveSessionId}
                 />
             </Stack>
-
-            <Dialog open={showEditDialog} onClose={closeEditDialog}>
-                <EditMachineDialog
-                    onClose={closeEditDialog}
-                    machine={machine}
-                />
-            </Dialog>
         </TrainingContainer>
     ) : null;
 
@@ -162,9 +157,5 @@ export default function MachinePage() {
         const targetId = session.setRecords[session.setRecords.length - 1].id;
 
         dbInstance.SetRecord.delete(targetId);
-    }
-
-    function closeEditDialog() {
-        setShowEditDialog(false);
     }
 }
