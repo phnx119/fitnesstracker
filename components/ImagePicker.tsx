@@ -19,7 +19,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import type { Table } from 'dexie';
-import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent } from 'react';
 
 type TablesWithImage = {
     [K in keyof SchemaTables]: 'imageBlob' extends keyof SchemaTables[K]
@@ -38,7 +38,7 @@ export default function ImagePicker({
 }) {
     const [showDialog, setShowDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [imageBlob, setImageBlob] = useState<Blob | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const table = dbInstance[tableName] as unknown as Table<
         { imageBlob?: Blob },
@@ -49,17 +49,16 @@ export default function ImagePicker({
         loadImage();
     }, []);
 
-    const activeBlob = selectedFile ?? imageBlob;
-
-    const previewUri = useObjectUrl(activeBlob);
+    const activeUrl = selectedFile
+        ? URL.createObjectURL(selectedFile)
+        : imageUrl;
 
     const imagePickerContent = (
         <Stack sx={{ gap: 1, p: 1 }}>
-            {previewUri ? (
+            {activeUrl ? (
                 <Box
                     component="img"
-                    key={previewUri}
-                    src={previewUri}
+                    src={activeUrl}
                     sx={{
                         width: '100%',
                         aspectRatio: '1 / 1',
@@ -104,7 +103,7 @@ export default function ImagePicker({
                 <Button
                     color="error"
                     onClick={handleDeleteClick}
-                    disabled={imageBlob === undefined}
+                    disabled={!imageUrl}
                 >
                     <DeleteIcon />
                 </Button>
@@ -147,9 +146,9 @@ export default function ImagePicker({
     async function loadImage() {
         await table.get(dbRowId).then((row) => {
             if (row?.imageBlob) {
-                setImageBlob(row.imageBlob);
+                setImageUrl(URL.createObjectURL(row.imageBlob));
             } else {
-                setImageBlob(null);
+                setImageUrl(null);
             }
         });
     }
@@ -182,17 +181,4 @@ export default function ImagePicker({
         await table.update(dbRowId, { imageBlob: undefined });
         loadImage();
     }
-}
-
-function useObjectUrl(blob: Blob | File | null | undefined): string | null {
-    const blobKey = blob
-        ? `${blob.size}-${blob.type}-${(blob as File).lastModified ?? 0}`
-        : null;
-
-    const url = useMemo(() => {
-        if (!blob) return null;
-        return URL.createObjectURL(blob);
-    }, [blobKey]);
-
-    return url;
 }
