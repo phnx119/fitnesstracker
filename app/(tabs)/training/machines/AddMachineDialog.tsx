@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-export default function EditMachineDialog({
+export default function AddMachineDialog({
     onClose,
     machine,
 }: {

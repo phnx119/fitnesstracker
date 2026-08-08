@@ -6,7 +6,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import TrainingContainer from '../TrainingContainer';
-import EditMachineDialog from './EditMachineDialog';
+import AddMachineDialog from './AddMachineDialog';
 import MachineList from './MachineList';
 
 export default function AllMachinesPage() {
@@ -27,7 +27,7 @@ export default function AllMachinesPage() {
             </Stack>
 
             <Dialog open={showEditDialog} onClose={closeEditDialog}>
-                <EditMachineDialog onClose={closeEditDialog} />
+                <AddMachineDialog onClose={closeEditDialog} />
             </Dialog>
         </TrainingContainer>
     );
