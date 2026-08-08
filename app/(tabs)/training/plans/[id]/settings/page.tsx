@@ -2,27 +2,37 @@
 
 import ImagePicker from '@/components/ImagePicker';
 import { dbInstance, Row } from '@/database/db';
-import { Stack, TextField } from '@mui/material';
+import { debounce, Stack, TextField } from '@mui/material';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export default function PlanSettings() {
     const { id: idString } = useParams<{ id: string }>();
     const planId = Number(idString);
 
     const [plan, setPlan] = useState<Row<'WorkoutPlan'> | null>(null);
-    const [planName, setPlanName] = useState('');
 
     useEffect(() => {
         loadPlan();
     }, []);
+
+    const debouncedSave = useMemo(
+        () =>
+            debounce(async (value: string) => {
+                await dbInstance.WorkoutPlan.update(planId, {
+                    name: value,
+                });
+            }, 300),
+        [planId],
+    );
     return (
         <Stack sx={{ pt: 1, flex: 1, gap: 1 }}>
             <ImagePicker tableName="WorkoutPlan" dbRowId={planId} />
             <TextField
+                key={plan?.name}
                 label="Name"
-                value={planName}
-                onChange={(e) => setPlanName(e.target.value)}
+                defaultValue={plan?.name}
+                onChange={(e) => debouncedSave(e.target.value)}
             />
         </Stack>
     );
@@ -31,7 +41,6 @@ export default function PlanSettings() {
         await dbInstance.WorkoutPlan.get(planId).then((plan) => {
             if (plan) {
                 setPlan(plan);
-                setPlanName(plan.name);
             } else {
                 setPlan(null);
             }
