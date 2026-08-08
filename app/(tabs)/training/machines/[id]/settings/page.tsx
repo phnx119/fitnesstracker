@@ -5,6 +5,7 @@ import { dbInstance, Row } from '@/database/db';
 import { debounce, Stack, TextField } from '@mui/material';
 import { useParams } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import TrainingContainer from '../../../TrainingContainer';
 
 export default function MachineSettings() {
     const { id: idString } = useParams<{ id: string }>();
@@ -26,15 +27,17 @@ export default function MachineSettings() {
         [machineId],
     );
     return (
-        <Stack sx={{ pt: 1, flex: 1, gap: 1 }}>
-            <ImagePicker tableName="Machine" dbRowId={machineId} />
-            <TextField
-                key={machine?.name}
-                label="Name"
-                defaultValue={machine?.name}
-                onChange={(e) => debouncedSave(e.target.value)}
-            />
-        </Stack>
+        <TrainingContainer title="Edit Machine">
+            <Stack sx={{ gap: 1, flex: 1 }}>
+                <ImagePicker tableName="Machine" dbRowId={machineId} />
+                <TextField
+                    key={machine?.name}
+                    label="Name"
+                    defaultValue={machine?.name}
+                    onChange={(e) => debouncedSave(e.target.value)}
+                />
+            </Stack>
+        </TrainingContainer>
     );
 
     async function loadMachine() {
