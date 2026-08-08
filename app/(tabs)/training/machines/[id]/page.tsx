@@ -2,7 +2,7 @@
 
 import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
-import { Settings } from '@mui/icons-material';
+import { AddBox, Settings } from '@mui/icons-material';
 import { Button, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
@@ -96,11 +96,37 @@ export default function MachinePage() {
                     ))}
             </Stack>
 
-            <Stack direction="row">
-                <Button onClick={removeSession}>-session</Button>
-                <Button onClick={removeSet}>-set</Button>
-                <Button onClick={addSession}>+session</Button>
-                <Button onClick={addSet}>+set</Button>
+            <Stack
+                direction="row"
+                // HEIGHT HAS TO BE HARDCODED. ICONBUTTON MESSES UP THE CHART OTHERWISE
+                sx={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 40,
+                }}
+            >
+                {/* <IconButton onClick={removeSession}>
+                    <CancelPresentation />
+                </IconButton>
+
+                <IconButton onClick={removeSet}>
+                    <AddBox />
+                </IconButton>
+
+                <IconButton onClick={addSession}>
+                    <AddBox />
+                </IconButton>
+
+                <IconButton onClick={addSet}>
+                    <AddBox />
+                </IconButton> */}
+                <Button startIcon={<AddBox />}>tttt</Button>
+                <IconButton>
+                    <AddBox />
+                </IconButton>
+                <Button>tttt</Button>
+                <Button>tttt</Button>
+                <Button>tttt</Button>
             </Stack>
 
             <Stack
