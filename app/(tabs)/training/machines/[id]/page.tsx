@@ -2,8 +2,14 @@
 
 import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
-import { AddBox, Settings } from '@mui/icons-material';
-import { Button, IconButton, Stack } from '@mui/material';
+import { Settings } from '@mui/icons-material';
+import { Divider, IconButton, Stack } from '@mui/material';
+import {
+    IconGraph,
+    IconGraphOff,
+    IconTableMinus,
+    IconTablePlus,
+} from '@tabler/icons-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
@@ -103,30 +109,27 @@ export default function MachinePage() {
                     justifyContent: 'center',
                     alignItems: 'center',
                     height: 40,
+                    m: 1,
+                    gap: 1,
                 }}
             >
-                {/* <IconButton onClick={removeSession}>
-                    <CancelPresentation />
-                </IconButton>
-
-                <IconButton onClick={removeSet}>
-                    <AddBox />
+                <IconButton onClick={removeSession}>
+                    <IconTableMinus size="32" />
                 </IconButton>
 
                 <IconButton onClick={addSession}>
-                    <AddBox />
+                    <IconTablePlus size="32" />
+                </IconButton>
+
+                <Divider orientation="vertical" sx={{ mx: 1 }} />
+
+                <IconButton onClick={removeSet}>
+                    <IconGraphOff size="35" />
                 </IconButton>
 
                 <IconButton onClick={addSet}>
-                    <AddBox />
-                </IconButton> */}
-                <Button startIcon={<AddBox />}>tttt</Button>
-                <IconButton>
-                    <AddBox />
+                    <IconGraph size="35" />
                 </IconButton>
-                <Button>tttt</Button>
-                <Button>tttt</Button>
-                <Button>tttt</Button>
             </Stack>
 
             <Stack
