@@ -1,7 +1,6 @@
 'use client';
 
-import ImagePicker from '@/components/ImagePicker';
-import { dbInstance, Row } from '@/database/db';
+import { dbInstance } from '@/database/db';
 import {
     Button,
     DialogActions,
@@ -10,38 +9,16 @@ import {
     Stack,
     TextField,
 } from '@mui/material';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 
-export default function AddPlanDialog({
-    onClose,
-    plan,
-}: {
-    onClose(): void;
-    plan?: Row<'WorkoutPlan'>;
-}) {
-    const [planName, setPlanName] = useState(plan?.name ?? '');
-
-    const livePlan = useLiveQuery(
-        () => (plan?.id ? dbInstance.WorkoutPlan.get(plan.id) : undefined),
-        [plan?.id],
-    );
-
-    const activePlan = livePlan ?? plan;
+export default function AddPlanDialog({ onClose }: { onClose(): void }) {
+    const [planName, setPlanName] = useState('');
 
     return (
         <>
-            <DialogTitle>
-                {activePlan?.id ? 'Edit Plan' : 'Add a Plan'}
-            </DialogTitle>
+            <DialogTitle>Add a Plan</DialogTitle>
             <DialogContent>
                 <Stack sx={{ pt: 1, flex: 1, gap: 1 }}>
-                    {activePlan?.id && (
-                        <ImagePicker
-                            tableName="WorkoutPlan"
-                            dbRowId={activePlan.id}
-                        />
-                    )}
                     <TextField
                         label="Name"
                         value={planName}
@@ -57,16 +34,11 @@ export default function AddPlanDialog({
     );
 
     function savePlan() {
-        if (activePlan?.id) {
-            dbInstance.WorkoutPlan.update(activePlan.id, {
-                name: planName,
-            });
-        } else {
-            dbInstance.WorkoutPlan.add({
-                name: planName,
-                imageBlob: undefined,
-            });
-        }
+        dbInstance.WorkoutPlan.add({
+            name: planName,
+            imageBlob: undefined,
+        });
+
         onClose();
     }
 }

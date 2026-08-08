@@ -1,7 +1,6 @@
 'use client';
 
-import ImagePicker from '@/components/ImagePicker';
-import { dbInstance, Row } from '@/database/db';
+import { dbInstance } from '@/database/db';
 import {
     Button,
     DialogActions,
@@ -12,24 +11,14 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-export default function AddMachineDialog({
-    onClose,
-    machine,
-}: {
-    onClose(): void;
-    machine?: Row<'Machine'>;
-}) {
-    const [machineName, setMachineName] = useState(machine?.name ?? '');
+export default function AddMachineDialog({ onClose }: { onClose(): void }) {
+    const [machineName, setMachineName] = useState('');
+
     return (
         <>
-            <DialogTitle>
-                {machine?.id ? 'Edit Machine' : 'Add a Machine'}
-            </DialogTitle>
+            <DialogTitle>Add a Machine</DialogTitle>
             <DialogContent>
                 <Stack sx={{ gap: 1, flex: 1 }}>
-                    {machine?.id && (
-                        <ImagePicker dbRowId={machine.id} tableName="Machine" />
-                    )}
                     <TextField
                         label="Name"
                         value={machineName}
@@ -45,16 +34,11 @@ export default function AddMachineDialog({
     );
 
     function savePlan() {
-        if (machine?.id) {
-            dbInstance.Machine.update(machine.id, {
-                name: machineName,
-            });
-        } else {
-            dbInstance.Machine.add({
-                name: machineName,
-                imageBlob: undefined,
-            });
-        }
+        dbInstance.Machine.add({
+            name: machineName,
+            imageBlob: undefined,
+        });
+
         onClose();
     }
 }
