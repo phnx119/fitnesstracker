@@ -19,7 +19,6 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import type { Table } from 'dexie';
-import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo, useState, type ChangeEvent } from 'react';
 
 type TablesWithImage = {
@@ -39,17 +38,18 @@ export default function ImagePicker({
 }) {
     const [showDialog, setShowDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [imageBlob, setImageBlob] = useState<Blob | null>(null);
 
     const table = dbInstance[tableName] as unknown as Table<
         { imageBlob?: Blob },
         number
     >;
 
-    const row = useLiveQuery(() => table.get(dbRowId), [dbRowId, table]);
-    const storedBlob = row?.imageBlob;
+    useEffect(() => {
+        loadImage();
+    }, []);
 
-    const activeBlob = selectedFile ?? storedBlob;
+    const activeBlob = selectedFile ?? imageBlob;
 
     const previewUri = useObjectUrl(activeBlob);
 
@@ -85,7 +85,7 @@ export default function ImagePicker({
             )}
 
             <Stack direction="row" sx={{ gap: 1, justifyContent: 'center' }}>
-                <Button component="label" disabled={isSaving}>
+                <Button component="label">
                     <AddPhotoAlternate />
                     <input
                         type="file"
@@ -98,7 +98,7 @@ export default function ImagePicker({
                 <Button
                     color="success"
                     onClick={handleSaveClick}
-                    disabled={!selectedFile || isSaving}
+                    disabled={!selectedFile}
                 >
                     <SaveIcon />
                 </Button>
@@ -106,7 +106,7 @@ export default function ImagePicker({
                 <Button
                     color="error"
                     onClick={handleDeleteClick}
-                    disabled={storedBlob === undefined || isSaving}
+                    disabled={imageBlob === undefined}
                 >
                     <DeleteIcon />
                 </Button>
@@ -146,6 +146,16 @@ export default function ImagePicker({
         </Stack>
     );
 
+    async function loadImage() {
+        await table.get(dbRowId).then((row) => {
+            if (row?.imageBlob) {
+                setImageBlob(row.imageBlob);
+            } else {
+                setImageBlob(null);
+            }
+        });
+    }
+
     function closeDialog() {
         setShowDialog(false);
     }
@@ -157,7 +167,6 @@ export default function ImagePicker({
         }
 
         setSelectedFile(file);
-        event.target.value = '';
     }
 
     async function handleSaveClick(): Promise<void> {
@@ -165,27 +174,15 @@ export default function ImagePicker({
             return;
         }
 
-        try {
-            setIsSaving(true);
-            await table.update(dbRowId, { imageBlob: selectedFile });
-            setSelectedFile(null);
-        } catch (error) {
-            console.error('Failed to save image:', error);
-        } finally {
-            setIsSaving(false);
-        }
+        await table.update(dbRowId, { imageBlob: selectedFile });
+        setSelectedFile(null);
+        loadImage();
     }
 
     async function handleDeleteClick(): Promise<void> {
-        try {
-            setIsSaving(true);
-            setSelectedFile(null);
-            await table.update(dbRowId, { imageBlob: undefined });
-        } catch (error) {
-            console.error('Failed to remove image:', error);
-        } finally {
-            setIsSaving(false);
-        }
+        setSelectedFile(null);
+        await table.update(dbRowId, { imageBlob: undefined });
+        loadImage();
     }
 }
 
@@ -197,7 +194,6 @@ function useObjectUrl(blob: Blob | File | null | undefined): string | null {
     const url = useMemo(() => {
         if (!blob) return null;
         return URL.createObjectURL(blob);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [blobKey]);
 
     useEffect(() => {
