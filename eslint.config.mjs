@@ -17,6 +17,7 @@ const eslintConfig = defineConfig([
                     destructuredArrayIgnorePattern: '^_',
                 },
             ],
+            'react-hooks/exhaustive-deps': 'off',
         },
     },
     // Override default ignores of eslint-config-next.
