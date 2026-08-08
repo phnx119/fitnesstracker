@@ -62,7 +62,6 @@ export default function ImagePicker({
                     src={previewUri}
                     sx={{
                         width: '100%',
-                        maxHeight: 300,
                         aspectRatio: '1 / 1',
                         objectFit: 'fill',
                         borderRadius: 1,
@@ -76,7 +75,6 @@ export default function ImagePicker({
                         justifyContent: 'center',
                         alignItems: 'center',
                         aspectRatio: '1 / 1',
-                        maxHeight: 300,
                         flex: 1,
                     }}
                 >
@@ -195,14 +193,6 @@ function useObjectUrl(blob: Blob | File | null | undefined): string | null {
         if (!blob) return null;
         return URL.createObjectURL(blob);
     }, [blobKey]);
-
-    useEffect(() => {
-        if (!url) return;
-
-        return () => {
-            URL.revokeObjectURL(url);
-        };
-    }, [url]);
 
     return url;
 }
