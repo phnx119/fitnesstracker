@@ -13,7 +13,7 @@ export default function AllMachinesPage() {
     const pathName = usePathname();
     const router = useRouter();
     const allMachines = useLiveQuery(() => dbInstance.Machine.toArray()) ?? [];
-    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showAddDialog, setShowAddDialog] = useState(false);
     return (
         <TrainingContainer title="All" headerButtons={null}>
             <Stack sx={{ gap: 1, overflow: 'auto', flex: 1 }}>
@@ -22,12 +22,12 @@ export default function AllMachinesPage() {
                     onClick={handleMachineClick}
                 />
                 <Card>
-                    <Button onClick={() => setShowEditDialog(true)}>add</Button>
+                    <Button onClick={() => setShowAddDialog(true)}>add</Button>
                 </Card>
             </Stack>
 
-            <Dialog open={showEditDialog} onClose={closeEditDialog}>
-                <AddMachineDialog onClose={closeEditDialog} />
+            <Dialog open={showAddDialog} onClose={closeAddDialog}>
+                <AddMachineDialog onClose={closeAddDialog} />
             </Dialog>
         </TrainingContainer>
     );
@@ -36,7 +36,7 @@ export default function AllMachinesPage() {
         router.push(`${pathName}/${machine.id}`);
     }
 
-    function closeEditDialog() {
-        setShowEditDialog(false);
+    function closeAddDialog() {
+        setShowAddDialog(false);
     }
 }

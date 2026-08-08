@@ -24,12 +24,12 @@ export default function PlanPage() {
     const machines =
         useLiveQuery(() => getPlanMachines(planId), [planId]) ?? [];
 
-    const [showEditPlanDialog, setShowEditPlanDialog] = useState(false);
+    const [showAddDialog, setShowAddDialog] = useState(false);
     const [showMachineSelect, setShowMachineSelect] = useState(false);
 
     return plan ? (
         <TrainingContainer
-            title={plan?.name ?? ''}
+            title={plan.name ?? ''}
             headerButtons={
                 <>
                     <IconButton onClick={() => setShowMachineSelect(true)}>
@@ -45,10 +45,8 @@ export default function PlanPage() {
         >
             <MachineList machines={machines} onClick={handleMachineClick} />
 
-            <Dialog open={showEditPlanDialog} onClose={closeEditDialog}>
-                {showEditPlanDialog && (
-                    <AddPlanDialog onClose={closeEditDialog} plan={plan} />
-                )}
+            <Dialog open={showAddDialog} onClose={closeAddDialog}>
+                {showAddDialog && <AddPlanDialog onClose={closeAddDialog} />}
             </Dialog>
 
             <Dialog open={showMachineSelect} onClose={closeMachineSelect}>
@@ -63,8 +61,8 @@ export default function PlanPage() {
         router.push(`/training/machines/${machine.id}`);
     }
 
-    function closeEditDialog() {
-        setShowEditPlanDialog(false);
+    function closeAddDialog() {
+        setShowAddDialog(false);
     }
 
     function closeMachineSelect() {
