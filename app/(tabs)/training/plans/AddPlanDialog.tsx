@@ -13,7 +13,7 @@ import {
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useState } from 'react';
 
-export default function EditPlanDialog({
+export default function AddPlanDialog({
     onClose,
     plan,
 }: {

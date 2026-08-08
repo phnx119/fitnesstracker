@@ -7,7 +7,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
 import { useState } from 'react';
 import TrainingContainer from '../TrainingContainer';
-import EditPlanDialog from './EditPlanDialog';
+import AddPlanDialog from './AddPlanDialog';
 import PlanCard from './PlanCard';
 
 export default function PlanListPage() {
@@ -33,7 +33,7 @@ export default function PlanListPage() {
             </Stack>
             <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
             <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
-                <EditPlanDialog onClose={closeAddPlanDialog} />
+                <AddPlanDialog onClose={closeAddPlanDialog} />
             </Dialog>
         </TrainingContainer>
     );

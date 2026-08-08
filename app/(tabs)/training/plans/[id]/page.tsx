@@ -4,15 +4,17 @@ import { dbInstance, Row } from '@/database/db';
 import { DashboardCustomize, Settings } from '@mui/icons-material';
 import { Dialog, IconButton } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import MachineList from '../../machines/MachineList';
 import TrainingContainer from '../../TrainingContainer';
-import EditPlanDialog from '../EditPlanDialog';
+import AddPlanDialog from '../AddPlanDialog';
 import MachineSelect from './MachineSelect';
 
 export default function PlanPage() {
     const router = useRouter();
+    const pathName = usePathname();
     const planTable = dbInstance.WorkoutPlan;
 
     const { id: idString } = useParams<{ id: string }>();
@@ -33,9 +35,11 @@ export default function PlanPage() {
                     <IconButton onClick={() => setShowMachineSelect(true)}>
                         <DashboardCustomize />
                     </IconButton>
-                    <IconButton onClick={() => setShowEditPlanDialog(true)}>
-                        <Settings />
-                    </IconButton>
+                    <Link href={`${pathName}/settings`}>
+                        <IconButton>
+                            <Settings />
+                        </IconButton>
+                    </Link>
                 </>
             }
         >
@@ -43,7 +47,7 @@ export default function PlanPage() {
 
             <Dialog open={showEditPlanDialog} onClose={closeEditDialog}>
                 {showEditPlanDialog && (
-                    <EditPlanDialog onClose={closeEditDialog} plan={plan} />
+                    <AddPlanDialog onClose={closeEditDialog} plan={plan} />
                 )}
             </Dialog>
 
