@@ -3,7 +3,13 @@
 import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
-import { Button, IconButton, Stack } from '@mui/material';
+import { Divider, IconButton, Stack } from '@mui/material';
+import {
+    IconGraph,
+    IconGraphOff,
+    IconTableMinus,
+    IconTablePlus,
+} from '@tabler/icons-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
 import { useParams, usePathname } from 'next/navigation';
@@ -96,11 +102,34 @@ export default function MachinePage() {
                     ))}
             </Stack>
 
-            <Stack direction="row">
-                <Button onClick={removeSession}>-session</Button>
-                <Button onClick={removeSet}>-set</Button>
-                <Button onClick={addSession}>+session</Button>
-                <Button onClick={addSet}>+set</Button>
+            <Stack
+                direction="row"
+                // HEIGHT HAS TO BE HARDCODED. ICONBUTTON MESSES UP THE CHART OTHERWISE
+                sx={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: 40,
+                    m: 1,
+                    gap: 1,
+                }}
+            >
+                <IconButton onClick={removeSession}>
+                    <IconTableMinus size="32" />
+                </IconButton>
+
+                <IconButton onClick={addSession}>
+                    <IconTablePlus size="32" />
+                </IconButton>
+
+                <Divider orientation="vertical" sx={{ mx: 1 }} />
+
+                <IconButton onClick={removeSet}>
+                    <IconGraphOff size="35" />
+                </IconButton>
+
+                <IconButton onClick={addSet}>
+                    <IconGraph size="35" />
+                </IconButton>
             </Stack>
 
             <Stack

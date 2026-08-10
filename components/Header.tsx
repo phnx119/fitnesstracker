@@ -22,6 +22,7 @@ export default function Header({
                 sx={{
                     gap: 1,
                     p: 1,
+                    pl: 2,
                     justifyContent: 'center',
                     alignItems: 'center',
                     minHeight: '56px',
