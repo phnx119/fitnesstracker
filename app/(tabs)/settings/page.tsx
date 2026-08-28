@@ -33,7 +33,19 @@ export default function Settings() {
 
             <TabContentStack>
                 <Stack sx={{ overflow: 'auto', gap: 1 }}>
-                    <SettingsGroup>
+                    <SettingsGroup header="General">
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    checked={!bigScreenMode}
+                                    onChange={toggleBigScreen}
+                                />
+                            }
+                            label="Small Screen Mode"
+                        />
+                    </SettingsGroup>
+
+                    <SettingsGroup header="Navigation">
                         <FormControl>
                             <InputLabel id="landingPageLabel">
                                 Landing Page
@@ -61,19 +73,9 @@ export default function Settings() {
                             }
                             label="Show Database Viewer"
                         />
-
-                        <FormControlLabel
-                            control={
-                                <Switch
-                                    checked={!bigScreenMode}
-                                    onChange={toggleBigScreen}
-                                />
-                            }
-                            label="Small Screen Mode"
-                        />
                     </SettingsGroup>
 
-                    <SettingsGroup>
+                    <SettingsGroup header="Tab - Training">
                         <FormControl>
                             <InputLabel id="progressMetricLabel">
                                 Progress Metric
@@ -95,7 +97,7 @@ export default function Settings() {
                         </FormControl>
                     </SettingsGroup>
 
-                    <SettingsGroup>
+                    <SettingsGroup header="Tab - Settings">
                         <Button onClick={setupSettings}>Revert Settings</Button>
                     </SettingsGroup>
                 </Stack>
