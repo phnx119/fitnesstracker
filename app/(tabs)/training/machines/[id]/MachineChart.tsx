@@ -1,8 +1,9 @@
 'use client';
 
 import { useChartOverlay } from '@/app/_helpers/useChartOverlay';
-import { Row } from '@/database/db';
+import { dbInstance, Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
+import { useLiveQuery } from 'dexie-react-hooks';
 import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
 
 export type SessionWithSets = {
@@ -21,6 +22,9 @@ export default function MachineChart({
     activeSessionId: number | null;
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
+    const progressMetric =
+        useLiveQuery(() => dbInstance.Settings.get(1))?.progressMetric ?? 0;
+
     const containerRef = useRef<HTMLDivElement>(null);
 
     const chart1 = useChartOverlay({
@@ -50,14 +54,18 @@ export default function MachineChart({
             'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
     });
 
-    const maxWeight = useMemo(() => {
+    const maxValue = useMemo(() => {
         return Math.max(
             0,
-            ...data.flatMap((item) => item.setRecords.map((r) => r.weight)),
+            ...data.flatMap((item) =>
+                item.setRecords.map((r) =>
+                    progressMetric === 1
+                        ? calculateE1RM(r.weight, r.reps)
+                        : r.weight,
+                ),
+            ),
         );
-    }, [data]);
-
-    const maxHeightPercent = 99;
+    }, [data, progressMetric]);
 
     function getRegisterRef(setIndex: number) {
         if (setIndex === 0) return chart1.registerPointRef;
@@ -115,10 +123,7 @@ export default function MachineChart({
                                         const registerRef =
                                             getRegisterRef(setIndex);
                                         const calculatedHeight =
-                                            maxWeight > 0
-                                                ? (set.weight / maxWeight) *
-                                                  maxHeightPercent
-                                                : 0;
+                                            calculateBarHeight(set);
 
                                         return (
                                             <Stack
@@ -179,4 +184,27 @@ export default function MachineChart({
             </Card>
         </Stack>
     );
+
+    function calculateBarHeight(set: Row<'SetRecord'>) {
+        if (maxValue === 0) {
+            return 0;
+        }
+
+        const maxHeightPercent = 99;
+
+        const value =
+            progressMetric === 1
+                ? calculateE1RM(set.weight, set.reps)
+                : set.weight;
+
+        return (value / maxValue) * maxHeightPercent;
+    }
+
+    function calculateE1RM(weight: number, reps: number) {
+        if (weight <= 0 || reps <= 0) {
+            return 0;
+        }
+
+        return Math.round(weight * (1 + reps / 30) * 10) / 10;
+    }
 }
