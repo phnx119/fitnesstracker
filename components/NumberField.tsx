@@ -16,7 +16,7 @@ export default function NumberField({
     showButtons = false,
     value,
     onValueChange,
-    fullWidth = false, // Added fullWidth prop (defaults to false or set to true)
+    fullWidth = false,
     ...other
 }: BaseNumberField.Root.Props & {
     label?: React.ReactNode;
@@ -36,7 +36,9 @@ export default function NumberField({
         <BaseNumberField.Root
             value={value}
             onValueChange={onValueChange}
-            style={{ width: fullWidth ? '100%' : undefined }} // Ensure root node stretches
+            style={{ width: fullWidth ? '100%' : undefined }}
+            // Use de-DE locale so Base UI natively parses ',' as decimal
+            locale="de-DE"
             {...other}
             render={(props, state) => (
                 <FormControl
@@ -46,7 +48,7 @@ export default function NumberField({
                     required={state.required}
                     error={error}
                     variant="outlined"
-                    fullWidth={fullWidth} // Pass fullWidth to MUI FormControl
+                    fullWidth={fullWidth}
                     sx={{
                         width: fullWidth ? '100%' : undefined,
                         '& .MuiButton-root': {
@@ -119,21 +121,29 @@ export default function NumberField({
 
                         <BaseNumberField.Input
                             id={id}
-                            style={{ flex: 1, minWidth: 0 }} // Allow input to grow and collapse inside flex container
+                            style={{ flex: 1, minWidth: 0 }}
                             render={(inputProps, state) => (
                                 <OutlinedInput
                                     inputRef={inputProps.ref}
-                                    value={state.inputValue}
+                                    // Display value always uses commas
+                                    value={state.inputValue.replace('.', ',')}
                                     onBlur={inputProps.onBlur}
-                                    onChange={inputProps.onChange}
+                                    onFocus={inputProps.onFocus}
                                     onKeyUp={inputProps.onKeyUp}
                                     onKeyDown={inputProps.onKeyDown}
-                                    onFocus={inputProps.onFocus}
+                                    // Replace dots with commas before Base UI reads the DOM event
+                                    onChange={(e) => {
+                                        const originalValue = e.target.value;
+                                        e.target.value = originalValue.replace(
+                                            '.',
+                                            ',',
+                                        );
+                                        inputProps.onChange?.(e);
+                                    }}
                                     label={label}
                                     slotProps={{
                                         input: {
                                             ...inputProps,
-                                            // Removed dynamic size attribute calculation so it can freely stretch to 100%
                                             sx: {
                                                 textAlign: 'center',
                                             },
