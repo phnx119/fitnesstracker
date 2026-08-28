@@ -45,7 +45,7 @@ export default function PlanPage() {
         >
             <MachineList machines={machines} onClick={handleMachineClick} />
 
-            <Dialog open={showAddDialog} onClose={closeAddDialog}>
+            <Dialog open={showAddDialog} onClose={closeAddDialog} fullScreen>
                 {showAddDialog && <AddPlanDialog onClose={closeAddDialog} />}
             </Dialog>
 
