@@ -32,7 +32,11 @@ export default function PlanListPage() {
                 ))}
             </Stack>
             <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
-            <Dialog open={showAddPlanDialog} onClose={closeAddPlanDialog}>
+            <Dialog
+                open={showAddPlanDialog}
+                onClose={closeAddPlanDialog}
+                fullScreen
+            >
                 <AddPlanDialog onClose={closeAddPlanDialog} />
             </Dialog>
         </TrainingContainer>

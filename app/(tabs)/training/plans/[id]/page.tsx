@@ -49,7 +49,11 @@ export default function PlanPage() {
                 {showAddDialog && <AddPlanDialog onClose={closeAddDialog} />}
             </Dialog>
 
-            <Dialog open={showMachineSelect} onClose={closeMachineSelect}>
+            <Dialog
+                open={showMachineSelect}
+                onClose={closeMachineSelect}
+                fullScreen
+            >
                 {showMachineSelect && (
                     <MachineSelect onClose={closeMachineSelect} plan={plan} />
                 )}

@@ -26,7 +26,7 @@ export default function AllMachinesPage() {
                 </Card>
             </Stack>
 
-            <Dialog open={showAddDialog} onClose={closeAddDialog}>
+            <Dialog open={showAddDialog} onClose={closeAddDialog} fullScreen>
                 <AddMachineDialog onClose={closeAddDialog} />
             </Dialog>
         </TrainingContainer>
