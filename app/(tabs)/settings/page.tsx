@@ -74,19 +74,27 @@ export default function Settings() {
                     </SettingsGroup>
 
                     <SettingsGroup>
-                        <Select
-                            value={progressMetric}
-                            onChange={(e) =>
-                                handleProgressMetricChange(e.target.value)
-                            }
-                        >
-                            {progressMetricOptions.map((item, index) => (
-                                <MenuItem key={index} value={index}>
-                                    {item}
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        <FormControl>
+                            <InputLabel id="progressMetricLabel">
+                                Progress Metric
+                            </InputLabel>
+                            <Select
+                                value={progressMetric}
+                                label="Progress Metric"
+                                labelId="progressMetricLabel"
+                                onChange={(e) =>
+                                    handleProgressMetricChange(e.target.value)
+                                }
+                            >
+                                {progressMetricOptions.map((item, index) => (
+                                    <MenuItem key={index} value={index}>
+                                        {item}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
                     </SettingsGroup>
+
                     <SettingsGroup>
                         <Button onClick={setupSettings}>Revert Settings</Button>
                     </SettingsGroup>

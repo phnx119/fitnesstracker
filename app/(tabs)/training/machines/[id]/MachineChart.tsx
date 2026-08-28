@@ -153,7 +153,7 @@ export default function MachineChart({
                                                     {set.weight}
                                                 </Typography>
                                                 <Typography
-                                                    sx={{ fontSize: 10 }}
+                                                    sx={{ fontSize: 14 }}
                                                 >
                                                     {set.reps}
                                                 </Typography>
