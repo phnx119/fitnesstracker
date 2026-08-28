@@ -10,7 +10,6 @@ import { useState } from 'react';
 import MachineList from '../../machines/MachineList';
 import TrainingContainer from '../../TrainingContainer';
 import AddPlanDialog from '../AddPlanDialog';
-import MachineSelect from './MachineSelect';
 
 export default function PlanPage() {
     const router = useRouter();
@@ -25,16 +24,18 @@ export default function PlanPage() {
         useLiveQuery(() => getPlanMachines(planId), [planId]) ?? [];
 
     const [showAddDialog, setShowAddDialog] = useState(false);
-    const [showMachineSelect, setShowMachineSelect] = useState(false);
 
     return plan ? (
         <TrainingContainer
             title={plan.name ?? ''}
             headerButtons={
                 <>
-                    <IconButton onClick={() => setShowMachineSelect(true)}>
-                        <DashboardCustomize />
-                    </IconButton>
+                    <Link href={`${pathName}/addMachine`}>
+                        <IconButton>
+                            <DashboardCustomize />
+                        </IconButton>
+                    </Link>
+
                     <Link href={`${pathName}/settings`}>
                         <IconButton>
                             <Settings />
@@ -48,16 +49,6 @@ export default function PlanPage() {
             <Dialog open={showAddDialog} onClose={closeAddDialog} fullScreen>
                 {showAddDialog && <AddPlanDialog onClose={closeAddDialog} />}
             </Dialog>
-
-            <Dialog
-                open={showMachineSelect}
-                onClose={closeMachineSelect}
-                fullScreen
-            >
-                {showMachineSelect && (
-                    <MachineSelect onClose={closeMachineSelect} plan={plan} />
-                )}
-            </Dialog>
         </TrainingContainer>
     ) : null;
 
@@ -67,10 +58,6 @@ export default function PlanPage() {
 
     function closeAddDialog() {
         setShowAddDialog(false);
-    }
-
-    function closeMachineSelect() {
-        setShowMachineSelect(false);
     }
 
     async function getPlanMachines(planId: number) {

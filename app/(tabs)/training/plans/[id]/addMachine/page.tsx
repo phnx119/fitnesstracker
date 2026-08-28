@@ -1,26 +1,26 @@
-import { dbInstance, Row } from '@/database/db';
-import {
-    Button,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-} from '@mui/material';
-import { useLiveQuery } from 'dexie-react-hooks';
-import MachineList from '../../machines/MachineList';
+'use client';
 
-export default function MachineSelect({
-    plan,
-    onClose,
-}: {
-    plan: Row<'WorkoutPlan'>;
-    onClose(): void;
-}) {
+import { dbInstance, Row } from '@/database/db';
+import { Button, DialogContent, DialogTitle } from '@mui/material';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { useParams, useRouter } from 'next/navigation';
+import MachineList from '../../../machines/MachineList';
+
+export default function AddMachine() {
+    const router = useRouter();
+    const planTable = dbInstance.WorkoutPlan;
+
+    const { id: idString } = useParams<{ id: string }>();
+    const planId = Number(idString);
+    const plan = useLiveQuery(() => planTable.get(planId));
+
     const machines = useLiveQuery(() => dbInstance.Machine.toArray()) ?? [];
     const selectedMachineIds =
         useLiveQuery(() => dbInstance.PlanMachine.toArray())?.map(
             (item) => item.machineId,
         ) ?? [];
-    return (
+
+    return plan ? (
         <>
             <DialogTitle>Select Machines for {plan.name}</DialogTitle>
             <DialogContent>
@@ -30,13 +30,16 @@ export default function MachineSelect({
                     selectedIds={selectedMachineIds}
                 />
             </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose}>Close</Button>
-            </DialogActions>
+
+            <Button onClick={() => router.back()}>test</Button>
         </>
-    );
+    ) : null;
 
     async function handleSelect(machine: Row<'Machine'>) {
+        if (!plan) {
+            return;
+        }
+
         const existing = await dbInstance.PlanMachine.where('planId')
             .equals(plan.id)
             .and((pm) => pm.machineId === machine.id)
