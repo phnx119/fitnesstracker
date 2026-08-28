@@ -24,6 +24,9 @@ export default function Settings() {
     const bigScreenMode = settings?.bigScreenMode ?? true;
     const landingPage = settings?.landingPage ?? '/training/plans';
 
+    const progressMetricOptions = ['Weight', 'E1RM'];
+    const progressMetric = settings?.progressMetric ?? 0;
+
     return (
         <Stack>
             <Header title="Hier wird gezwirbelt" />
@@ -69,6 +72,21 @@ export default function Settings() {
                             label="Small Screen Mode"
                         />
                     </SettingsGroup>
+
+                    <SettingsGroup>
+                        <Select
+                            value={progressMetric}
+                            onChange={(e) =>
+                                handleProgressMetricChange(e.target.value)
+                            }
+                        >
+                            {progressMetricOptions.map((item, index) => (
+                                <MenuItem key={index} value={index}>
+                                    {item}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </SettingsGroup>
                     <SettingsGroup>
                         <Button onClick={setupSettings}>Revert Settings</Button>
                     </SettingsGroup>
@@ -76,6 +94,12 @@ export default function Settings() {
             </TabContentStack>
         </Stack>
     );
+
+    async function handleProgressMetricChange(value: number) {
+        await dbInstance.Settings.update(1, {
+            progressMetric: value,
+        });
+    }
 
     async function handleLandingPageSelect(e: SelectChangeEvent) {
         await dbInstance.Settings.update(1, {
@@ -105,6 +129,7 @@ export default function Settings() {
             showDbViewer: true,
             bigScreenMode: true,
             landingPage: '/training/plans',
+            progressMetric: 0,
         });
     }
 }

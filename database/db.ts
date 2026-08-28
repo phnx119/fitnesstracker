@@ -11,6 +11,7 @@ const schemaDefinition = {
         showDbViewer: { default: true as boolean, index: false },
         bigScreenMode: { default: true as boolean, index: false },
         landingPage: { default: '' as string, index: false },
+        progressMetric: { default: 1 as number, index: false },
     },
     Machine: {
         name: { default: 'Mausmaschine' as string, index: true },
