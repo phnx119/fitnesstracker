@@ -14,9 +14,11 @@ export type SessionWithSets = {
 
 export default function MachineChart({
     data,
+    activeSessionId,
     setActiveSessionId,
 }: {
     data: SessionWithSets[];
+    activeSessionId: number | null;
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -133,6 +135,11 @@ export default function MachineChart({
                                                     gap: 0.5,
                                                     pb: 0.5,
                                                     overflow: 'hidden',
+                                                    paddingBottom:
+                                                        session.id ===
+                                                        activeSessionId
+                                                            ? 2
+                                                            : undefined,
                                                 }}
                                             >
                                                 <Typography

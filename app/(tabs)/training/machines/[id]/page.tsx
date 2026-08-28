@@ -137,6 +137,7 @@ export default function MachinePage() {
             >
                 <MachineChart
                     data={machineData}
+                    activeSessionId={activeSessionId}
                     setActiveSessionId={setActiveSessionId}
                 />
             </Stack>
