@@ -289,7 +289,7 @@ export const THEMES = {
         name: 'Desert Sand',
         palette: {
             mode: 'dark' as const,
-            primary: { main: '#d97706' }, // Warm Warm Terracotta
+            primary: { main: '#d97706' }, // Warm Terracotta
             secondary: { main: '#b45309' }, // Sandstone
             background: {
                 default: '#14110e',
@@ -307,6 +307,266 @@ export const THEMES = {
             set3: '#b45309', // Earth Brown
             fadeBackground:
                 'linear-gradient(180deg, rgba(217, 119, 6, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 12. Tokyo Night (Deep Indigo & Soft Cyan/Lavender)
+    tokyoNight: {
+        name: 'Tokyo Night',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#7aa2f7' }, // Soft Blue
+            secondary: { main: '#bb9af7' }, // Lavender
+            background: {
+                default: '#1a1b26',
+                paper: '#24283b',
+            },
+            text: {
+                primary: '#c0caf5',
+                secondary: '#7982a9',
+            },
+            divider: 'rgba(122, 162, 247, 0.16)',
+        },
+        chart: {
+            set1: '#7dcfff', // Cyan
+            set2: '#bb9af7', // Lavender
+            set3: '#f7768e', // Coral Pink
+            fadeBackground:
+                'linear-gradient(180deg, rgba(122, 162, 247, 0.14) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 13. Nord Frost (Glacial Arctic Slate)
+    nordFrost: {
+        name: 'Nord Frost',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#88c0d0' }, // Frost Blue
+            secondary: { main: '#81a1c1' }, // Glacier Blue
+            background: {
+                default: '#242933',
+                paper: '#2e3440',
+            },
+            text: {
+                primary: '#eceff4',
+                secondary: '#d8dee9',
+            },
+            divider: 'rgba(136, 192, 208, 0.18)',
+        },
+        chart: {
+            set1: '#a3be8c', // Nord Green
+            set2: '#ebcb8b', // Nord Gold
+            set3: '#bf616a', // Nord Red
+            fadeBackground:
+                'linear-gradient(180deg, rgba(136, 192, 208, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 14. Synthwave '84 (Neon Outrun Sunset)
+    synthwave84: {
+        name: "Synthwave '84",
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#ff7edb' }, // Hot Pink
+            secondary: { main: '#36f9f6' }, // Electric Cyan
+            background: {
+                default: '#161324',
+                paper: '#26203d',
+            },
+            text: {
+                primary: '#fdf2f8',
+                secondary: '#a79ac5',
+            },
+            divider: 'rgba(255, 126, 219, 0.2)',
+        },
+        chart: {
+            set1: '#36f9f6', // Turquoise
+            set2: '#fede5d', // Sunset Gold
+            set3: '#fe4450', // Neon Red
+            fadeBackground:
+                'linear-gradient(180deg, rgba(255, 126, 219, 0.15) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 15. Volcanic Magma (Obsidian & Lava Fire)
+    volcanicMagma: {
+        name: 'Volcanic Magma',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#ff5722' }, // Molten Orange
+            secondary: { main: '#ff9800' }, // Blaze Amber
+            background: {
+                default: '#101012',
+                paper: '#1c1c20',
+            },
+            text: {
+                primary: '#fff5f2',
+                secondary: '#9ca3af',
+            },
+            divider: 'rgba(255, 87, 34, 0.18)',
+        },
+        chart: {
+            set1: '#ff5722', // Magma Orange
+            set2: '#ffeb3b', // Lava Yellow
+            set3: '#f44336', // Fire Red
+            fadeBackground:
+                'linear-gradient(180deg, rgba(255, 87, 34, 0.14) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 16. Matcha Zen (Bamboo & Fresh Green)
+    matchaZen: {
+        name: 'Matcha Zen',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#84cc16' }, // Matcha Lime
+            secondary: { main: '#a3e635' }, // Leaf Green
+            background: {
+                default: '#0f1510',
+                paper: '#18221a',
+            },
+            text: {
+                primary: '#f7fee7',
+                secondary: '#8ba38d',
+            },
+            divider: 'rgba(132, 204, 22, 0.16)',
+        },
+        chart: {
+            set1: '#84cc16', // Matcha
+            set2: '#facc15', // Bamboo Gold
+            set3: '#fb7185', // Blossom Pink
+            fadeBackground:
+                'linear-gradient(180deg, rgba(132, 204, 22, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 17. Deep Abyss (Bioluminescent Ocean)
+    deepAbyss: {
+        name: 'Deep Abyss',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#00e5ff' }, // Electric Aqua
+            secondary: { main: '#00b0ff' }, // Ocean Blue
+            background: {
+                default: '#050e14',
+                paper: '#0b1a24',
+            },
+            text: {
+                primary: '#e0f7fa',
+                secondary: '#78909c',
+            },
+            divider: 'rgba(0, 229, 255, 0.16)',
+        },
+        chart: {
+            set1: '#00e5ff', // Aqua
+            set2: '#76ff03', // Neon Lime
+            set3: '#ff4081', // Coral Pink
+            fadeBackground:
+                'linear-gradient(180deg, rgba(0, 229, 255, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 18. Royal Amethyst (Velvet Purple & Gold)
+    royalAmethyst: {
+        name: 'Royal Amethyst',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#a855f7' }, // Amethyst Purple
+            secondary: { main: '#fbbf24' }, // Royal Gold
+            background: {
+                default: '#0e0717',
+                paper: '#1c102c',
+            },
+            text: {
+                primary: '#faf5ff',
+                secondary: '#a89ec4',
+            },
+            divider: 'rgba(168, 85, 247, 0.18)',
+        },
+        chart: {
+            set1: '#c084fc', // Lavender
+            set2: '#fbbf24', // Gold
+            set3: '#f43f5e', // Ruby
+            fadeBackground:
+                'linear-gradient(180deg, rgba(168, 85, 247, 0.14) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 19. Coffee Espresso (Rich Warm Mocha)
+    coffeeEspresso: {
+        name: 'Coffee Espresso',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#c28b5d' }, // Caramel
+            secondary: { main: '#e0a96d' }, // Toasted Mocha
+            background: {
+                default: '#120c09',
+                paper: '#1f1611',
+            },
+            text: {
+                primary: '#fffbeb',
+                secondary: '#a89f91',
+            },
+            divider: 'rgba(194, 139, 93, 0.16)',
+        },
+        chart: {
+            set1: '#4ade80', // Mint
+            set2: '#e0a96d', // Caramel
+            set3: '#f87171', // Berry Red
+            fadeBackground:
+                'linear-gradient(180deg, rgba(194, 139, 93, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 20. Dracula Classic (Iconic Vampire Slate)
+    draculaClassic: {
+        name: 'Dracula Classic',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#bd93f9' }, // Dracula Purple
+            secondary: { main: '#ff79c6' }, // Dracula Pink
+            background: {
+                default: '#1e1f29',
+                paper: '#282a36',
+            },
+            text: {
+                primary: '#f8f8f2',
+                secondary: '#6272a4',
+            },
+            divider: 'rgba(189, 147, 249, 0.18)',
+        },
+        chart: {
+            set1: '#50fa7b', // Dracula Green
+            set2: '#8be9fd', // Dracula Cyan
+            set3: '#ff5555', // Dracula Red
+            fadeBackground:
+                'linear-gradient(180deg, rgba(189, 147, 249, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 21. Carbon Graphite (Gym Chartreuse / High-Voltage Neon)
+    carbonGraphite: {
+        name: 'Carbon Graphite',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#ccff00' }, // Electric Chartreuse
+            secondary: { main: '#38bdf8' }, // Sky Blue
+            background: {
+                default: '#111215',
+                paper: '#1a1c22',
+            },
+            text: {
+                primary: '#f3f4f6',
+                secondary: '#9ca3af',
+            },
+            divider: 'rgba(204, 255, 0, 0.18)',
+        },
+        chart: {
+            set1: '#ccff00', // Chartreuse
+            set2: '#38bdf8', // Sky Blue
+            set3: '#f43f5e', // Hot Pink
+            fadeBackground:
+                'linear-gradient(180deg, rgba(204, 255, 0, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
         },
     },
 } as const;
@@ -401,5 +661,5 @@ export function createAppTheme(themeKey: string) {
     });
 }
 
-const defaultTheme = createAppTheme('dark');
+const defaultTheme = createAppTheme('defaultMui');
 export default defaultTheme;
