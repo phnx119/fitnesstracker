@@ -29,34 +29,32 @@ export default function MachineChart({
 
     const containerRef = useRef<HTMLDivElement>(null);
 
+    const fadeBackground =
+        theme.chart?.fadeBackground ??
+        'linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.06) 100%)';
+
     const chart1 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-0',
-        lineColor: theme.chart?.set1 ?? '#00e676',
+        lineColor: theme.chart?.set1 ?? '#10b981',
         tension: 1,
-        fillBelowBackground:
-            theme.chart?.fadeBackground ??
-            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+        fillBelowBackground: fadeBackground,
     });
 
     const chart2 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-1',
-        lineColor: theme.chart?.set2 ?? '#29b6f6',
+        lineColor: theme.chart?.set2 ?? '#38bdf8',
         tension: 1,
-        fillBelowBackground:
-            theme.chart?.fadeBackground ??
-            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+        fillBelowBackground: fadeBackground,
     });
 
     const chart3 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-2',
-        lineColor: theme.chart?.set3 ?? '#ff1744',
+        lineColor: theme.chart?.set3 ?? '#f43f5e',
         tension: 1,
-        fillBelowBackground:
-            theme.chart?.fadeBackground ??
-            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+        fillBelowBackground: fadeBackground,
     });
 
     const maxValue = useMemo(() => {

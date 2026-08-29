@@ -61,6 +61,7 @@ export default function BottomNav() {
         <Stack
             sx={{
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+                backgroundColor: 'background.paper',
             }}
         >
             <Divider />
@@ -68,7 +69,7 @@ export default function BottomNav() {
                 value={activeIndex}
                 onChange={handleNavigation}
                 showLabels
-                sx={{ backgroundColor: 'transparent' }}
+                sx={{ backgroundColor: 'background.paper' }}
             >
                 {NAV_ITEMS.map((item) => (
                     <BottomNavigationAction

@@ -204,7 +204,7 @@ export default function Settings() {
             bigScreenMode: true,
             landingPage: '/training/plans',
             progressMetric: 0,
-            theme: 'dark',
+            theme: 'defaultMui',
         });
     }
 }
