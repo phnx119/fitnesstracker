@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 // INCREMENT AFTER EVERY SCHEMA CHANGE
-const version = 9;
+const version = 10;
 
 // tableName: { rowName: defaultValue as type }
 // id is added automatically
@@ -12,6 +12,7 @@ const schemaDefinition = {
         bigScreenMode: { default: true as boolean, index: false },
         landingPage: { default: '' as string, index: false },
         progressMetric: { default: 1 as number, index: false },
+        theme: { default: 'dark' as string, index: false },
     },
     Machine: {
         name: { default: 'Mausmaschine' as string, index: true },
@@ -96,6 +97,7 @@ class FitnessDatabase extends Dexie {
                 id: 1,
                 showDbViewer: false,
                 landingPage: '/training',
+                theme: 'dark',
             });
         });
     }

@@ -3,6 +3,7 @@
 import { useChartOverlay } from '@/app/_helpers/useChartOverlay';
 import { dbInstance, Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
 
@@ -22,36 +23,38 @@ export default function MachineChart({
     activeSessionId: number | null;
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
+    const theme = useTheme();
     const progressMetric =
         useLiveQuery(() => dbInstance.Settings.get(1))?.progressMetric ?? 0;
 
     const containerRef = useRef<HTMLDivElement>(null);
 
+    const fadeBackground =
+        theme.chart?.fadeBackground ??
+        'linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.06) 100%)';
+
     const chart1 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-0',
-        lineColor: '#00e676',
+        lineColor: theme.chart?.set1 ?? '#10b981',
         tension: 1,
-        fillBelowBackground:
-            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+        fillBelowBackground: fadeBackground,
     });
 
     const chart2 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-1',
-        lineColor: '#29b6f6',
+        lineColor: theme.chart?.set2 ?? '#38bdf8',
         tension: 1,
-        fillBelowBackground:
-            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+        fillBelowBackground: fadeBackground,
     });
 
     const chart3 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-2',
-        lineColor: '#ff1744',
+        lineColor: theme.chart?.set3 ?? '#f43f5e',
         tension: 1,
-        fillBelowBackground:
-            'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
+        fillBelowBackground: fadeBackground,
     });
 
     const maxValue = useMemo(() => {

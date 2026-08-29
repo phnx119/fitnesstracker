@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className="h-full w-full">
-            <body className="h-[100dvh] w-full flex flex-col m-0 p-0 overflow-hidden bg-zinc-50 dark:bg-black">
+            <body className="h-[100dvh] w-full flex flex-col m-0 p-0 overflow-hidden">
                 <ThemeRegistry>{children}</ThemeRegistry>
             </body>
         </html>
