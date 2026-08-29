@@ -170,12 +170,26 @@ export default function MachinePage() {
             return;
         }
 
+        const currentSessionIndex = machineData.findIndex(
+            (s) => s.id === activeSessionId,
+        );
+
+        const previousSession =
+            currentSessionIndex > 0
+                ? machineData[currentSessionIndex - 1]
+                : null;
+
+        const currentSetIndex = session.setRecords.length;
+        const previousSetRecord =
+            previousSession?.setRecords[currentSetIndex] ??
+            previousSession?.setRecords[previousSession.setRecords.length - 1];
+
         dbInstance.SetRecord.add({
             machineId: machine.id,
             sessionId: activeSessionId,
-            reps: 12,
-            setNumber: session.setRecords.length,
-            weight: 50,
+            reps: previousSetRecord?.reps ?? 12,
+            setNumber: currentSetIndex,
+            weight: previousSetRecord?.weight ?? 50,
         });
     }
 
