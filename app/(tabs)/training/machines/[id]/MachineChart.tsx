@@ -3,6 +3,7 @@
 import { useChartOverlay } from '@/app/_helpers/useChartOverlay';
 import { dbInstance, Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
 
@@ -22,6 +23,7 @@ export default function MachineChart({
     activeSessionId: number | null;
     setActiveSessionId: Dispatch<SetStateAction<number | null>>;
 }) {
+    const theme = useTheme();
     const progressMetric =
         useLiveQuery(() => dbInstance.Settings.get(1))?.progressMetric ?? 0;
 
@@ -30,27 +32,30 @@ export default function MachineChart({
     const chart1 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-0',
-        lineColor: '#00e676',
+        lineColor: theme.chart?.set1 ?? '#00e676',
         tension: 1,
         fillBelowBackground:
+            theme.chart?.fadeBackground ??
             'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
     });
 
     const chart2 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-1',
-        lineColor: '#29b6f6',
+        lineColor: theme.chart?.set2 ?? '#29b6f6',
         tension: 1,
         fillBelowBackground:
+            theme.chart?.fadeBackground ??
             'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
     });
 
     const chart3 = useChartOverlay({
         containerRef,
         attributeName: 'data-set-2',
-        lineColor: '#ff1744',
+        lineColor: theme.chart?.set3 ?? '#ff1744',
         tension: 1,
         fillBelowBackground:
+            theme.chart?.fadeBackground ??
             'linear-gradient(0deg, rgba(255, 23, 68, 0) 0%, #9a9a9a5a 100%)',
     });
 
