@@ -2,14 +2,12 @@
 
 import { dbInstance, Row } from '@/database/db';
 import { DashboardCustomize, Settings } from '@mui/icons-material';
-import { Dialog, IconButton } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
 import MachineList from '../../machines/MachineList';
 import TrainingContainer from '../../TrainingContainer';
-import AddPlanDialog from '../AddPlanDialog';
 
 export default function PlanPage() {
     const router = useRouter();
@@ -22,8 +20,6 @@ export default function PlanPage() {
 
     const machines =
         useLiveQuery(() => getPlanMachines(planId), [planId]) ?? [];
-
-    const [showAddDialog, setShowAddDialog] = useState(false);
 
     return plan ? (
         <TrainingContainer
@@ -45,19 +41,11 @@ export default function PlanPage() {
             }
         >
             <MachineList machines={machines} onClick={handleMachineClick} />
-
-            <Dialog open={showAddDialog} onClose={closeAddDialog} fullScreen>
-                {showAddDialog && <AddPlanDialog onClose={closeAddDialog} />}
-            </Dialog>
         </TrainingContainer>
     ) : null;
 
     function handleMachineClick(machine: Row<'Machine'>) {
         router.push(`/training/machines/${machine.id}`);
-    }
-
-    function closeAddDialog() {
-        setShowAddDialog(false);
     }
 
     async function getPlanMachines(planId: number) {
