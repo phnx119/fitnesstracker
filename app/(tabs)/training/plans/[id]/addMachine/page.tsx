@@ -23,7 +23,7 @@ export default function AddMachine() {
     return plan ? (
         <>
             <Header title={`Select Machines for ${plan.name}`} showClose />
-            <Stack sx={{ p: 2, overflow: 'auto' }}>
+            <Stack sx={{ p: 1, overflow: 'auto' }}>
                 <MachineList
                     machines={machines}
                     onClick={handleSelect}
