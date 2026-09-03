@@ -1,5 +1,6 @@
 'use client';
 
+import Header from '@/components/Header';
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -36,62 +37,73 @@ export default function ExercisePage() {
         }
     }, [personalData]);
 
+    //mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
+    // Ich hab hier den Header hinzugefügt, damit man zurück in Home routen kann.
+    // Home soll als Dashboard hauptsächlich ein paar Statistiken und sowas anzeigen aber auch das routing von der Navigationsleiste unten übernehmen.
+    //mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
     return (
-        <TabContentStack sx={{ gap: 1, overflow: 'auto' }}>
-            <Stack direction="row">
-                <Box sx={{ flex: 1 }} />
-                <Typography>Overview</Typography>
-                <Box sx={{ flex: 1 }} />
-            </Stack>
-            <Stack sx={{ overflow: 'auto', gap: 1 }}>
+        <>
+            <Header title="Ich war mal so frei" showHome />
+            <TabContentStack sx={{ gap: 1, overflow: 'auto' }}>
                 <Stack direction="row">
-                    <Typography variant="h6">Show Biometric Data</Typography>
-                    <IconButton onClick={() => setExpanded(!expanded)}>
-                        <ExpandMoreIcon
-                            sx={{
-                                transform: expanded
-                                    ? 'rotate(180deg)'
-                                    : 'rotate(0deg)',
-                                transition: '0.2s',
-                            }}
-                        />
-                    </IconButton>
+                    <Box sx={{ flex: 1 }} />
+                    <Typography>Overview</Typography>
+                    <Box sx={{ flex: 1 }} />
                 </Stack>
-                <Collapse in={expanded}>
-                    <Stack sx={{ gap: 1 }}>
-                        <PersonalBiografieCard
-                            label={'Body Weight'}
-                            attName="bodyWeight"
-                            bioValue={personalData?.bodyWeight}
-                        />
-                        <PersonalBiografieCard
-                            label={'Body Height'}
-                            attName="bodyHeight"
-                            bioValue={personalData?.bodyHeight}
-                        />
-                        <PersonalBiografieCard
-                            label={'Body Fat'}
-                            attName="bodyFat"
-                            bioValue={personalData?.bodyFat}
-                        />
-                        <PersonalBiografieCard
-                            label={'Target Weight'}
-                            attName="targetWeight"
-                            bioValue={personalData?.targetWeight}
-                        />
+                <Stack sx={{ overflow: 'auto', gap: 1 }}>
+                    <Stack direction="row">
+                        <Typography variant="h6">
+                            Show Biometric Data
+                        </Typography>
+                        <IconButton onClick={() => setExpanded(!expanded)}>
+                            <ExpandMoreIcon
+                                sx={{
+                                    transform: expanded
+                                        ? 'rotate(180deg)'
+                                        : 'rotate(0deg)',
+                                    transition: '0.2s',
+                                }}
+                            />
+                        </IconButton>
                     </Stack>
-                </Collapse>
-            </Stack>
-            <Stack>
-                <Box>
-                    <Typography>Kalorie graph Placeholder</Typography>
-                </Box>
-            </Stack>
-            <Stack>
-                <Box>
-                    <Typography>Kalorie subpage access / rerouting</Typography>
-                </Box>
-            </Stack>
-        </TabContentStack>
+                    <Collapse in={expanded}>
+                        <Stack sx={{ gap: 1 }}>
+                            <PersonalBiografieCard
+                                label={'Body Weight'}
+                                attName="bodyWeight"
+                                bioValue={personalData?.bodyWeight}
+                            />
+                            <PersonalBiografieCard
+                                label={'Body Height'}
+                                attName="bodyHeight"
+                                bioValue={personalData?.bodyHeight}
+                            />
+                            <PersonalBiografieCard
+                                label={'Body Fat'}
+                                attName="bodyFat"
+                                bioValue={personalData?.bodyFat}
+                            />
+                            <PersonalBiografieCard
+                                label={'Target Weight'}
+                                attName="targetWeight"
+                                bioValue={personalData?.targetWeight}
+                            />
+                        </Stack>
+                    </Collapse>
+                </Stack>
+                <Stack>
+                    <Box>
+                        <Typography>Kalorie graph Placeholder</Typography>
+                    </Box>
+                </Stack>
+                <Stack>
+                    <Box>
+                        <Typography>
+                            Kalorie subpage access / rerouting
+                        </Typography>
+                    </Box>
+                </Stack>
+            </TabContentStack>
+        </>
     );
 }

@@ -32,7 +32,7 @@ export default function Settings() {
 
     return (
         <Stack sx={{ overflow: 'auto' }}>
-            <Header title="Hier wird gezwirbelt" />
+            <Header title="Hier wird gezwirbelt" showHome />
 
             <TabContentStack>
                 <Stack sx={{ overflow: 'auto', gap: 1 }}>
