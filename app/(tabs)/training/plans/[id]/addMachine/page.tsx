@@ -1,13 +1,13 @@
 'use client';
 
+import Header from '@/components/Header';
 import { dbInstance, Row } from '@/database/db';
-import { Button, DialogContent, DialogTitle } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import MachineList from '../../../machines/MachineList';
 
 export default function AddMachine() {
-    const router = useRouter();
     const planTable = dbInstance.WorkoutPlan;
 
     const { id: idString } = useParams<{ id: string }>();
@@ -22,16 +22,14 @@ export default function AddMachine() {
 
     return plan ? (
         <>
-            <DialogTitle>Select Machines for {plan.name}</DialogTitle>
-            <DialogContent>
+            <Header title={`Select Machines for ${plan.name}`} showClose />
+            <Stack sx={{ p: 2, overflow: 'auto' }}>
                 <MachineList
                     machines={machines}
                     onClick={handleSelect}
                     selectedIds={selectedMachineIds}
                 />
-            </DialogContent>
-
-            <Button onClick={() => router.back()}>test</Button>
+            </Stack>
         </>
     ) : null;
 
