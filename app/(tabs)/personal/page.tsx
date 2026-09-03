@@ -26,6 +26,7 @@ export default function ExercisePage() {
     //     so wie es ja schon einen da gibt
     //mausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmausmaus
     useEffect(() => {
+        return; // siehe oben
         if (!personalData?.id) {
             dbInstance.PersonalData.add({
                 id: 1,
