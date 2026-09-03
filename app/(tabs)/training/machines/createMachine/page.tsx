@@ -3,11 +3,12 @@
 import Header from '@/components/Header';
 import { dbInstance } from '@/database/db';
 import { Button, Stack, TextField } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function CreateMachine() {
     const [machineName, setMachineName] = useState('');
-
+    const router = useRouter();
     return (
         <>
             <Header title="Create Machine">
@@ -29,5 +30,7 @@ export default function CreateMachine() {
             name: machineName,
             imageBlob: undefined,
         });
+
+        router.back();
     }
 }
