@@ -13,10 +13,6 @@
         user-select: none;
     }
 
-    body {
-        padding-top: env(safe-area-inset-top);
-    }
-
     input,
     textarea {
         user-select: text;

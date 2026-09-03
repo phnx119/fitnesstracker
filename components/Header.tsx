@@ -16,7 +16,11 @@ export default function Header({
     const router = useRouter();
 
     return (
-        <Stack sx={{ backgroundColor: 'background.paper' }}>
+        <Stack
+            sx={{
+                backgroundColor: 'background.paper',
+            }}
+        >
             <Stack
                 direction="row"
                 sx={{
