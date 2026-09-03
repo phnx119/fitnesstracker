@@ -33,7 +33,9 @@ export default function RootLayout({
     return (
         <html lang="en" className="h-full w-full">
             <body className="h-[100dvh] w-full flex flex-col m-0 px-0 pb-0 pt-[env(safe-area-inset-top)] overflow-hidden">
-                <ThemeRegistry>{children}</ThemeRegistry>
+                <div className="flex flex-col flex-1 min-h-0">
+                    <ThemeRegistry>{children}</ThemeRegistry>
+                </div>
             </body>
         </html>
     );
