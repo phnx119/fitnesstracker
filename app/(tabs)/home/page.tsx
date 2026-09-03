@@ -1,10 +1,13 @@
-import TabContentStack from '@/components/TabContentStack';
-import { Typography } from '@mui/material';
+import SideNav from '@/app/_helpers/SideNav';
+import { Stack, TextField } from '@mui/material';
 
 export default function Home() {
     return (
-        <TabContentStack>
-            <Typography>Nocts on Top</Typography>
-        </TabContentStack>
+        <Stack sx={{ flex: 1, overflow: 'auto' }} direction="row">
+            <Stack sx={{ flex: 1, overflow: 'auto' }}>
+                <TextField></TextField>
+            </Stack>
+            <SideNav />
+        </Stack>
     );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import Header from '@/components/Header';
 import { dbInstance, type SchemaTables } from '@/database/db';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
@@ -96,196 +97,214 @@ export default function DatabaseViewer() {
     }
 
     return (
-        <Card
-            elevation={4}
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                flex: 1,
-                minHeight: 0, // Verhindert Overflow-Probleme in Flexbox-Parents
-            }}
-        >
-            {' '}
-            {/* Dynamische Tabellen-Tabs */}
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs
-                    value={activeTable}
-                    onChange={handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="auto"
+        <>
+            <Header showHome>
+                <Box
+                    sx={{
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                        overflow: 'auto',
+                    }}
                 >
-                    {TABLE_NAMES.map((tableName) => (
-                        <Tab
-                            key={tableName}
-                            label={tableName}
-                            value={tableName}
-                        />
-                    ))}
-                </Tabs>
-            </Box>
-            {/* Status-Bar & Actions */}
-            <Box
+                    <Tabs
+                        value={activeTable}
+                        onChange={handleTabChange}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                    >
+                        {TABLE_NAMES.map((tableName) => (
+                            <Tab
+                                key={tableName}
+                                label={tableName}
+                                value={tableName}
+                            />
+                        ))}
+                    </Tabs>
+                </Box>
+            </Header>
+            <Card
+                elevation={4}
                 sx={{
-                    px: 2,
-                    py: 1,
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    bgcolor: 'action.hover',
-                    gap: 2,
-                }}
-            >
-                <Typography variant="caption" color="text.secondary">
-                    Einträge:{' '}
-                    <Box
-                        component="span"
-                        sx={{ color: 'text.primary', fontWeight: 'bold' }}
-                    >
-                        {rows?.length ?? 0}
-                    </Box>
-                </Typography>
-
-                {Boolean(rows?.length) && (
-                    <Button
-                        size="small"
-                        color="error"
-                        startIcon={<ClearAllIcon fontSize="small" />}
-                        onClick={handleClearTable}
-                    >
-                        Tabelle leeren
-                    </Button>
-                )}
-            </Box>
-            {/* Datensätze / Content Area */}
-            <CardContent
-                sx={{
+                    flexDirection: 'column',
                     flex: 1,
-                    overflowY: 'auto',
-                    p: 2,
-                    '&:last-child': { pb: 2 },
+                    minHeight: 0, // Verhindert Overflow-Probleme in Flexbox-Parents
                 }}
             >
-                {!rows ? (
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            py: 4,
-                        }}
-                    >
-                        <CircularProgress size={24} />
-                    </Box>
-                ) : rows.length === 0 ? (
-                    <Paper
-                        variant="outlined"
-                        sx={{
-                            p: 4,
-                            textAlign: 'center',
-                            borderStyle: 'dashed',
-                        }}
-                    >
-                        <Typography variant="body2" color="text.secondary">
-                            Tabelle `{activeTable}` ist leer.
-                        </Typography>
-                    </Paper>
-                ) : (
-                    <Stack spacing={2}>
-                        {rows.map((row) => (
-                            <Paper
-                                key={row.id}
-                                variant="outlined"
-                                sx={{
-                                    p: 2,
-                                    bgcolor: 'background.default',
-                                }}
-                            >
-                                {/* Row Header (ID + Delete Button) */}
-                                <Box
+                <Box
+                    sx={{
+                        px: 2,
+                        py: 1,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        bgcolor: 'action.hover',
+                        gap: 2,
+                    }}
+                >
+                    <Typography variant="caption" color="text.secondary">
+                        Einträge:{' '}
+                        <Box
+                            component="span"
+                            sx={{ color: 'text.primary', fontWeight: 'bold' }}
+                        >
+                            {rows?.length ?? 0}
+                        </Box>
+                    </Typography>
+
+                    {Boolean(rows?.length) && (
+                        <Button
+                            size="small"
+                            color="error"
+                            startIcon={<ClearAllIcon fontSize="small" />}
+                            onClick={handleClearTable}
+                        >
+                            Tabelle leeren
+                        </Button>
+                    )}
+                </Box>
+                {/* Datensätze / Content Area */}
+                <CardContent
+                    sx={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        p: 2,
+                        '&:last-child': { pb: 2 },
+                    }}
+                >
+                    {!rows ? (
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                py: 4,
+                            }}
+                        >
+                            <CircularProgress size={24} />
+                        </Box>
+                    ) : rows.length === 0 ? (
+                        <Paper
+                            variant="outlined"
+                            sx={{
+                                p: 4,
+                                textAlign: 'center',
+                                borderStyle: 'dashed',
+                            }}
+                        >
+                            <Typography variant="body2" color="text.secondary">
+                                Tabelle `{activeTable}` ist leer.
+                            </Typography>
+                        </Paper>
+                    ) : (
+                        <Stack spacing={2}>
+                            {rows.map((row) => (
+                                <Paper
+                                    key={row.id}
+                                    variant="outlined"
                                     sx={{
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center',
-                                        pb: 1,
-                                        mb: 1.5,
-                                        borderBottom: 1,
-                                        borderColor: 'divider',
+                                        p: 2,
+                                        bgcolor: 'background.default',
                                     }}
                                 >
-                                    <Typography
-                                        variant="subtitle2"
+                                    {/* Row Header (ID + Delete Button) */}
+                                    <Box
                                         sx={{
-                                            fontWeight: 'bold',
-                                            color: 'primary.main',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                            pb: 1,
+                                            mb: 1.5,
+                                            borderBottom: 1,
+                                            borderColor: 'divider',
                                         }}
                                     >
-                                        #ID: {row.id}
-                                    </Typography>
-                                    <Tooltip title="Eintrag löschen">
-                                        <IconButton
-                                            size="small"
-                                            color="error"
-                                            onClick={() =>
-                                                handleDeleteRow(row.id)
-                                            }
-                                        >
-                                            <DeleteOutlineIcon fontSize="small" />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
-
-                                {/* Key-Value Auflistung */}
-                                <Stack spacing={1}>
-                                    {Object.entries(row).map(([key, value]) => (
-                                        <Box
-                                            key={key}
+                                        <Typography
+                                            variant="subtitle2"
                                             sx={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'baseline',
-                                                gap: 2,
+                                                fontWeight: 'bold',
+                                                color: 'primary.main',
                                             }}
                                         >
-                                            <Stack
-                                                direction="row"
-                                                spacing={1}
-                                                sx={{
-                                                    alignItems: 'center',
-                                                    minWidth: 0,
-                                                    flexShrink: 0,
-                                                }}
+                                            #ID: {row.id}
+                                        </Typography>
+                                        <Tooltip title="Eintrag löschen">
+                                            <IconButton
+                                                size="small"
+                                                color="error"
+                                                onClick={() =>
+                                                    handleDeleteRow(row.id)
+                                                }
                                             >
-                                                <Typography
-                                                    variant="caption"
-                                                    color="text.secondary"
+                                                <DeleteOutlineIcon fontSize="small" />
+                                            </IconButton>
+                                        </Tooltip>
+                                    </Box>
+
+                                    {/* Key-Value Auflistung */}
+                                    <Stack spacing={1}>
+                                        {Object.entries(row).map(
+                                            ([key, value]) => (
+                                                <Box
+                                                    key={key}
                                                     sx={{
-                                                        fontWeight: 'medium',
+                                                        display: 'flex',
+                                                        justifyContent:
+                                                            'space-between',
+                                                        alignItems: 'baseline',
+                                                        gap: 2,
                                                     }}
                                                 >
-                                                    {key}:
-                                                </Typography>
-                                                {renderValueBadge(value)}
-                                            </Stack>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    textAlign: 'right',
-                                                    wordBreak: 'break-word',
-                                                    flex: 1,
-                                                }}
-                                            >
-                                                {typeof value === 'object'
-                                                    ? JSON.stringify(value)
-                                                    : String(value)}
-                                            </Typography>
-                                        </Box>
-                                    ))}
-                                </Stack>
-                            </Paper>
-                        ))}
-                    </Stack>
-                )}
-            </CardContent>
-        </Card>
+                                                    <Stack
+                                                        direction="row"
+                                                        spacing={1}
+                                                        sx={{
+                                                            alignItems:
+                                                                'center',
+                                                            minWidth: 0,
+                                                            flexShrink: 0,
+                                                        }}
+                                                    >
+                                                        <Typography
+                                                            variant="caption"
+                                                            color="text.secondary"
+                                                            sx={{
+                                                                fontWeight:
+                                                                    'medium',
+                                                            }}
+                                                        >
+                                                            {key}:
+                                                        </Typography>
+                                                        {renderValueBadge(
+                                                            value,
+                                                        )}
+                                                    </Stack>
+                                                    <Typography
+                                                        variant="body2"
+                                                        sx={{
+                                                            textAlign: 'right',
+                                                            wordBreak:
+                                                                'break-word',
+                                                            flex: 1,
+                                                        }}
+                                                    >
+                                                        {typeof value ===
+                                                        'object'
+                                                            ? JSON.stringify(
+                                                                  value,
+                                                              )
+                                                            : String(value)}
+                                                    </Typography>
+                                                </Box>
+                                            ),
+                                        )}
+                                    </Stack>
+                                </Paper>
+                            ))}
+                        </Stack>
+                    )}
+                </CardContent>
+            </Card>
+        </>
     );
 }
