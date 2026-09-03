@@ -96,8 +96,8 @@ class FitnessDatabase extends Dexie {
             tx.table('Settings').add({
                 id: 1,
                 showDbViewer: false,
-                landingPage: '/training',
-                theme: 'dark',
+                landingPage: '/training/plans',
+                theme: 'defaultMui',
             });
         });
     }
