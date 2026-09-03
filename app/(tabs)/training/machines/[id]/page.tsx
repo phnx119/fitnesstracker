@@ -12,19 +12,22 @@ import {
 } from '@tabler/icons-react';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import SetInput from '../SetInput';
 
 export default function MachinePage() {
     const pathName = usePathname();
+    const searchParams = useSearchParams();
 
     const settings = useLiveQuery(() => dbInstance.Settings.get(1));
 
     const { id: idString } = useParams<{ id: string }>();
     const machineId = Number(idString);
     const machine = useLiveQuery(() => dbInstance.Machine.get(machineId));
+
+    const fromPlanId = Number(searchParams.get('fromPlan'));
 
     const getMachineData = useCallback(async () => {
         if (!machineId) return [];
@@ -191,6 +194,12 @@ export default function MachinePage() {
             setNumber: currentSetIndex,
             weight: previousSetRecord?.weight ?? 50,
         });
+
+        if (fromPlanId) {
+            dbInstance.WorkoutPlan.update(fromPlanId, {
+                lastUsed: Date.now(),
+            });
+        }
     }
 
     function removeSet() {

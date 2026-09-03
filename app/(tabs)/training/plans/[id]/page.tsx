@@ -45,7 +45,10 @@ export default function PlanPage() {
     ) : null;
 
     function handleMachineClick(machine: Row<'Machine'>) {
-        router.push(`/training/machines/${machine.id}`);
+        if (!plan) {
+            return;
+        }
+        router.push(`/training/machines/${machine.id}?fromPlan=${plan.id}`);
     }
 
     async function getPlanMachines(planId: number) {
