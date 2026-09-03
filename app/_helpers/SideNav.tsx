@@ -12,14 +12,14 @@ import { useMemo } from 'react';
 
 export const FIXED_NAV_ITEMS = [
     {
-        label: 'Personal',
-        path: '/personal',
-        icon: <PersonIcon />,
-    },
-    {
         label: 'Training',
         path: '/training/plans',
         icon: <FitnessCenterIcon />,
+    },
+    {
+        label: 'Personal',
+        path: '/personal',
+        icon: <PersonIcon />,
     },
     {
         label: 'Settings',
