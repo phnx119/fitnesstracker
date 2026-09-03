@@ -25,7 +25,7 @@ export default function Settings() {
     const showDbViewer = settings?.showDbViewer ?? false;
     const bigScreenMode = settings?.bigScreenMode ?? true;
     const landingPage = settings?.landingPage ?? '/training/plans';
-    const currentTheme = (settings?.theme as ThemeKey) || 'dark';
+    const currentTheme = (settings?.theme as ThemeKey) || 'defaultMui';
 
     const progressMetricOptions = ['Weight', 'E1RM'];
     const progressMetric = settings?.progressMetric ?? 0;
