@@ -21,7 +21,7 @@ const schemaDefinition = {
     WorkoutPlan: {
         name: { default: 'Mausplan' as string, index: false },
         imageBlob: { default: undefined as Blob | undefined, index: false },
-        lastUsed: { default: 0 as number, index: true },
+        lastUsed: { default: 0 as number | undefined, index: true },
     },
     PlanMachine: {
         planId: { default: 0 as number, index: true },

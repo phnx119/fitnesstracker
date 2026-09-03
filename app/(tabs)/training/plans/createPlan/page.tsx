@@ -30,6 +30,7 @@ export default function CreateMachine() {
         dbInstance.WorkoutPlan.add({
             name: planName,
             imageBlob: undefined,
+            lastUsed: undefined,
         });
 
         router.back();
