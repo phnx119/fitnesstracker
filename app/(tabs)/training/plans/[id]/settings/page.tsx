@@ -27,7 +27,7 @@ export default function PlanSettings() {
         [planId],
     );
     return (
-        <TrainingContainer title="Edit Machine">
+        <TrainingContainer title="Edit Plan">
             <Stack sx={{ gap: 1, flex: 1 }}>
                 <ImagePicker tableName="WorkoutPlan" dbRowId={planId} />
                 <TextField
