@@ -1,7 +1,7 @@
 'use client';
 
 import { dbInstance, Row } from '@/database/db';
-import { Button, Card, Dialog, Stack } from '@mui/material';
+import { Button, Dialog, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -21,9 +21,8 @@ export default function AllMachinesPage() {
                     machines={allMachines}
                     onClick={handleMachineClick}
                 />
-                <Card>
-                    <Button onClick={() => setShowAddDialog(true)}>add</Button>
-                </Card>
+
+                <Button onClick={() => setShowAddDialog(true)}>add</Button>
             </Stack>
 
             <Dialog open={showAddDialog} onClose={closeAddDialog} fullScreen>
