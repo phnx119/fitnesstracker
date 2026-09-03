@@ -26,12 +26,12 @@ export default function PlanListPage() {
             }
             showClose={false}
         >
-            <Stack sx={{ overflow: 'auto', gap: 1 }}>
+            <Stack sx={{ overflow: 'auto', gap: 1, mb: 1 }}>
                 {plans.map((item) => (
                     <PlanCard key={item.id} plan={item} />
                 ))}
             </Stack>
-            <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
+            <Button onClick={() => setShowAddPlanDialog(true)}>Add Plan</Button>
             <Dialog
                 open={showAddPlanDialog}
                 onClose={closeAddPlanDialog}
