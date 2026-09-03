@@ -1,6 +1,5 @@
 'use client';
 
-import BottomNav from '@/app/_helpers/BottomNav';
 import { Stack } from '@mui/material';
 
 export default function TabsLayout({
@@ -11,7 +10,7 @@ export default function TabsLayout({
     return (
         <Stack sx={{ height: '100%', width: '100%' }}>
             <Stack sx={{ flex: 1, minHeight: 0 }}>{children}</Stack>
-            <BottomNav />
+            {/* <BottomNav /> */}
         </Stack>
     );
 }
