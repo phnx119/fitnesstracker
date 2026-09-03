@@ -31,8 +31,8 @@ export default function Settings() {
     const progressMetric = settings?.progressMetric ?? 0;
 
     return (
-        <Stack>
-            <Header title="Hier wird gezwirbelt" />
+        <Stack sx={{ overflow: 'auto' }}>
+            <Header title="Hier wird gezwirbelt" showHome />
 
             <TabContentStack>
                 <Stack sx={{ overflow: 'auto', gap: 1 }}>

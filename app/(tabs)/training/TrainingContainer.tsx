@@ -8,16 +8,16 @@ import { PropsWithChildren, ReactNode } from 'react';
 export default function TrainingContainer({
     title,
     headerButtons = null,
-    showClose = true,
+    showHome = false,
     children,
 }: PropsWithChildren<{
     title: string;
     headerButtons?: ReactNode;
-    showClose?: boolean;
+    showHome?: boolean;
 }>) {
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }}>
-            <Header title={title} showClose={showClose}>
+            <Header title={title} showHome={showHome}>
                 {headerButtons}
             </Header>
 

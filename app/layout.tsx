@@ -33,7 +33,13 @@ export default function RootLayout({
     return (
         <html lang="en" className="h-full w-full">
             <body className="h-[100dvh] w-full flex flex-col m-0 p-0 overflow-hidden">
-                <ThemeRegistry>{children}</ThemeRegistry>
+                <div
+                    className="shrink-0"
+                    style={{ height: 'env(safe-area-inset-top, 0px)' }}
+                />
+                <div className="flex flex-col flex-1 min-h-0">
+                    <ThemeRegistry>{children}</ThemeRegistry>
+                </div>
             </body>
         </html>
     );

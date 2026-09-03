@@ -2,17 +2,17 @@
 
 import { dbInstance } from '@/database/db';
 import { Apps } from '@mui/icons-material';
-import { Button, Dialog, IconButton, Stack } from '@mui/material';
+import { Button, IconButton, Stack } from '@mui/material';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import TrainingContainer from '../TrainingContainer';
-import AddPlanDialog from './AddPlanDialog';
 import PlanCard from './PlanCard';
 
 export default function PlanListPage() {
-    const [showAddPlanDialog, setShowAddPlanDialog] = useState(false);
     const plans = useLiveQuery(() => dbInstance.WorkoutPlan.toArray()) ?? [];
+    const router = useRouter();
+    const pathName = usePathname();
 
     return (
         <TrainingContainer
@@ -24,25 +24,16 @@ export default function PlanListPage() {
                     </IconButton>
                 </Link>
             }
-            showClose={false}
+            showHome
         >
-            <Stack sx={{ overflow: 'auto', gap: 1 }}>
+            <Stack sx={{ overflow: 'auto', gap: 1, mb: 1 }}>
                 {plans.map((item) => (
                     <PlanCard key={item.id} plan={item} />
                 ))}
             </Stack>
-            <Button onClick={() => setShowAddPlanDialog(true)}>maus</Button>
-            <Dialog
-                open={showAddPlanDialog}
-                onClose={closeAddPlanDialog}
-                fullScreen
-            >
-                <AddPlanDialog onClose={closeAddPlanDialog} />
-            </Dialog>
+            <Button onClick={() => router.push(`${pathName}/createPlan`)}>
+                Create Plan
+            </Button>
         </TrainingContainer>
     );
-
-    function closeAddPlanDialog() {
-        setShowAddPlanDialog(false);
-    }
 }
