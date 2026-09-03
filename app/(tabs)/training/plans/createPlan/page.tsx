@@ -10,7 +10,7 @@ export default function CreateMachine() {
 
     return (
         <>
-            <Header title="Create Plan" showClose>
+            <Header title="Create Plan">
                 <Button onClick={createPlan}>Save</Button>
             </Header>
 

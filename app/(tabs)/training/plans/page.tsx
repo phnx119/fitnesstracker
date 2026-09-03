@@ -24,7 +24,7 @@ export default function PlanListPage() {
                     </IconButton>
                 </Link>
             }
-            showClose={false}
+            showHome
         >
             <Stack sx={{ overflow: 'auto', gap: 1, mb: 1 }}>
                 {plans.map((item) => (
