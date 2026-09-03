@@ -16,9 +16,9 @@ export default function AddMachine() {
 
     const machines = useLiveQuery(() => dbInstance.Machine.toArray()) ?? [];
     const selectedMachineIds =
-        useLiveQuery(() => dbInstance.PlanMachine.toArray())?.map(
-            (item) => item.machineId,
-        ) ?? [];
+        useLiveQuery(() => dbInstance.PlanMachine.toArray())
+            ?.filter((item) => item.planId === planId)
+            .map((item) => item.machineId) ?? [];
 
     return plan ? (
         <>
