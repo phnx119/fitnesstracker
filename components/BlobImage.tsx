@@ -1,6 +1,7 @@
 'use client';
 
-import { Skeleton, Typography } from '@mui/material';
+import { HideImage } from '@mui/icons-material';
+import { Skeleton } from '@mui/material';
 import Box, { type BoxProps } from '@mui/material/Box';
 import { useEffect, useState } from 'react';
 
@@ -64,9 +65,7 @@ export function BlobImage({
                     ...sx,
                 }}
             >
-                <Typography variant="caption" color="text.secondary">
-                    nix
-                </Typography>
+                <HideImage />
             </Box>
         );
     }
