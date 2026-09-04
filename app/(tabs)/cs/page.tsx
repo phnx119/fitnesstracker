@@ -4,7 +4,7 @@ export default function Cs() {
     redirect('cs/mirage/t');
 }
 
-export const maps = [
+export const MAPS = [
     {
         id: 1,
         name: 'ancient',
