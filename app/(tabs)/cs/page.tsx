@@ -1,5 +1,9 @@
 import { redirect } from 'next/navigation';
 
+export default function Cs() {
+    redirect('cs/mirage/t');
+}
+
 export const maps = [
     {
         id: 1,
@@ -44,7 +48,3 @@ export const maps = [
         image: null,
     },
 ];
-
-export default function Cs() {
-    redirect('cs/mirage/t');
-}
