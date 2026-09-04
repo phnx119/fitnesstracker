@@ -30,6 +30,11 @@ export default function Settings() {
     const progressMetricOptions = ['Weight', 'E1RM'];
     const progressMetric = settings?.progressMetric ?? 0;
 
+    const landingPages = [
+        ...FIXED_NAV_ITEMS,
+        { label: 'Home', path: '/home', icon: null },
+    ];
+
     return (
         <Stack sx={{ overflow: 'auto' }}>
             <Header title="Hier wird gezwirbelt" showHome />
@@ -114,7 +119,7 @@ export default function Settings() {
                                 value={landingPage}
                                 onChange={handleLandingPageSelect}
                             >
-                                {FIXED_NAV_ITEMS.map((item) => (
+                                {landingPages.map((item) => (
                                     <MenuItem key={item.path} value={item.path}>
                                         {item.label}
                                     </MenuItem>
@@ -202,7 +207,7 @@ export default function Settings() {
             id: 1,
             showDbViewer: true,
             bigScreenMode: true,
-            landingPage: '/training/plans',
+            landingPage: '/home',
             progressMetric: 0,
             theme: 'defaultMui',
         });
