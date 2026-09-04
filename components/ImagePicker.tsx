@@ -37,7 +37,8 @@ export default function ImagePicker({
     dialog?: boolean;
 }) {
     const [showDialog, setShowDialog] = useState(false);
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [compressedBlob, setCompressedBlob] = useState<Blob | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const table = dbInstance[tableName] as unknown as Table<
@@ -47,11 +48,13 @@ export default function ImagePicker({
 
     useEffect(() => {
         loadImage();
+        return () => {
+            if (imageUrl) URL.revokeObjectURL(imageUrl);
+            if (previewUrl) URL.revokeObjectURL(previewUrl);
+        };
     }, []);
 
-    const activeUrl = selectedFile
-        ? URL.createObjectURL(selectedFile)
-        : imageUrl;
+    const activeUrl = previewUrl || imageUrl;
 
     const imagePickerContent = (
         <Stack sx={{ gap: 1, p: 1 }}>
@@ -62,7 +65,7 @@ export default function ImagePicker({
                     sx={{
                         width: '100%',
                         aspectRatio: '1 / 1',
-                        objectFit: 'fill',
+                        objectFit: 'cover',
                         borderRadius: 1,
                         boxShadow: 3,
                         contain: 'paint layout',
@@ -95,7 +98,7 @@ export default function ImagePicker({
                 <Button
                     color="success"
                     onClick={handleSaveClick}
-                    disabled={!selectedFile}
+                    disabled={!compressedBlob}
                 >
                     <SaveIcon />
                 </Button>
@@ -144,12 +147,12 @@ export default function ImagePicker({
     );
 
     async function loadImage() {
-        await table.get(dbRowId).then((row) => {
-            if (row?.imageBlob) {
-                setImageUrl(URL.createObjectURL(row.imageBlob));
-            } else {
-                setImageUrl(null);
-            }
+        const row = await table.get(dbRowId);
+        setImageUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return row?.imageBlob && row.imageBlob instanceof Blob
+                ? URL.createObjectURL(row.imageBlob)
+                : null;
         });
     }
 
@@ -157,28 +160,81 @@ export default function ImagePicker({
         setShowDialog(false);
     }
 
-    function handleFileChange(event: ChangeEvent<HTMLInputElement>): void {
+    async function handleFileChange(
+        event: ChangeEvent<HTMLInputElement>,
+    ): Promise<void> {
         const file = event.target.files?.[0];
         if (!file) {
             return;
         }
 
-        setSelectedFile(file);
+        const resized = await resizeImage(file, 600);
+        setCompressedBlob(resized);
+
+        setPreviewUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return URL.createObjectURL(resized);
+        });
     }
 
     async function handleSaveClick(): Promise<void> {
-        if (!selectedFile) {
+        if (!compressedBlob) {
             return;
         }
 
-        await table.update(dbRowId, { imageBlob: selectedFile });
-        setSelectedFile(null);
+        await table.update(dbRowId, { imageBlob: compressedBlob });
+        setCompressedBlob(null);
+        setPreviewUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return null;
+        });
         loadImage();
     }
 
     async function handleDeleteClick(): Promise<void> {
-        setSelectedFile(null);
+        setCompressedBlob(null);
+        setPreviewUrl((prev) => {
+            if (prev) URL.revokeObjectURL(prev);
+            return null;
+        });
         await table.update(dbRowId, { imageBlob: undefined });
         loadImage();
+    }
+}
+
+async function resizeImage(file: File, maxSize = 600): Promise<Blob> {
+    try {
+        const bitmap = await createImageBitmap(file);
+        const canvas = document.createElement('canvas');
+        let { width, height } = bitmap;
+
+        if (width > height) {
+            if (width > maxSize) {
+                height = Math.round((height * maxSize) / width);
+                width = maxSize;
+            }
+        } else {
+            if (height > maxSize) {
+                width = Math.round((width * maxSize) / height);
+                height = maxSize;
+            }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(bitmap, 0, 0, width, height);
+
+        return new Promise((resolve) => {
+            canvas.toBlob(
+                (blob) => {
+                    resolve(blob || file);
+                },
+                'image/webp',
+                0.85,
+            );
+        });
+    } catch {
+        return file;
     }
 }

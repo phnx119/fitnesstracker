@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 // INCREMENT AFTER EVERY SCHEMA CHANGE
-const version = 12;
+const version = 14;
 
 // tableName: { rowName: defaultValue as type }
 // id is added automatically

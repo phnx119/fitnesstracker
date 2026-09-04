@@ -3,9 +3,14 @@
 
 import { Row } from '@/database/db';
 import { Box } from '@mui/material';
-import * as echarts from 'echarts'; // Required for gradient
-import ReactECharts from 'echarts-for-react';
+import ReactEChartsCore from 'echarts-for-react/lib/core';
+import { LineChart } from 'echarts/charts';
+import { GridComponent, TooltipComponent } from 'echarts/components';
+import * as echarts from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
 import { useMemo } from 'react';
+
+echarts.use([LineChart, GridComponent, TooltipComponent, CanvasRenderer]);
 
 type SessionData = {
     machineId: number;
@@ -164,7 +169,8 @@ export default function MachineProgressChart({
 
     return (
         <Box sx={{ width: '100%', height: 400 }}>
-            <ReactECharts
+            <ReactEChartsCore
+                echarts={echarts}
                 option={chartOptions}
                 style={{ height: '100%', width: '100%' }}
                 notMerge={true}

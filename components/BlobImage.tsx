@@ -17,19 +17,16 @@ export function BlobImage({
     const [previewUri, setPreviewUri] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!blob) return;
+        if (!blob || !(blob instanceof Blob)) {
+            return;
+        }
 
-        let isMounted = true;
         const objectUrl = URL.createObjectURL(blob);
-
-        queueMicrotask(() => {
-            if (isMounted) {
-                setPreviewUri(objectUrl);
-            }
-        });
+        // Synchronize browser resource URL with state
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setPreviewUri(objectUrl);
 
         return () => {
-            isMounted = false;
             URL.revokeObjectURL(objectUrl);
             setPreviewUri(null);
         };
@@ -80,7 +77,7 @@ export function BlobImage({
                 maxWidth: '100%',
                 maxHeight: '100%',
                 aspectRatio: aspectRatio,
-                objectFit: 'fill',
+                objectFit: 'cover',
                 borderRadius: 1,
                 ...sx,
             }}
