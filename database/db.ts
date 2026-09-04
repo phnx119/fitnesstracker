@@ -1,7 +1,7 @@
 import Dexie, { type EntityTable } from 'dexie';
 
 // INCREMENT AFTER EVERY SCHEMA CHANGE
-const version = 11;
+const version = 12;
 
 // tableName: { rowName: defaultValue as type }
 // id is added automatically
@@ -22,6 +22,7 @@ const schemaDefinition = {
         name: { default: 'Mausplan' as string, index: false },
         imageBlob: { default: undefined as Blob | undefined, index: false },
         lastUsed: { default: 0 as number | undefined, index: true },
+        favorite: { default: false as boolean, index: false },
     },
     PlanMachine: {
         planId: { default: 0 as number, index: true },

@@ -31,6 +31,7 @@ export default function CreateMachine() {
             name: planName,
             imageBlob: undefined,
             lastUsed: undefined,
+            favorite: false,
         });
 
         router.back();

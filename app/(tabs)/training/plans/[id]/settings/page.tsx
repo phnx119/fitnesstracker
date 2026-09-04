@@ -2,9 +2,9 @@
 
 import ImagePicker from '@/components/ImagePicker';
 import { dbInstance, Row } from '@/database/db';
-import { debounce, Stack, TextField } from '@mui/material';
+import { debounce, Stack, Switch, TextField } from '@mui/material';
 import { useParams } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import TrainingContainer from '../../../TrainingContainer';
 
 export default function PlanSettings() {
@@ -26,19 +26,23 @@ export default function PlanSettings() {
             }, 300),
         [planId],
     );
-    return (
+    return plan ? (
         <TrainingContainer title="Edit Plan">
             <Stack sx={{ gap: 1, flex: 1 }}>
                 <ImagePicker tableName="WorkoutPlan" dbRowId={planId} />
                 <TextField
-                    key={plan?.name}
+                    key={plan.name}
                     label="Name"
-                    defaultValue={plan?.name}
+                    defaultValue={plan.name}
                     onChange={(e) => debouncedSave(e.target.value)}
+                />
+                <Switch
+                    checked={plan.favorite}
+                    onChange={(e) => toggleFavorite(e)}
                 />
             </Stack>
         </TrainingContainer>
-    );
+    ) : null;
 
     async function loadPlan() {
         await dbInstance.WorkoutPlan.get(planId).then((plan) => {
@@ -48,5 +52,13 @@ export default function PlanSettings() {
                 setPlan(null);
             }
         });
+    }
+
+    async function toggleFavorite(e: ChangeEvent<HTMLInputElement, Element>) {
+        await dbInstance.WorkoutPlan.update(planId, {
+            favorite: e.target.checked,
+        });
+
+        loadPlan();
     }
 }
