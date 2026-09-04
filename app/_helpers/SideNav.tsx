@@ -19,7 +19,7 @@ export const FIXED_NAV_ITEMS = [
     },
     {
         label: 'CS',
-        path: '/cs',
+        path: '/cs/mirage/t',
         icon: <FlareIcon />,
     },
     {
