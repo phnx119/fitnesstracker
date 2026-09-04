@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Stack, Typography, useTheme } from '@mui/material';
+import { Card, Stack, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 
 export default function HomeWidgetCard({
@@ -8,7 +8,6 @@ export default function HomeWidgetCard({
     title = undefined,
     children,
 }: PropsWithChildren<{ flex?: number; title?: string | undefined }>) {
-    const theme = useTheme();
     return (
         <Stack sx={{ flex: flex, overflow: 'auto' }}>
             <Card sx={{ flex: flex, p: 1, overflow: 'auto' }} component={Stack}>
