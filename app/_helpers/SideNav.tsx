@@ -2,6 +2,7 @@
 
 import { dbInstance } from '@/database/db';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import FlareIcon from '@mui/icons-material/Flare';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import StorageIcon from '@mui/icons-material/Storage';
@@ -15,6 +16,11 @@ export const FIXED_NAV_ITEMS = [
         label: 'Training',
         path: '/training/plans',
         icon: <FitnessCenterIcon />,
+    },
+    {
+        label: 'CS',
+        path: '/cs',
+        icon: <FlareIcon />,
     },
     {
         label: 'Personal',

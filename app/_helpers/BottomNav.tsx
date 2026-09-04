@@ -1,9 +1,6 @@
 'use client';
 
 import { dbInstance } from '@/database/db';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import PersonIcon from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
 import StorageIcon from '@mui/icons-material/Storage';
 import {
     BottomNavigation,
@@ -14,24 +11,7 @@ import {
 import { useLiveQuery } from 'dexie-react-hooks';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo } from 'react';
-
-export const FIXED_NAV_ITEMS = [
-    {
-        label: 'Settings',
-        path: '/settings',
-        icon: <SettingsIcon />,
-    },
-    {
-        label: 'Training',
-        path: '/training/plans',
-        icon: <FitnessCenterIcon />,
-    },
-    {
-        label: 'Personal',
-        path: '/personal',
-        icon: <PersonIcon />,
-    },
-];
+import { FIXED_NAV_ITEMS } from './SideNav';
 
 export default function BottomNav() {
     const router = useRouter();
