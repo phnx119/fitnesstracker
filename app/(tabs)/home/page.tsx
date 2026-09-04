@@ -8,7 +8,9 @@ export default function Home() {
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }} direction="row">
             <Stack sx={{ flex: 1, overflow: 'auto', p: 1 }}>
-                <LastUsedPlans />
+                <Stack sx={{ flex: 1, overflow: 'auto' }}>
+                    <LastUsedPlans />
+                </Stack>
                 <Stack sx={{ flex: 4 }}></Stack>
             </Stack>
             <SideNav />
