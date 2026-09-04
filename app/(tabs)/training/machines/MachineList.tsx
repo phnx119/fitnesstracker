@@ -9,6 +9,7 @@ import {
     ImageListItemBar,
     Stack,
 } from '@mui/material';
+import { useMemo } from 'react';
 
 export default function MachineList({
     machines,
@@ -19,13 +20,22 @@ export default function MachineList({
     onClick(machine: Row<'Machine'>): void;
     selectedIds?: number[];
 }) {
+    const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+
     return (
         <ImageList cols={2} gap={8} sx={{ overflow: 'auto' }}>
             {machines.map((item) => (
-                <ImageListItem key={item.id} onClick={() => onClick(item)}>
+                <ImageListItem
+                    key={item.id}
+                    onClick={() => onClick(item)}
+                    sx={{
+                        contentVisibility: 'auto',
+                        containIntrinsicSize: '0 180px',
+                    }}
+                >
                     <BlobImage blob={item.imageBlob} />
 
-                    {selectedIds.some((selId) => selId === item.id) && (
+                    {selectedSet.has(item.id) && (
                         <Stack
                             sx={{
                                 position: 'absolute',

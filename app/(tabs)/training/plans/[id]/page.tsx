@@ -60,10 +60,15 @@ export default function PlanPage() {
             return [];
         }
 
-        const machines = await Promise.all(
-            planMachines.map((pm) => dbInstance.Machine.get(pm.machineId)),
-        );
+        const machineIds = planMachines.map((pm) => pm.machineId);
+        const machines = await dbInstance.Machine.where('id')
+            .anyOf(machineIds)
+            .toArray();
 
-        return machines.filter((m) => m !== undefined);
+        const machineMap = new Map(machines.map((m) => [m.id, m]));
+        return planMachines
+            .sort((a, b) => (a.orderIndex ?? 0) - (b.orderIndex ?? 0))
+            .map((pm) => machineMap.get(pm.machineId))
+            .filter((m): m is Row<'Machine'> => m !== undefined);
     }
 }

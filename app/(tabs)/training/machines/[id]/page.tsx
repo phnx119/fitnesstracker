@@ -1,9 +1,8 @@
 'use client';
 
-import MachineChart from '@/app/(tabs)/training/machines/[id]/MachineChart';
 import { dbInstance, Row } from '@/database/db';
 import { Settings } from '@mui/icons-material';
-import { Divider, IconButton, Stack } from '@mui/material';
+import { Divider, IconButton, Skeleton, Stack } from '@mui/material';
 import {
     IconGraph,
     IconGraphOff,
@@ -11,11 +10,30 @@ import {
     IconTablePlus,
 } from '@tabler/icons-react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import TrainingContainer from '../../TrainingContainer';
 import SetInput from '../SetInput';
+
+const MachineChart = dynamic(
+    () => import('@/app/(tabs)/training/machines/[id]/MachineChart'),
+    {
+        ssr: false,
+        loading: () => (
+            <Skeleton
+                variant="rectangular"
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    minHeight: 250,
+                    borderRadius: 2,
+                }}
+            />
+        ),
+    },
+);
 
 export default function MachinePage() {
     const pathName = usePathname();

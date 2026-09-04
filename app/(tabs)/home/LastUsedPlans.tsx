@@ -6,36 +6,37 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import HomeWidgetCard from './HomeWidgetCard';
 
 export default function LastUsedPlans() {
-    const lastPlans = useLiveQuery(() =>
-        dbInstance.WorkoutPlan.filter(
-            (plan) => plan.favorite === true,
-        ).toArray(),
-    );
+    const lastPlans = useLiveQuery(async () => {
+        const plans = await dbInstance.WorkoutPlan.filter((plan) =>
+            Boolean(plan.favorite),
+        ).toArray();
+        return plans.sort((a, b) => (b.lastUsed ?? 0) - (a.lastUsed ?? 0));
+    });
+
     return (
         <HomeWidgetCard title="Last used Plans" flex={1}>
-            {lastPlans
-                ?.sort((a, b) => (b.lastUsed ?? 0) - (a.lastUsed ?? 0))
-                .map((plan) => (
-                    <Stack key={plan.id}>
-                        <Card sx={{ p: 1, px: 2 }}>
-                            <Stack direction="row">
-                                <Typography>{plan.name}</Typography>
-                                <Box sx={{ flex: 1 }} />
-                                {plan.lastUsed && (
-                                    <Typography>
-                                        {new Date(
-                                            plan.lastUsed,
-                                        ).toLocaleDateString('de-DE', {
+            {lastPlans?.map((plan) => (
+                <Stack key={plan.id}>
+                    <Card sx={{ p: 1, px: 2 }}>
+                        <Stack direction="row">
+                            <Typography>{plan.name}</Typography>
+                            <Box sx={{ flex: 1 }} />
+                            {plan.lastUsed && (
+                                <Typography>
+                                    {new Date(plan.lastUsed).toLocaleDateString(
+                                        'de-DE',
+                                        {
                                             day: '2-digit',
                                             month: '2-digit',
                                             year: '2-digit',
-                                        })}
-                                    </Typography>
-                                )}
-                            </Stack>
-                        </Card>
-                    </Stack>
-                ))}
+                                        },
+                                    )}
+                                </Typography>
+                            )}
+                        </Stack>
+                    </Card>
+                </Stack>
+            ))}
         </HomeWidgetCard>
     );
 }
