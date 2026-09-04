@@ -1,6 +1,6 @@
 'use client';
 
-import { FIXED_NAV_ITEMS } from '@/app/_helpers/BottomNav';
+import { FIXED_NAV_ITEMS } from '@/app/_helpers/SideNav';
 import Header from '@/components/Header';
 import TabContentStack from '@/components/TabContentStack';
 import { dbInstance } from '@/database/db';
