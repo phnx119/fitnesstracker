@@ -15,6 +15,8 @@ export default function AncientT() {
                 <CsImage src={spawn4} text="4" w lmb jump />
                 <CsImage src={spawn5} text="5" w lmb jump />
             </Stack>
+
+            <MiniHeader title="B-Site" />
         </TabContentStack>
     );
 }
