@@ -1,7 +1,7 @@
 'use client';
 
 import TabContentStack from '@/components/TabContentStack';
-import instaWindowPosImg from '@/public/csLineups/tMirageInstaWindowPositions.png';
+import instaWindowPosImg from '@/public/csLineups/mirage/t/instaWindow/instaWindowPositions.png';
 import CsImage from '../../CsImage';
 import ImageContainer from '../../ImageContainer';
 import MiniHeader from '../../MiniHeader';
