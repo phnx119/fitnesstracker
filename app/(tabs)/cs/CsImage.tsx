@@ -22,19 +22,19 @@ export default function CsImage({
     w?: boolean;
 }) {
     const mouseIcon = lmb ? (rmb ? LMBRMBIcon : LMBIcon) : RMBIcon;
+    const infoBgColor = '#00000090';
     return (
         <Stack>
             {text !== '' && (
                 <Typography
                     sx={{
                         position: 'absolute',
-                        top: 2,
-                        left: 2,
-                        backgroundColor: 'black',
+                        backgroundColor: infoBgColor,
                         zIndex: 10,
+                        fontSize: 15,
                     }}
                 >
-                    test
+                    {text}
                 </Typography>
             )}
             <Image alt="image" src={src} fill priority />;
@@ -46,17 +46,17 @@ export default function CsImage({
                         justifyContent: 'center',
                         bottom: 0,
                         position: 'absolute',
-                        bgcolor: 'black',
+                        bgcolor: infoBgColor,
                         height: 30,
                     }}
                 >
                     {(lmb || rmb) && (
-                        <Stack sx={{ mx: -2 }}>
-                            <Image alt="image" src={mouseIcon} height="30" />
+                        <Stack sx={{ mx: -1 }}>
+                            <Image alt="image" src={mouseIcon} height="22" />
                         </Stack>
                     )}
-                    {jump && <IconTagsChevronUp />}
-                    {w && <IconLetterW height="50" />}
+                    {jump && <IconTagsChevronUp height="15" />}
+                    {w && <IconLetterW height="15" />}
                 </Stack>
             )}
         </Stack>
