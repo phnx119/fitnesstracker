@@ -1,6 +1,6 @@
-import LMBIcon from '@/public/inputIcons/LMBIcon.webp';
-import LMBRMBIcon from '@/public/inputIcons/LMBRMBIcon.webp';
-import RMBIcon from '@/public/inputIcons/RMBIcon.webp';
+import LMBIcon from '@/public/inputIcons/LMBIcon.png';
+import LMBRMBIcon from '@/public/inputIcons/LMBRMBIcon.png';
+import RMBIcon from '@/public/inputIcons/RMBIcon.png';
 
 import { Stack, Typography } from '@mui/material';
 import { IconLetterW, IconTagsChevronUp } from '@tabler/icons-react/';
@@ -47,16 +47,23 @@ export default function CsImage({
                         bottom: 0,
                         position: 'absolute',
                         bgcolor: infoBgColor,
-                        height: 30,
                     }}
                 >
                     {(lmb || rmb) && (
-                        <Stack sx={{ mx: -1 }}>
-                            <Image alt="image" src={mouseIcon} height="22" />
-                        </Stack>
+                        <Image alt="image" src={mouseIcon} height="15" />
                     )}
-                    {jump && <IconTagsChevronUp height="15" />}
-                    {w && <IconLetterW height="15" />}
+                    {jump && (
+                        <IconTagsChevronUp
+                            height="15"
+                            style={{ marginLeft: -3, marginRight: -4 }}
+                        />
+                    )}
+                    {w && (
+                        <IconLetterW
+                            height="15"
+                            style={{ marginLeft: -6, marginRight: -4 }}
+                        />
+                    )}
                 </Stack>
             )}
         </Stack>
