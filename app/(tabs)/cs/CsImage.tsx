@@ -30,7 +30,7 @@ export default function CsImage({
     const infoBgColor = '#00000090';
 
     const content = (
-        <Stack>
+        <Stack sx={{ position: 'relative', width: '100%', height: '100%' }}>
             {text !== '' && (
                 <Typography
                     sx={{
@@ -56,17 +56,17 @@ export default function CsImage({
                     }}
                 >
                     {(lmb || rmb) && (
-                        <Image alt="image" src={mouseIcon} height="15" />
+                        <Image alt="image" src={mouseIcon} height={15} />
                     )}
                     {jump && (
                         <IconTagsChevronUp
-                            height="15"
+                            height={15}
                             style={{ marginLeft: -3, marginRight: -4 }}
                         />
                     )}
                     {w && (
                         <IconLetterW
-                            height="15"
+                            height={15}
                             style={{ marginLeft: -6, marginRight: -4 }}
                         />
                     )}
