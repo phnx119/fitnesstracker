@@ -9,6 +9,7 @@ import {
     SelectChangeEvent,
     Stack,
 } from '@mui/material';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 import { CS_MAPS } from './maps';
@@ -40,7 +41,21 @@ export default function CsLayout({ children }: PropsWithChildren) {
                         >
                             {CS_MAPS.map((map) => (
                                 <MenuItem key={map.id} value={map.path}>
-                                    {map.name}
+                                    <Stack
+                                        direction="row"
+                                        sx={{
+                                            gap: 1,
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Image
+                                            src={map.image}
+                                            alt=""
+                                            width={25}
+                                            height={25}
+                                        />
+                                        {map.name}
+                                    </Stack>
                                 </MenuItem>
                             ))}
                         </Select>

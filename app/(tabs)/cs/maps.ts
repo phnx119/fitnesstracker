@@ -1,44 +1,52 @@
+import ancient from '@/public/csMapIcons/ancient.png';
+import anubis from '@/public/csMapIcons/anubis.png';
+import cache from '@/public/csMapIcons/cache.png';
+import dust from '@/public/csMapIcons/dust.png';
+import inferno from '@/public/csMapIcons/inferno.png';
+import mirage from '@/public/csMapIcons/mirage.png';
+import nuke from '@/public/csMapIcons/nuke.png';
+
 export const CS_MAPS = [
     {
         id: 1,
-        name: 'ancient',
+        name: 'Ancient',
         path: 'ancient',
-        image: null,
+        image: ancient,
     },
     {
         id: 2,
-        name: 'anubis',
+        name: 'Anubis',
         path: 'anubis',
-        image: null,
+        image: anubis,
     },
     {
         id: 3,
-        name: 'cache',
+        name: 'Cache',
         path: 'cache',
-        image: null,
+        image: cache,
     },
     {
         id: 4,
-        name: 'dust',
+        name: 'Dust',
         path: 'dust',
-        image: null,
+        image: dust,
     },
     {
         id: 5,
-        name: 'inferno',
+        name: 'Inferno',
         path: 'inferno',
-        image: null,
+        image: inferno,
     },
     {
         id: 6,
-        name: 'mirage',
+        name: 'Mirage',
         path: 'mirage',
-        image: null,
+        image: mirage,
     },
     {
         id: 7,
-        name: 'nuke',
+        name: 'Nuke',
         path: 'nuke',
-        image: null,
+        image: nuke,
     },
 ];
