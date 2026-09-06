@@ -1,4 +1,7 @@
 import TabContentStack from '@/components/TabContentStack';
+import aCt from '@/public/csLineups/ancient/t/a/ct.jpg';
+import aDonut from '@/public/csLineups/ancient/t/a/donut.jpg';
+import aPos from '@/public/csLineups/ancient/t/a/pos.jpg';
 import bLong from '@/public/csLineups/ancient/t/b/long.jpg';
 import bPos from '@/public/csLineups/ancient/t/b/pos.jpg';
 import bShort from '@/public/csLineups/ancient/t/b/short.jpg';
@@ -24,6 +27,13 @@ export default function AncientT() {
                 <CsImage src={bPos} text="Pos: Corner" />
                 <CsImage src={bLong} lmb jump text="Long" />
                 <CsImage src={bShort} lmb jump text="Short" />
+            </Stack>
+
+            <MiniHeader title="A-Site" />
+            <Stack sx={{ height: 150 }} direction="row">
+                <CsImage src={aPos} text="Pos: Stone center" />
+                <CsImage src={aCt} text="CT" jump lmb />
+                <CsImage src={aDonut} text="Donut" jump lmb />
             </Stack>
         </TabContentStack>
     );
