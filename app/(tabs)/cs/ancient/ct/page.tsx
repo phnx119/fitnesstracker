@@ -13,7 +13,6 @@ import spawn5End from '@/public/csLineups/ancient/ct/instaElbow/spawn5End.jpg';
 import spawn5Start from '@/public/csLineups/ancient/ct/instaElbow/spawn5Start.jpg';
 import { Stack } from '@mui/material';
 import CsImage from '../../CsImage';
-import ImageContainer from '../../ImageContainer';
 import MiniHeader from '../../MiniHeader';
 
 export default function AncientCt() {
@@ -22,47 +21,27 @@ export default function AncientCt() {
             <MiniHeader title="Insta Elbow (left to right; SHIFT WALK S-E)" />
             <Stack>
                 <Stack direction="row" sx={{ height: 120, gap: 1 }}>
-                    <ImageContainer>
-                        <CsImage src={spawn1Start} text="1 Start" jump lmb w />
-                    </ImageContainer>
+                    <CsImage src={spawn1Start} text="1 Start" jump lmb w />
 
-                    <ImageContainer>
-                        <CsImage src={spawn2Start} text="2 Start" jump lmb w />
-                    </ImageContainer>
+                    <CsImage src={spawn2Start} text="2 Start" jump lmb w />
 
-                    <ImageContainer>
-                        <CsImage src={spawn3Start} text="3 Start" jump lmb w />
-                    </ImageContainer>
+                    <CsImage src={spawn3Start} text="3 Start" jump lmb w />
 
-                    <ImageContainer>
-                        <CsImage src={spawn4Start} text="4 Start" jump lmb w />
-                    </ImageContainer>
+                    <CsImage src={spawn4Start} text="4 Start" jump lmb w />
 
-                    <ImageContainer>
-                        <CsImage src={spawn5Start} text="5 Start" jump lmb w />
-                    </ImageContainer>
+                    <CsImage src={spawn5Start} text="5 Start" jump lmb w />
                 </Stack>
 
                 <Stack direction="row" sx={{ height: 120, gap: 1 }}>
-                    <ImageContainer>
-                        <CsImage src={spawn1End} text="1 End" />
-                    </ImageContainer>
+                    <CsImage src={spawn1End} text="1 End" />
 
-                    <ImageContainer>
-                        <CsImage src={spawn2End} text="2 End" />
-                    </ImageContainer>
+                    <CsImage src={spawn2End} text="2 End" />
 
-                    <ImageContainer>
-                        <CsImage src={spawn3End} text="3 End" />
-                    </ImageContainer>
+                    <CsImage src={spawn3End} text="3 End" />
 
-                    <ImageContainer>
-                        <CsImage src={spawn4End} text="4 End" />
-                    </ImageContainer>
+                    <CsImage src={spawn4End} text="4 End" />
 
-                    <ImageContainer>
-                        <CsImage src={spawn5End} text="5 End" />
-                    </ImageContainer>
+                    <CsImage src={spawn5End} text="5 End" />
                 </Stack>
             </Stack>
         </TabContentStack>

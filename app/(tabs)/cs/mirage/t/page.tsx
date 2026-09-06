@@ -9,36 +9,25 @@ import instaWindow4 from '@/public/csLineups/mirage/t/instaWindow/spawn4InstaWin
 import instaWindow5 from '@/public/csLineups/mirage/t/instaWindow/spawn5InstaWindow.png';
 import { Stack } from '@mui/material';
 import CsImage from '../../CsImage';
-import ImageContainer from '../../ImageContainer';
 import MiniHeader from '../../MiniHeader';
 
 export default function MirageT() {
     return (
         <TabContentStack>
             <MiniHeader title="Insta Window" />
-            <ImageContainer height="150px">
+            <Stack sx={{ height: 150 }}>
                 <CsImage src={instaWindowPosImg} />
-            </ImageContainer>
+            </Stack>
             <Stack direction="row" sx={{ height: 120 }}>
-                <ImageContainer>
-                    <CsImage src={instaWindow1} text="1" jump lmb w />
-                </ImageContainer>
+                <CsImage src={instaWindow1} text="1" jump lmb w />
 
-                <ImageContainer>
-                    <CsImage src={instaWindow2} text="2" jump lmb w />
-                </ImageContainer>
+                <CsImage src={instaWindow2} text="2" jump lmb w />
 
-                <ImageContainer>
-                    <CsImage src={instaWindow3} text="3" jump lmb w />
-                </ImageContainer>
+                <CsImage src={instaWindow3} text="3" jump lmb w />
 
-                <ImageContainer>
-                    <CsImage src={instaWindow4} text="4" jump lmb w />
-                </ImageContainer>
+                <CsImage src={instaWindow4} text="4" jump lmb w />
 
-                <ImageContainer>
-                    <CsImage src={instaWindow5} text="5" jump lmb w />
-                </ImageContainer>
+                <CsImage src={instaWindow5} text="5" jump lmb w />
             </Stack>
         </TabContentStack>
     );
