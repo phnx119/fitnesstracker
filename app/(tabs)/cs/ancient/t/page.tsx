@@ -1,4 +1,7 @@
 import TabContentStack from '@/components/TabContentStack';
+import bLong from '@/public/csLineups/ancient/t/b/long.jpg';
+import bPos from '@/public/csLineups/ancient/t/b/pos.jpg';
+import bShort from '@/public/csLineups/ancient/t/b/short.jpg';
 import spawn1 from '@/public/csLineups/ancient/t/instaRed/spawn1.jpg';
 import spawn4 from '@/public/csLineups/ancient/t/instaRed/spawn4.jpg';
 import spawn5 from '@/public/csLineups/ancient/t/instaRed/spawn5.jpg';
@@ -17,6 +20,11 @@ export default function AncientT() {
             </Stack>
 
             <MiniHeader title="B-Site" />
+            <Stack sx={{ height: 150 }} direction="row">
+                <CsImage src={bPos} text="Pos: Corner" />
+                <CsImage src={bLong} lmb jump text="Long" />
+                <CsImage src={bShort} lmb jump text="Short" />
+            </Stack>
         </TabContentStack>
     );
 }
