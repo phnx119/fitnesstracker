@@ -20,8 +20,8 @@ export default function AncientCt() {
     return (
         <TabContentStack>
             <MiniHeader title="Insta Elbow (left to right; SHIFT WALK S-E)" />
-            <Stack sx={{ gap: 1 }}>
-                <Stack direction="row" sx={{ height: 120 }}>
+            <Stack>
+                <Stack direction="row" sx={{ height: 120, gap: 1 }}>
                     <ImageContainer>
                         <CsImage src={spawn1Start} text="1 Start" jump lmb w />
                     </ImageContainer>
@@ -43,7 +43,7 @@ export default function AncientCt() {
                     </ImageContainer>
                 </Stack>
 
-                <Stack direction="row" sx={{ height: 120 }}>
+                <Stack direction="row" sx={{ height: 120, gap: 1 }}>
                     <ImageContainer>
                         <CsImage src={spawn1End} text="1 End" />
                     </ImageContainer>
