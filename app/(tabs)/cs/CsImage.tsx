@@ -1,3 +1,5 @@
+'use client';
+
 import LMBIcon from '@/public/inputIcons/LMBIcon.png';
 import LMBRMBIcon from '@/public/inputIcons/LMBRMBIcon.png';
 import RMBIcon from '@/public/inputIcons/RMBIcon.png';
@@ -6,6 +8,7 @@ import { Stack, Typography } from '@mui/material';
 import { IconLetterW, IconTagsChevronUp } from '@tabler/icons-react/';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image from 'next/image';
+import ImageContainer from './ImageContainer';
 export default function CsImage({
     src,
     text = '',
@@ -13,6 +16,7 @@ export default function CsImage({
     rmb = false,
     jump = false,
     w = false,
+    noContainer = false,
 }: {
     src: string | StaticImport;
     text?: string;
@@ -20,10 +24,12 @@ export default function CsImage({
     rmb?: boolean;
     jump?: boolean;
     w?: boolean;
+    noContainer?: boolean;
 }) {
     const mouseIcon = lmb ? (rmb ? LMBRMBIcon : LMBIcon) : RMBIcon;
     const infoBgColor = '#00000090';
-    return (
+
+    const content = (
         <Stack>
             {text !== '' && (
                 <Typography
@@ -68,4 +74,6 @@ export default function CsImage({
             )}
         </Stack>
     );
+
+    return noContainer ? content : <ImageContainer>{content}</ImageContainer>;
 }

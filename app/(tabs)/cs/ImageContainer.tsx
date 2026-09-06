@@ -1,3 +1,5 @@
+'use client';
+
 import { Dialog, Stack } from '@mui/material';
 import { PropsWithChildren, useState } from 'react';
 
