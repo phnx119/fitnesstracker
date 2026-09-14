@@ -9,13 +9,9 @@ export default function Home() {
     return (
         <Stack sx={{ flex: 1, overflow: 'auto' }} direction="row">
             <Stack sx={{ flex: 1, overflow: 'auto', p: 1, gap: 1 }}>
-                <Stack sx={{ flex: 1, overflow: 'auto' }}>
-                    <LastUsedPlans />
-                </Stack>
+                <LastUsedPlans />
 
                 <GymCalendar />
-
-                <Stack sx={{ flex: 3 }}></Stack>
             </Stack>
             <SideNav />
         </Stack>

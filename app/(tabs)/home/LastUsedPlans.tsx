@@ -21,7 +21,7 @@ export default function LastUsedPlans() {
     });
 
     return (
-        <HomeWidgetCard title="Last used Plans" flex={1}>
+        <HomeWidgetCard title="Last used Plans">
             {lastPlans?.map((plan) => (
                 <Link href={`/training/plans/${plan.id}`} key={plan.id}>
                     <Stack>
