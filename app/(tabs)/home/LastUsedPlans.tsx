@@ -11,7 +11,7 @@ export default function LastUsedPlans() {
         const plans = await dbInstance.WorkoutPlan.filter((plan) =>
             Boolean(plan.favorite),
         ).toArray();
-        return plans.sort((a, b) => (b.lastUsed ?? 0) - (a.lastUsed ?? 0));
+        return plans.sort((a, b) => (a.lastUsed ?? 0) - (b.lastUsed ?? 0));
     });
 
     return (
