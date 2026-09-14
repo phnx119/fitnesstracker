@@ -25,40 +25,42 @@ const MachineItem = React.memo(function MachineItem({
     }, [onClick, item]);
 
     return (
-        <ImageListItem
-            onClick={handleClick}
-            sx={{
-                contentVisibility: 'auto',
-                containIntrinsicSize: '0 180px',
-                cursor: 'pointer',
-                borderRadius: 1,
-                overflow: 'hidden',
-                position: 'relative',
-            }}
-        >
-            <BlobImage
-                blob={item.imageBlob}
-                cacheKey={`machine-${item.id}`}
-            />
+        <Stack sx={{ aspectRatio: 1 }}>
+            <ImageListItem
+                onClick={handleClick}
+                sx={{
+                    contentVisibility: 'auto',
+                    containIntrinsicSize: '0 180px',
+                    cursor: 'pointer',
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                    position: 'relative',
+                }}
+            >
+                <BlobImage
+                    blob={item.imageBlob}
+                    cacheKey={`machine-${item.id}`}
+                />
 
-            {isSelected && (
-                <Stack
-                    sx={{
-                        position: 'absolute',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        height: '100%',
-                        width: '100%',
-                        bgcolor: '#000000A0',
-                        zIndex: 2,
-                    }}
-                >
-                    <CheckBox sx={{ fontSize: 40 }} />
-                </Stack>
-            )}
+                {isSelected && (
+                    <Stack
+                        sx={{
+                            position: 'absolute',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                            width: '100%',
+                            bgcolor: '#000000A0',
+                            zIndex: 2,
+                        }}
+                    >
+                        <CheckBox sx={{ fontSize: 40 }} />
+                    </Stack>
+                )}
 
-            <ImageListItemBar title={item.name} />
-        </ImageListItem>
+                <ImageListItemBar title={item.name} />
+            </ImageListItem>
+        </Stack>
     );
 });
 
