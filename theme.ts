@@ -102,6 +102,214 @@ export const THEMES = {
         },
     },
 
+    // 22. Electric Lime (Pure Black & Vibrant Acid Lime)
+    electricLime: {
+        name: 'Electric Lime',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#a3e635' }, // Acid Lime
+            secondary: { main: '#84cc16' },
+            background: {
+                default: '#000000',
+                paper: '#111111',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#71717a',
+            },
+            divider: 'rgba(163, 230, 53, 0.2)',
+        },
+        chart: {
+            set1: '#a3e635',
+            set2: '#22c55e',
+            set3: '#14b8a6',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(163, 230, 53, 0.16) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 23. Neon Cyan (OLED Pitch Black & Piercing Cyan)
+    neonCyan: {
+        name: 'Neon Cyan',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#06b6d4' }, // Intense Cyan
+            secondary: { main: '#22d3ee' },
+            background: {
+                default: '#000000',
+                paper: '#0d131a',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#64748b',
+            },
+            divider: 'rgba(6, 182, 212, 0.2)',
+        },
+        chart: {
+            set1: '#06b6d4',
+            set2: '#3b82f6',
+            set3: '#a855f7',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(6, 182, 212, 0.15) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 24. Hyper Violet (Deep Void & Vibrant Electric Violet)
+    hyperViolet: {
+        name: 'Hyper Violet',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#8b5cf6' }, // Electric Purple
+            secondary: { main: '#c084fc' },
+            background: {
+                default: '#09070f',
+                paper: '#130e20',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#71717a',
+            },
+            divider: 'rgba(139, 92, 246, 0.2)',
+        },
+        chart: {
+            set1: '#8b5cf6',
+            set2: '#ec4899',
+            set3: '#06b6d4',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(139, 92, 246, 0.15) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 25. Atomic Orange (Minimal Charcoal & Glowing Amber Ember)
+    atomicOrange: {
+        name: 'Atomic Orange',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#ff6b00' }, // Glowing Orange
+            secondary: { main: '#ff8800' },
+            background: {
+                default: '#0d0d0d',
+                paper: '#171717',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#8e8e93',
+            },
+            divider: 'rgba(255, 107, 0, 0.2)',
+        },
+        chart: {
+            set1: '#ff6b00',
+            set2: '#ffb700',
+            set3: '#ff2a00',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(255, 107, 0, 0.16) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 26. Acid Pink (Pure Black & Punchy Neon Pink)
+    acidPink: {
+        name: 'Acid Pink',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#f43f5e' }, // Neon Pink
+            secondary: { main: '#fb7185' },
+            background: {
+                default: '#000000',
+                paper: '#120d10',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#71717a',
+            },
+            divider: 'rgba(244, 63, 94, 0.2)',
+        },
+        chart: {
+            set1: '#f43f5e',
+            set2: '#a855f7',
+            set3: '#3b82f6',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(244, 63, 94, 0.16) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 27. Solar Flare (Deep Slate & Bright Canary Gold)
+    solarFlare: {
+        name: 'Solar Flare',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#ffd600' }, // High-energy Yellow
+            secondary: { main: '#ffea00' },
+            background: {
+                default: '#0a0a0c',
+                paper: '#141418',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#71717a',
+            },
+            divider: 'rgba(255, 214, 0, 0.2)',
+        },
+        chart: {
+            set1: '#ffd600',
+            set2: '#ff6d00',
+            set3: '#00e676',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(255, 214, 0, 0.15) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 28. Menthol Mint (Pitch Black & Ultra-Clean Mint)
+    mentholMint: {
+        name: 'Menthol Mint',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#00e676' }, // Crisp Mint
+            secondary: { main: '#69f0ae' },
+            background: {
+                default: '#000000',
+                paper: '#0b120e',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#64748b',
+            },
+            divider: 'rgba(0, 230, 118, 0.18)',
+        },
+        chart: {
+            set1: '#00e676',
+            set2: '#00b0ff',
+            set3: '#651fff',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(0, 230, 118, 0.15) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
+    // 29. Plasma Blue (Obsidian Dark & High-Voltage Blue)
+    plasmaBlue: {
+        name: 'Plasma Blue',
+        palette: {
+            mode: 'dark' as const,
+            primary: { main: '#2979ff' }, // Electric Cobalt
+            secondary: { main: '#448aff' },
+            background: {
+                default: '#06080c',
+                paper: '#0e121a',
+            },
+            text: {
+                primary: '#ffffff',
+                secondary: '#64748b',
+            },
+            divider: 'rgba(41, 121, 255, 0.2)',
+        },
+        chart: {
+            set1: '#2979ff',
+            set2: '#00e5ff',
+            set3: '#d500f9',
+            fadeBackground:
+                'linear-gradient(180deg, rgba(41, 121, 255, 0.16) 0%, rgba(0, 0, 0, 0) 100%)',
+        },
+    },
+
     // 4. Crimson Slate (Red Accent)
     crimsonSlate: {
         name: 'Crimson Slate',
