@@ -1,7 +1,6 @@
 'use client';
 
 import { Box } from '@mui/material';
-import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
@@ -29,8 +28,6 @@ function formatDateKey(date: Date): string {
 export default function GymCalendar({
     gymDates = defaultGymDates,
 }: GymCalendarProps) {
-    const [value, setValue] = useState<Date | null>(new Date());
-
     const tileClassName = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month' && gymDates.includes(formatDateKey(date))) {
             return 'gym-day';
@@ -44,7 +41,7 @@ export default function GymCalendar({
                 width: '100%',
                 bgcolor: 'transparent',
 
-                // 1. Remove white background from container & nav
+                // 1. Transparent background container & navigation controls
                 '& .react-calendar': {
                     width: '100%',
                     border: 'none',
@@ -60,44 +57,47 @@ export default function GymCalendar({
                     },
                 },
 
-                // 2. Base tile layout
+                // 2. Weekdays header
                 '& .react-calendar__month-view__weekdays': {
                     color: theme.palette.text.secondary,
                 },
                 '& .react-calendar__month-view__weekdays__weekday abbr': {
                     textDecoration: 'none',
                 },
+
+                // 3. Disable click & interaction on standard day tiles
                 '& .react-calendar__tile': {
                     color: 'inherit',
                     background: 'transparent !important',
                     borderRadius: '8px',
-                    '&:enabled:hover, &:enabled:focus': {
-                        backgroundColor: `${theme.palette.action.hover} !important`,
-                    },
+                    pointerEvents: 'none', // Prevents tile click/focus interaction
+                    cursor: 'default',
                 },
 
-                // 3. Highlight Gym Days & Active Selected Days with full background fill
-                '& .react-calendar__tile.gym-day, & .react-calendar__tile--active':
-                    {
-                        backgroundColor: `${theme.palette.primary.main} !important`,
-                        color: `${theme.palette.primary.contrastText} !important`,
-                        fontWeight: 'bold',
-                        '&:enabled:hover, &:enabled:focus': {
-                            backgroundColor: `${theme.palette.primary.dark} !important`,
-                        },
-                    },
+                // 4. Highlight Gym Days only
+                '& .react-calendar__tile.gym-day': {
+                    backgroundColor: `${theme.palette.primary.main} !important`,
+                    color: `${theme.palette.primary.contrastText} !important`,
+                    fontWeight: 'bold',
+                },
 
-                // 4. Subtle outline for today's date if not a gym day
+                // 5. Remove selection/active state background
+                '& .react-calendar__tile--active': {
+                    backgroundColor: 'transparent !important',
+                    color: 'inherit !important',
+                },
+                '& .react-calendar__tile--active.gym-day': {
+                    backgroundColor: `${theme.palette.primary.main} !important`,
+                    color: `${theme.palette.primary.contrastText} !important`,
+                },
+
+                // 6. Subtle border indicator for today's date
                 '& .react-calendar__tile--now': {
                     border: `1px solid ${theme.palette.primary.main}`,
                 },
             })}
         >
-            <Calendar
-                onChange={(val) => setValue(val as Date)}
-                value={value}
-                tileClassName={tileClassName}
-            />
+            <Calendar tileClassName={tileClassName} />
         </Box>
     );
 }
