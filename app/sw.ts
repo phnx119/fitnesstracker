@@ -16,41 +16,45 @@ declare const self: ServiceWorkerGlobalScope & {
 const customCaching: RuntimeCaching[] = [
     // Next.js static JS & CSS bundles - immutable, cache first
     {
-        matcher: /\/_next\/static\/.+\.(?:js|css)$/i,
+        matcher: ({ url }) => url.pathname.startsWith('/_next/static/'),
         handler: new CacheFirst({
             cacheName: 'next-static-assets',
             plugins: [
                 new ExpirationPlugin({
-                    maxEntries: 256,
+                    maxEntries: 512,
                     maxAgeSeconds: 365 * 24 * 60 * 60,
                     maxAgeFrom: 'last-used',
                 }),
             ],
         }),
     },
-    // Next.js dynamic optimized images - cache first for instant local PWA loads
+    // User images (machines, plans) from persistent CacheStorage
     {
-        matcher: /\/_next\/image\?url=.+$/i,
+        matcher: ({ url }) => url.pathname.startsWith('/api/user-images/'),
         handler: new CacheFirst({
-            cacheName: 'next-optimized-images',
+            cacheName: 'user-blob-images',
             plugins: [
                 new ExpirationPlugin({
-                    maxEntries: 256,
-                    maxAgeSeconds: 60 * 24 * 60 * 60,
-                    maxAgeFrom: 'last-used',
+                    maxEntries: 500,
+                    maxAgeSeconds: 365 * 24 * 60 * 60,
                 }),
             ],
         }),
     },
     // All static images, icons, and lineups
     {
-        matcher: /\.(?:jpg|jpeg|gif|png|svg|ico|webp|avif)$/i,
+        matcher: ({ url }) =>
+            /\.(?:jpg|jpeg|gif|png|svg|ico|webp|avif)$/i.test(url.pathname) ||
+            url.pathname.startsWith('/csLineups/') ||
+            url.pathname.startsWith('/csMapIcons/') ||
+            url.pathname.startsWith('/csSideIcons/') ||
+            url.pathname.startsWith('/inputIcons/'),
         handler: new CacheFirst({
             cacheName: 'static-image-assets',
             plugins: [
                 new ExpirationPlugin({
-                    maxEntries: 256,
-                    maxAgeSeconds: 60 * 24 * 60 * 60,
+                    maxEntries: 512,
+                    maxAgeSeconds: 365 * 24 * 60 * 60,
                     maxAgeFrom: 'last-used',
                 }),
             ],
@@ -58,12 +62,13 @@ const customCaching: RuntimeCaching[] = [
     },
     // Fonts
     {
-        matcher: /\.(?:eot|otf|ttc|ttf|woff|woff2|font\.css)$/i,
+        matcher: ({ url }) =>
+            /\.(?:eot|otf|ttc|ttf|woff|woff2|font\.css)$/i.test(url.pathname),
         handler: new CacheFirst({
             cacheName: 'static-font-assets',
             plugins: [
                 new ExpirationPlugin({
-                    maxEntries: 32,
+                    maxEntries: 64,
                     maxAgeSeconds: 365 * 24 * 60 * 60,
                     maxAgeFrom: 'last-used',
                 }),

@@ -8,7 +8,10 @@ import React, { useEffect, useState } from 'react';
 // In-memory cache for Object URLs to prevent repeated revoke/re-create cycles,
 // decode thrashing, and skeleton flashes across tab switches and list re-renders.
 const weakBlobMap = new WeakMap<Blob, string>();
-const keyBlobMap = new Map<string, { url: string; size: number; lastAccessed: number }>();
+const keyBlobMap = new Map<
+    string,
+    { url: string; size: number; lastAccessed: number }
+>();
 const MAX_CACHE_ENTRIES = 200;
 
 function cleanupCacheIfFull() {
@@ -62,6 +65,27 @@ export function getBlobUrl(
                 size: blob.size,
                 lastAccessed: Date.now(),
             });
+
+            if (typeof window !== 'undefined' && 'caches' in window) {
+                caches
+                    .open('user-blob-images')
+                    .then((cache) => {
+                        cache
+                            .put(
+                                `/api/user-images/${stringKey}`,
+                                new Response(blob, {
+                                    headers: {
+                                        'Content-Type':
+                                            blob.type || 'image/webp',
+                                        'Cache-Control':
+                                            'public, max-age=31536000, immutable',
+                                    },
+                                }),
+                            )
+                            .catch(() => {});
+                    })
+                    .catch(() => {});
+            }
         }
         return newUrl;
     } catch {
@@ -75,6 +99,14 @@ export function invalidateBlobUrl(cacheKey: string | number) {
     if (cached) {
         URL.revokeObjectURL(cached.url);
         keyBlobMap.delete(stringKey);
+    }
+    if (typeof window !== 'undefined' && 'caches' in window) {
+        caches
+            .open('user-blob-images')
+            .then((cache) => {
+                cache.delete(`/api/user-images/${stringKey}`);
+            })
+            .catch(() => {});
     }
 }
 
