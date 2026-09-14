@@ -5,8 +5,13 @@ import { Row } from '@/database/db';
 import { Box, Card, Stack, Typography } from '@mui/material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import React from 'react';
 
-export default function PlanCard({ plan }: { plan: Row<'WorkoutPlan'> }) {
+const PlanCard = React.memo(function PlanCard({
+    plan,
+}: {
+    plan: Row<'WorkoutPlan'>;
+}) {
     const pathName = usePathname();
     return (
         <Link href={`${pathName}/${plan.id}`}>
@@ -16,18 +21,23 @@ export default function PlanCard({ plan }: { plan: Row<'WorkoutPlan'> }) {
                     sx={{
                         alignItems: 'center',
                         p: 1,
-                        gap: 3,
+                        gap: 2,
                         flex: 1,
                     }}
                 >
-                    <Stack sx={{ aspectRatio: 1, height: 80 }}>
-                        <BlobImage blob={plan.imageBlob} />
+                    <Stack sx={{ aspectRatio: 1, height: 80, minWidth: 80 }}>
+                        <BlobImage
+                            blob={plan.imageBlob}
+                            cacheKey={`plan-${plan.id}`}
+                        />
                     </Stack>
-                    <Typography>{plan.name}</Typography>
+                    <Typography sx={{ fontWeight: 500 }}>
+                        {plan.name}
+                    </Typography>
 
                     <Box sx={{ flex: 1 }} />
 
-                    {plan.lastUsed && (
+                    {plan.lastUsed ? (
                         <Typography>
                             {new Date(plan.lastUsed).toLocaleDateString(
                                 'de-DE',
@@ -38,9 +48,11 @@ export default function PlanCard({ plan }: { plan: Row<'WorkoutPlan'> }) {
                                 },
                             )}
                         </Typography>
-                    )}
+                    ) : null}
                 </Stack>
             </Card>
         </Link>
     );
-}
+});
+
+export default PlanCard;
