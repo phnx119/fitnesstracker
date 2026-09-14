@@ -74,7 +74,13 @@ export default function GymCalendar({ gymDates }: GymCalendarProps) {
                     },
                 },
 
-                // 2. Weekdays header
+                // 2. Disable clicking on the month/year header title
+                '& .react-calendar__navigation__label': {
+                    pointerEvents: 'none',
+                    cursor: 'default',
+                },
+
+                // 3. Weekdays header
                 '& .react-calendar__month-view__weekdays': {
                     color: theme.palette.text.secondary,
                 },
@@ -82,7 +88,7 @@ export default function GymCalendar({ gymDates }: GymCalendarProps) {
                     textDecoration: 'none',
                 },
 
-                // 3. Disable click & interaction on standard day tiles
+                // 4. Disable click & interaction on standard day tiles
                 '& .react-calendar__tile': {
                     color: 'inherit',
                     background: 'transparent !important',
@@ -91,14 +97,14 @@ export default function GymCalendar({ gymDates }: GymCalendarProps) {
                     cursor: 'default',
                 },
 
-                // 4. Highlight Gym Days
+                // 5. Highlight Gym Days
                 '& .react-calendar__tile.gym-day': {
                     backgroundColor: `${theme.palette.primary.main} !important`,
                     color: `${theme.palette.primary.contrastText} !important`,
                     fontWeight: 'bold',
                 },
 
-                // 5. Override click/active highlight styles
+                // 6. Override click/active highlight styles
                 '& .react-calendar__tile--active': {
                     backgroundColor: 'transparent !important',
                     color: 'inherit !important',
@@ -108,13 +114,18 @@ export default function GymCalendar({ gymDates }: GymCalendarProps) {
                     color: `${theme.palette.primary.contrastText} !important`,
                 },
 
-                // 6. Border indicator for today's date
+                // 7. Border indicator for today's date
                 '& .react-calendar__tile--now': {
                     border: `1px solid ${theme.palette.primary.main}`,
                 },
             })}
         >
-            <Calendar key={calendarKey} tileClassName={tileClassName} />
+            <Calendar
+                key={calendarKey}
+                tileClassName={tileClassName}
+                minDetail="month"
+                maxDetail="month"
+            />
         </Box>
     );
 }
