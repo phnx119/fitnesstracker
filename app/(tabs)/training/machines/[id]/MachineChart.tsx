@@ -36,25 +36,29 @@ export default function MachineChart({
     );
 
     useEffect(() => {
-        if (activeSessionId !== null) {
-            const activeEl = sessionRefs.current.get(activeSessionId);
-            if (activeEl) {
-                activeEl.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'nearest',
-                    inline: 'center',
-                });
-                return;
-            }
+        if (data.length === 0) return;
+
+        let targetId = activeSessionId;
+
+        if (targetId === null) {
+            targetId = data[data.length - 1].id;
+            setActiveSessionId(targetId);
         }
 
-        if (containerRef.current) {
+        const activeEl = sessionRefs.current.get(targetId);
+        if (activeEl) {
+            activeEl.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center',
+            });
+        } else if (containerRef.current) {
             containerRef.current.scrollTo({
                 left: containerRef.current.scrollWidth,
                 behavior: 'smooth',
             });
         }
-    }, [data.length, totalSetsCount, activeSessionId]);
+    }, [data.length, totalSetsCount, activeSessionId, setActiveSessionId]);
 
     const fadeBackground =
         theme.chart?.fadeBackground ??
