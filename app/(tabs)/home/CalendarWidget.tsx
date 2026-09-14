@@ -6,6 +6,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useMemo } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import HomeWidgetCard from './HomeWidgetCard';
 
 export interface GymCalendarProps {
     gymDates?: string[];
@@ -53,79 +54,88 @@ export default function GymCalendar({ gymDates }: GymCalendarProps) {
     const calendarKey = Array.from(activeDateSet).sort().join(',');
 
     return (
-        <Box
-            sx={(theme) => ({
-                width: '100%',
-                bgcolor: 'transparent',
-
-                // 1. Transparent background container & navigation controls
-                '& .react-calendar': {
+        <HomeWidgetCard>
+            <Box
+                sx={(theme) => ({
                     width: '100%',
-                    border: 'none',
-                    background: 'transparent !important',
-                    fontFamily: 'inherit',
-                    color: 'inherit',
-                },
-                '& .react-calendar__navigation button': {
-                    color: 'inherit',
-                    background: 'transparent !important',
-                    '&:enabled:hover, &:enabled:focus': {
-                        backgroundColor: `${theme.palette.action.hover} !important`,
+                    bgcolor: 'transparent',
+
+                    // Global reset for all borders, outlines, and shadows inside react-calendar
+                    '& .react-calendar, & .react-calendar *, & .react-calendar *::before, & .react-calendar *::after':
+                        {
+                            border: 'none !important',
+                            outline: 'none !important',
+                            boxShadow: 'none !important',
+                        },
+
+                    // 1. Transparent background container & navigation controls
+                    '& .react-calendar': {
+                        width: '100%',
+                        background: 'transparent !important',
+                        fontFamily: 'inherit',
+                        color: 'inherit',
                     },
-                },
+                    '& .react-calendar__navigation button': {
+                        color: 'inherit',
+                        background: 'transparent !important',
+                        '&:enabled:hover, &:enabled:focus': {
+                            backgroundColor: `${theme.palette.action.hover} !important`,
+                        },
+                    },
 
-                // 2. Disable clicking on the month/year header title
-                '& .react-calendar__navigation__label': {
-                    pointerEvents: 'none',
-                    cursor: 'default',
-                },
+                    // 2. Disable clicking on the month/year header title
+                    '& .react-calendar__navigation__label': {
+                        pointerEvents: 'none',
+                        cursor: 'default',
+                    },
 
-                // 3. Weekdays header
-                '& .react-calendar__month-view__weekdays': {
-                    color: theme.palette.text.secondary,
-                },
-                '& .react-calendar__month-view__weekdays__weekday abbr': {
-                    textDecoration: 'none',
-                },
+                    // 3. Weekdays header
+                    '& .react-calendar__month-view__weekdays': {
+                        color: theme.palette.text.secondary,
+                    },
+                    '& .react-calendar__month-view__weekdays__weekday abbr': {
+                        textDecoration: 'none',
+                    },
 
-                // 4. Disable click & interaction on standard day tiles
-                '& .react-calendar__tile': {
-                    color: 'inherit',
-                    background: 'transparent !important',
-                    borderRadius: '8px',
-                    pointerEvents: 'none',
-                    cursor: 'default',
-                },
+                    // 4. Disable click & interaction on standard day tiles
+                    '& .react-calendar__tile': {
+                        color: 'inherit',
+                        background: 'transparent !important',
+                        borderRadius: '8px',
+                        pointerEvents: 'none',
+                        cursor: 'default',
+                    },
 
-                // 5. Highlight Gym Days
-                '& .react-calendar__tile.gym-day': {
-                    backgroundColor: `${theme.palette.primary.main} !important`,
-                    color: `${theme.palette.primary.contrastText} !important`,
-                    fontWeight: 'bold',
-                },
+                    // 5. Highlight Gym Days
+                    '& .react-calendar__tile.gym-day': {
+                        backgroundColor: `${theme.palette.primary.main} !important`,
+                        color: `${theme.palette.primary.contrastText} !important`,
+                        fontWeight: 'bold',
+                    },
 
-                // 6. Override click/active highlight styles
-                '& .react-calendar__tile--active': {
-                    backgroundColor: 'transparent !important',
-                    color: 'inherit !important',
-                },
-                '& .react-calendar__tile--active.gym-day': {
-                    backgroundColor: `${theme.palette.primary.main} !important`,
-                    color: `${theme.palette.primary.contrastText} !important`,
-                },
+                    // 6. Reset "Today" tile background and border completely
+                    '& .react-calendar__tile--now': {
+                        background: 'transparent !important',
+                    },
 
-                // 7. Border indicator for today's date
-                '& .react-calendar__tile--now': {
-                    border: `1px solid ${theme.palette.primary.main}`,
-                },
-            })}
-        >
-            <Calendar
-                key={calendarKey}
-                tileClassName={tileClassName}
-                minDetail="month"
-                maxDetail="month"
-            />
-        </Box>
+                    // 7. Override click/active highlight styles
+                    '& .react-calendar__tile--active': {
+                        backgroundColor: 'transparent !important',
+                        color: 'inherit !important',
+                    },
+                    '& .react-calendar__tile--active.gym-day': {
+                        backgroundColor: `${theme.palette.primary.main} !important`,
+                        color: `${theme.palette.primary.contrastText} !important`,
+                    },
+                })}
+            >
+                <Calendar
+                    key={calendarKey}
+                    tileClassName={tileClassName}
+                    minDetail="month"
+                    maxDetail="month"
+                />
+            </Box>
+        </HomeWidgetCard>
     );
 }
