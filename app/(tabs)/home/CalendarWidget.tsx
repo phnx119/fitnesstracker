@@ -1,6 +1,5 @@
 'use client';
 
-import { FitnessCenter as GymIcon } from '@mui/icons-material';
 import { Box } from '@mui/material';
 import { useState } from 'react';
 import Calendar from 'react-calendar';
@@ -32,74 +31,72 @@ export default function GymCalendar({
 }: GymCalendarProps) {
     const [value, setValue] = useState<Date | null>(new Date());
 
-    const tileContent = ({ date, view }: { date: Date; view: string }) => {
+    const tileClassName = ({ date, view }: { date: Date; view: string }) => {
         if (view === 'month' && gymDates.includes(formatDateKey(date))) {
-            return (
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        lineHeight: 1,
-                        mt: 0.25,
-                    }}
-                >
-                    <GymIcon sx={{ fontSize: 12, color: 'success.main' }} />
-                </Box>
-            );
+            return 'gym-day';
         }
-        return null;
+        return '';
     };
 
     return (
         <Box
-            sx={{
+            sx={(theme) => ({
                 width: '100%',
                 bgcolor: 'transparent',
+
+                // 1. Remove white background from container & nav
                 '& .react-calendar': {
                     width: '100%',
                     border: 'none',
-                    bgcolor: 'transparent !important',
-                    background: 'none !important',
+                    background: 'transparent !important',
                     fontFamily: 'inherit',
                     color: 'inherit',
                 },
                 '& .react-calendar__navigation button': {
                     color: 'inherit',
-                    bgcolor: 'transparent !important',
+                    background: 'transparent !important',
                     '&:enabled:hover, &:enabled:focus': {
-                        bgcolor: 'action.hover !important',
+                        backgroundColor: `${theme.palette.action.hover} !important`,
                     },
                 },
+
+                // 2. Base tile layout
                 '& .react-calendar__month-view__weekdays': {
-                    color: 'text.secondary',
+                    color: theme.palette.text.secondary,
                 },
                 '& .react-calendar__month-view__weekdays__weekday abbr': {
                     textDecoration: 'none',
                 },
                 '& .react-calendar__tile': {
                     color: 'inherit',
-                    bgcolor: 'transparent !important',
-                    background: 'none !important',
+                    background: 'transparent !important',
+                    borderRadius: '8px',
                     '&:enabled:hover, &:enabled:focus': {
-                        bgcolor: 'action.hover !important',
+                        backgroundColor: `${theme.palette.action.hover} !important`,
                     },
                 },
+
+                // 3. Highlight Gym Days & Active Selected Days with full background fill
+                '& .react-calendar__tile.gym-day, & .react-calendar__tile--active':
+                    {
+                        backgroundColor: `${theme.palette.primary.main} !important`,
+                        color: `${theme.palette.primary.contrastText} !important`,
+                        fontWeight: 'bold',
+                        '&:enabled:hover, &:enabled:focus': {
+                            backgroundColor: `${theme.palette.primary.dark} !important`,
+                        },
+                    },
+
+                // 4. Subtle outline for today's date if not a gym day
                 '& .react-calendar__tile--now': {
-                    bgcolor: 'action.selected !important',
+                    border: `1px solid ${theme.palette.primary.main}`,
                 },
-                '& .react-calendar__tile--active': {
-                    bgcolor: 'primary.main !important',
-                    color: 'primary.contrastText !important',
-                },
-                '& .react-calendar__tile--active .MuiSvgIcon-root': {
-                    color: 'primary.contrastText',
-                },
-            }}
+            })}
         >
             <Calendar
                 onChange={(val) => setValue(val as Date)}
                 value={value}
-                tileContent={tileContent}
+                tileClassName={tileClassName}
             />
         </Box>
     );
