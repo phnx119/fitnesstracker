@@ -5,7 +5,7 @@ import { dbInstance, Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 
 export type SessionWithSets = {
     id: number;
@@ -28,6 +28,33 @@ export default function MachineChart({
         useLiveQuery(() => dbInstance.Settings.get(1))?.progressMetric ?? 0;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const sessionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+    const totalSetsCount = useMemo(
+        () => data.reduce((acc, s) => acc + s.setRecords.length, 0),
+        [data],
+    );
+
+    useEffect(() => {
+        if (activeSessionId !== null) {
+            const activeEl = sessionRefs.current.get(activeSessionId);
+            if (activeEl) {
+                activeEl.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest',
+                    inline: 'center',
+                });
+                return;
+            }
+        }
+
+        if (containerRef.current) {
+            containerRef.current.scrollTo({
+                left: containerRef.current.scrollWidth,
+                behavior: 'smooth',
+            });
+        }
+    }, [data.length, totalSetsCount, activeSessionId]);
 
     const fadeBackground =
         theme.chart?.fadeBackground ??
@@ -110,7 +137,17 @@ export default function MachineChart({
                         {data.map((session) => (
                             <Stack
                                 key={session.id}
-                                sx={{ height: '100%', zIndex: 1 }}
+                                ref={(el) => {
+                                    if (el) {
+                                        sessionRefs.current.set(session.id, el);
+                                    } else {
+                                        sessionRefs.current.delete(session.id);
+                                    }
+                                }}
+                                sx={{
+                                    height: '100%',
+                                    zIndex: 1,
+                                }}
                                 onClick={() => setActiveSessionId(session.id)}
                             >
                                 <Stack
