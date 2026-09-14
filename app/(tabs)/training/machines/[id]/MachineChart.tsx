@@ -119,22 +119,9 @@ export default function MachineChart({
                         position: 'relative',
                         overflowX: 'auto',
                         overflowY: 'hidden',
-                        // Modern CSS scrollbar behavior fix
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: 'transparent transparent',
-                        '&:hover': {
-                            scrollbarColor: (t) =>
-                                `${t.palette.divider} transparent`,
-                        },
+                        scrollbarWidth: 'none',
                         '&::-webkit-scrollbar': {
-                            height: 6,
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                            backgroundColor: 'transparent',
-                            borderRadius: 3,
-                        },
-                        '&:hover::-webkit-scrollbar-thumb': {
-                            backgroundColor: 'action.hover',
+                            display: 'none',
                         },
                     }}
                 >
@@ -170,7 +157,6 @@ export default function MachineChart({
                                     height: '100%',
                                     zIndex: 1,
                                     cursor: 'pointer',
-                                    scrollSnapAlign: 'center',
                                 }}
                                 onClick={() => setActiveSessionId(session.id)}
                             >
