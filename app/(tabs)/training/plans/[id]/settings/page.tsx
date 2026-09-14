@@ -2,7 +2,13 @@
 
 import ImagePicker from '@/components/ImagePicker';
 import { dbInstance, Row } from '@/database/db';
-import { debounce, Stack, Switch, TextField } from '@mui/material';
+import {
+    debounce,
+    FormControlLabel,
+    Stack,
+    Switch,
+    TextField,
+} from '@mui/material';
 import { useParams } from 'next/navigation';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import TrainingContainer from '../../../TrainingContainer';
@@ -36,9 +42,14 @@ export default function PlanSettings() {
                     defaultValue={plan.name}
                     onChange={(e) => debouncedSave(e.target.value)}
                 />
-                <Switch
-                    checked={plan.favorite}
-                    onChange={(e) => toggleFavorite(e)}
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={plan.favorite}
+                            onChange={(e) => toggleFavorite(e)}
+                        />
+                    }
+                    label="Show in last used"
                 />
             </Stack>
         </TrainingContainer>
