@@ -109,7 +109,7 @@ export default function MachineChart({
     }
 
     return (
-        <Stack sx={{ flex: 1, overflow: 'auto' }}>
+        <Stack sx={{ flex: 1, overflow: 'hidden' }}>
             <Card sx={{ flex: 1, p: 1, overflow: 'hidden' }}>
                 <Box
                     ref={containerRef}
@@ -117,7 +117,25 @@ export default function MachineChart({
                         flex: 1,
                         height: '100%',
                         position: 'relative',
-                        overflow: 'auto',
+                        overflowX: 'auto',
+                        overflowY: 'hidden',
+                        // Modern CSS scrollbar behavior fix
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: 'transparent transparent',
+                        '&:hover': {
+                            scrollbarColor: (t) =>
+                                `${t.palette.divider} transparent`,
+                        },
+                        '&::-webkit-scrollbar': {
+                            height: 6,
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: 'transparent',
+                            borderRadius: 3,
+                        },
+                        '&:hover::-webkit-scrollbar-thumb': {
+                            backgroundColor: 'action.hover',
+                        },
                     }}
                 >
                     {chart1.backgroundOverlay}
@@ -151,6 +169,8 @@ export default function MachineChart({
                                 sx={{
                                     height: '100%',
                                     zIndex: 1,
+                                    cursor: 'pointer',
+                                    scrollSnapAlign: 'center',
                                 }}
                                 onClick={() => setActiveSessionId(session.id)}
                             >
