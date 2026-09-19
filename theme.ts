@@ -103,28 +103,28 @@ export const THEMES = {
     },
 
     // 4. Crimson Slate (Red Accent)
-    crimsonSlate: {
-        name: 'Crimson Slate',
+    redline: {
+        name: 'Redline',
         palette: {
             mode: 'dark' as const,
-            primary: { main: '#ef4444' },
-            secondary: { main: '#f87171' },
+            primary: { main: '#ff0000' },
+            secondary: { main: '#ff0000' },
             background: {
-                default: '#0f0a0a',
-                paper: '#1a1212',
+                default: '#000000',
+                paper: '#1c1c20',
             },
             text: {
-                primary: '#fef2f2',
-                secondary: '#a89a9a',
+                primary: '#fff5f2',
+                secondary: '#9ca3af',
             },
-            divider: 'rgba(239, 68, 68, 0.16)',
+            divider: 'rgba(255, 0, 0, 0.18)',
         },
         chart: {
-            set1: '#ef4444',
-            set2: '#f97316',
-            set3: '#fbbf24',
+            set1: '#ff5722',
+            set2: '#ffeb3b',
+            set3: '#f44336',
             fadeBackground:
-                'linear-gradient(180deg, rgba(239, 68, 68, 0.12) 0%, rgba(0, 0, 0, 0) 100%)',
+                'linear-gradient(180deg, rgba(255, 34, 34, 0.14) 0%, rgba(0, 0, 0, 0) 100%)',
         },
     },
 
@@ -136,8 +136,8 @@ export const THEMES = {
             primary: { main: '#10b981' },
             secondary: { main: '#34d399' },
             background: {
-                default: '#06120e',
-                paper: '#0f1f19',
+                default: '#101012',
+                paper: '#1c1c20',
             },
             text: {
                 primary: '#ecfdf5',
@@ -188,8 +188,8 @@ export const THEMES = {
             primary: { main: '#eab308' },
             secondary: { main: '#fde047' },
             background: {
-                default: '#121006',
-                paper: '#1f1b0b',
+                default: '#101012',
+                paper: '#1c1c20',
             },
             text: {
                 primary: '#fefce8',
