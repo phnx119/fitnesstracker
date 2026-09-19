@@ -9,6 +9,7 @@ import { IconLetterW, IconTagsChevronUp } from '@tabler/icons-react/';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image from 'next/image';
 import ImageContainer from './ImageContainer';
+
 export default function CsImage({
     src,
     text = '',
@@ -17,6 +18,7 @@ export default function CsImage({
     jump = false,
     w = false,
     noContainer = false,
+    priority = false,
 }: {
     src: string | StaticImport;
     text?: string;
@@ -25,6 +27,7 @@ export default function CsImage({
     jump?: boolean;
     w?: boolean;
     noContainer?: boolean;
+    priority?: boolean;
 }) {
     const mouseIcon = lmb ? (rmb ? LMBRMBIcon : LMBIcon) : RMBIcon;
     const infoBgColor = '#00000090';
@@ -43,7 +46,14 @@ export default function CsImage({
                     {text}
                 </Typography>
             )}
-            <Image alt="image" src={src} fill priority />;
+            <Image
+                alt="image"
+                src={src}
+                fill
+                priority={priority}
+                unoptimized
+                sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 400px"
+            />
             {(lmb || rmb || w || jump) && (
                 <Stack
                     direction="row"

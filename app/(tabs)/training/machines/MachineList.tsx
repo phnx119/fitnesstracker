@@ -9,7 +9,60 @@ import {
     ImageListItemBar,
     Stack,
 } from '@mui/material';
-import { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
+
+const MachineItem = React.memo(function MachineItem({
+    item,
+    isSelected,
+    onClick,
+}: {
+    item: Row<'Machine'>;
+    isSelected: boolean;
+    onClick: (machine: Row<'Machine'>) => void;
+}) {
+    const handleClick = useCallback(() => {
+        onClick(item);
+    }, [onClick, item]);
+
+    return (
+        <Stack sx={{ aspectRatio: 1 }}>
+            <ImageListItem
+                onClick={handleClick}
+                sx={{
+                    contentVisibility: 'auto',
+                    containIntrinsicSize: '0 180px',
+                    cursor: 'pointer',
+                    borderRadius: 4,
+                    overflow: 'hidden',
+                    position: 'relative',
+                }}
+            >
+                <BlobImage
+                    blob={item.imageBlob}
+                    cacheKey={`machine-${item.id}`}
+                />
+
+                {isSelected && (
+                    <Stack
+                        sx={{
+                            position: 'absolute',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: '100%',
+                            width: '100%',
+                            bgcolor: '#000000A0',
+                            zIndex: 2,
+                        }}
+                    >
+                        <CheckBox sx={{ fontSize: 40 }} />
+                    </Stack>
+                )}
+
+                <ImageListItemBar title={item.name} />
+            </ImageListItem>
+        </Stack>
+    );
+});
 
 export default function MachineList({
     machines,
@@ -23,35 +76,14 @@ export default function MachineList({
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
 
     return (
-        <ImageList cols={2} gap={8} sx={{ overflow: 'auto' }}>
+        <ImageList cols={2} gap={8} sx={{ overflow: 'auto', m: 0 }}>
             {machines.map((item) => (
-                <ImageListItem
+                <MachineItem
                     key={item.id}
-                    onClick={() => onClick(item)}
-                    sx={{
-                        contentVisibility: 'auto',
-                        containIntrinsicSize: '0 180px',
-                    }}
-                >
-                    <BlobImage blob={item.imageBlob} />
-
-                    {selectedSet.has(item.id) && (
-                        <Stack
-                            sx={{
-                                position: 'absolute',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                                width: '100%',
-                                bgcolor: '#000000A0',
-                            }}
-                        >
-                            <CheckBox sx={{ fontSize: 40 }} />
-                        </Stack>
-                    )}
-
-                    <ImageListItemBar title={item.name} />
-                </ImageListItem>
+                    item={item}
+                    isSelected={selectedSet.has(item.id)}
+                    onClick={onClick}
+                />
             ))}
         </ImageList>
     );

@@ -2,7 +2,13 @@
 
 import ImagePicker from '@/components/ImagePicker';
 import { dbInstance, Row } from '@/database/db';
-import { debounce, Stack, Switch, TextField } from '@mui/material';
+import {
+    debounce,
+    FormControlLabel,
+    Stack,
+    Switch,
+    TextField,
+} from '@mui/material';
 import { useParams } from 'next/navigation';
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import TrainingContainer from '../../../TrainingContainer';
@@ -14,19 +20,31 @@ export default function PlanSettings() {
     const [plan, setPlan] = useState<Row<'WorkoutPlan'> | null>(null);
 
     useEffect(() => {
-        loadPlan();
-    }, []);
+        if (!planId) return;
+        dbInstance.WorkoutPlan.get(planId).then((fetchedPlan) => {
+            setPlan(fetchedPlan ?? null);
+        });
+    }, [planId]);
 
     const debouncedSave = useMemo(
         () =>
-            debounce(async (value: string) => {
-                await dbInstance.WorkoutPlan.update(planId, {
-                    name: value,
-                });
+            debounce((value: string) => {
+                dbInstance.WorkoutPlan.update(planId, { name: value });
             }, 300),
         [planId],
     );
-    return plan ? (
+
+    useEffect(() => () => debouncedSave.clear(), [debouncedSave]);
+
+    const handleFavoriteToggle = async (e: ChangeEvent<HTMLInputElement>) => {
+        const favorite = e.target.checked;
+        setPlan((prev) => (prev ? { ...prev, favorite } : null));
+        await dbInstance.WorkoutPlan.update(planId, { favorite });
+    };
+
+    if (!plan) return null;
+
+    return (
         <TrainingContainer title="Edit Plan">
             <Stack sx={{ gap: 1, flex: 1 }}>
                 <ImagePicker tableName="WorkoutPlan" dbRowId={planId} />
@@ -36,29 +54,16 @@ export default function PlanSettings() {
                     defaultValue={plan.name}
                     onChange={(e) => debouncedSave(e.target.value)}
                 />
-                <Switch
-                    checked={plan.favorite}
-                    onChange={(e) => toggleFavorite(e)}
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={Boolean(plan.favorite)}
+                            onChange={handleFavoriteToggle}
+                        />
+                    }
+                    label="Show in last used"
                 />
             </Stack>
         </TrainingContainer>
-    ) : null;
-
-    async function loadPlan() {
-        await dbInstance.WorkoutPlan.get(planId).then((plan) => {
-            if (plan) {
-                setPlan(plan);
-            } else {
-                setPlan(null);
-            }
-        });
-    }
-
-    async function toggleFavorite(e: ChangeEvent<HTMLInputElement, Element>) {
-        await dbInstance.WorkoutPlan.update(planId, {
-            favorite: e.target.checked,
-        });
-
-        loadPlan();
-    }
+    );
 }

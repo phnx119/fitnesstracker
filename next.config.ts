@@ -51,6 +51,10 @@ const withSerwist = withSerwistInit({
 
 const nextConfig: NextConfig = {
     reactStrictMode: true,
+    compress: true,
+    images: {
+        unoptimized: true,
+    },
     experimental: {
         optimizePackageImports: [
             '@mui/material',
@@ -61,6 +65,19 @@ const nextConfig: NextConfig = {
     },
     compiler: {
         removeConsole: process.env.NODE_ENV === 'production',
+    },
+    async headers() {
+        return [
+            {
+                source: '/:path*.{jpg,jpeg,png,webp,avif,svg,ico,woff,woff2}',
+                headers: [
+                    {
+                        key: 'Cache-Control',
+                        value: 'public, max-age=31536000, immutable',
+                    },
+                ],
+            },
+        ];
     },
 };
 

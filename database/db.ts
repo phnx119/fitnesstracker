@@ -107,3 +107,139 @@ class FitnessDatabase extends Dexie {
 
 export const dbInstance = new FitnessDatabase() as FitnessDatabase &
     DerivedTables;
+
+async function compressBlob(blob: Blob): Promise<Blob> {
+    try {
+        const probeBitmap = await createImageBitmap(blob);
+        let { width, height } = probeBitmap;
+        const maxSize = 512;
+        if (width > height) {
+            if (width > maxSize) {
+                height = Math.round((height * maxSize) / width);
+                width = maxSize;
+            }
+        } else {
+            if (height > maxSize) {
+                width = Math.round((width * maxSize) / height);
+                height = maxSize;
+            }
+        }
+
+        let bitmap: ImageBitmap;
+        if (width !== probeBitmap.width || height !== probeBitmap.height) {
+            try {
+                bitmap = await createImageBitmap(blob, {
+                    resizeWidth: width,
+                    resizeHeight: height,
+                    resizeQuality: 'high',
+                });
+                probeBitmap.close();
+            } catch {
+                bitmap = probeBitmap;
+            }
+        } else {
+            bitmap = probeBitmap;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d', { alpha: false });
+        if (ctx) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(bitmap, 0, 0, width, height);
+        }
+        bitmap.close();
+
+        return await new Promise<Blob>((resolve) => {
+            canvas.toBlob(
+                (newBlob) => {
+                    resolve(newBlob || blob);
+                },
+                'image/webp',
+                0.8,
+            );
+        });
+    } catch {
+        return blob;
+    }
+}
+
+export async function optimizeStoredBlobs(): Promise<void> {
+    if (typeof window === 'undefined') return;
+
+    try {
+        const machines = await dbInstance.Machine.toArray();
+        for (const machine of machines) {
+            if (
+                machine.imageBlob &&
+                machine.imageBlob instanceof Blob &&
+                machine.imageBlob.size > 80 * 1024
+            ) {
+                const compressed = await compressBlob(machine.imageBlob);
+                if (compressed.size < machine.imageBlob.size) {
+                    await dbInstance.Machine.update(machine.id, {
+                        imageBlob: compressed,
+                    });
+                    if ('caches' in window) {
+                        try {
+                            const cache = await caches.open('user-blob-images');
+                            await cache.put(
+                                `/api/user-images/machine-${machine.id}`,
+                                new Response(compressed, {
+                                    headers: {
+                                        'Content-Type': 'image/webp',
+                                        'Cache-Control':
+                                            'public, max-age=31536000, immutable',
+                                    },
+                                }),
+                            );
+                        } catch {
+                            // ignore cache errors
+                        }
+                    }
+                }
+            }
+        }
+
+        const plans = await dbInstance.WorkoutPlan.toArray();
+        for (const plan of plans) {
+            if (
+                plan.imageBlob &&
+                plan.imageBlob instanceof Blob &&
+                plan.imageBlob.size > 80 * 1024
+            ) {
+                const compressed = await compressBlob(plan.imageBlob);
+                if (compressed.size < plan.imageBlob.size) {
+                    await dbInstance.WorkoutPlan.update(plan.id, {
+                        imageBlob: compressed,
+                    });
+                    if ('caches' in window) {
+                        try {
+                            const cache = await caches.open('user-blob-images');
+                            await cache.put(
+                                `/api/user-images/plan-${plan.id}`,
+                                new Response(compressed, {
+                                    headers: {
+                                        'Content-Type': 'image/webp',
+                                        'Cache-Control':
+                                            'public, max-age=31536000, immutable',
+                                    },
+                                }),
+                            );
+                        } catch {
+                            // ignore cache errors
+                        }
+                    }
+                }
+            }
+        }
+    } catch {
+        // Non-fatal background migration
+    }
+}
+
+if (typeof window !== 'undefined') {
+    setTimeout(optimizeStoredBlobs, 2000);
+}

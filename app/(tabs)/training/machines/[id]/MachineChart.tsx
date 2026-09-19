@@ -5,7 +5,7 @@ import { dbInstance, Row } from '@/database/db';
 import { Box, Card, Divider, Stack, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { Dispatch, SetStateAction, useMemo, useRef } from 'react';
+import { Dispatch, SetStateAction, useEffect, useMemo, useRef } from 'react';
 
 export type SessionWithSets = {
     id: number;
@@ -28,6 +28,37 @@ export default function MachineChart({
         useLiveQuery(() => dbInstance.Settings.get(1))?.progressMetric ?? 0;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const sessionRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+    const totalSetsCount = useMemo(
+        () => data.reduce((acc, s) => acc + s.setRecords.length, 0),
+        [data],
+    );
+
+    useEffect(() => {
+        if (data.length === 0) return;
+
+        let targetId = activeSessionId;
+
+        if (targetId === null) {
+            targetId = data[data.length - 1].id;
+            setActiveSessionId(targetId);
+        }
+
+        const activeEl = sessionRefs.current.get(targetId);
+        if (activeEl) {
+            activeEl.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center',
+            });
+        } else if (containerRef.current) {
+            containerRef.current.scrollTo({
+                left: containerRef.current.scrollWidth,
+                behavior: 'smooth',
+            });
+        }
+    }, [data.length, totalSetsCount, activeSessionId, setActiveSessionId]);
 
     const fadeBackground =
         theme.chart?.fadeBackground ??
@@ -78,7 +109,7 @@ export default function MachineChart({
     }
 
     return (
-        <Stack sx={{ flex: 1, overflow: 'auto' }}>
+        <Stack sx={{ flex: 1, overflow: 'hidden' }}>
             <Card sx={{ flex: 1, p: 1, overflow: 'hidden' }}>
                 <Box
                     ref={containerRef}
@@ -86,7 +117,12 @@ export default function MachineChart({
                         flex: 1,
                         height: '100%',
                         position: 'relative',
-                        overflow: 'auto',
+                        overflowX: 'auto',
+                        overflowY: 'hidden',
+                        scrollbarWidth: 'none',
+                        '&::-webkit-scrollbar': {
+                            display: 'none',
+                        },
                     }}
                 >
                     {chart1.backgroundOverlay}
@@ -110,7 +146,18 @@ export default function MachineChart({
                         {data.map((session) => (
                             <Stack
                                 key={session.id}
-                                sx={{ height: '100%', zIndex: 1 }}
+                                ref={(el) => {
+                                    if (el) {
+                                        sessionRefs.current.set(session.id, el);
+                                    } else {
+                                        sessionRefs.current.delete(session.id);
+                                    }
+                                }}
+                                sx={{
+                                    height: '100%',
+                                    zIndex: 1,
+                                    cursor: 'pointer',
+                                }}
                                 onClick={() => setActiveSessionId(session.id)}
                             >
                                 <Stack

@@ -20,6 +20,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import type { Table } from 'dexie';
 import { useEffect, useState, type ChangeEvent } from 'react';
+import { invalidateBlobUrl } from './BlobImage';
 
 type TablesWithImage = {
     [K in keyof SchemaTables]: 'imageBlob' extends keyof SchemaTables[K]
@@ -182,6 +183,9 @@ export default function ImagePicker({
             return;
         }
 
+        const cacheKey = `${tableName === 'Machine' ? 'machine' : 'plan'}-${dbRowId}`;
+        invalidateBlobUrl(cacheKey);
+
         await table.update(dbRowId, { imageBlob: compressedBlob });
         setCompressedBlob(null);
         setPreviewUrl((prev) => {
@@ -192,6 +196,9 @@ export default function ImagePicker({
     }
 
     async function handleDeleteClick(): Promise<void> {
+        const cacheKey = `${tableName === 'Machine' ? 'machine' : 'plan'}-${dbRowId}`;
+        invalidateBlobUrl(cacheKey);
+
         setCompressedBlob(null);
         setPreviewUrl((prev) => {
             if (prev) URL.revokeObjectURL(prev);
@@ -202,11 +209,10 @@ export default function ImagePicker({
     }
 }
 
-async function resizeImage(file: File, maxSize = 600): Promise<Blob> {
+async function resizeImage(file: File, maxSize = 512): Promise<Blob> {
     try {
-        const bitmap = await createImageBitmap(file);
-        const canvas = document.createElement('canvas');
-        let { width, height } = bitmap;
+        const probeBitmap = await createImageBitmap(file);
+        let { width, height } = probeBitmap;
 
         if (width > height) {
             if (width > maxSize) {
@@ -220,18 +226,40 @@ async function resizeImage(file: File, maxSize = 600): Promise<Blob> {
             }
         }
 
+        let bitmap: ImageBitmap;
+        if (width !== probeBitmap.width || height !== probeBitmap.height) {
+            try {
+                bitmap = await createImageBitmap(file, {
+                    resizeWidth: width,
+                    resizeHeight: height,
+                    resizeQuality: 'high',
+                });
+                probeBitmap.close();
+            } catch {
+                bitmap = probeBitmap;
+            }
+        } else {
+            bitmap = probeBitmap;
+        }
+
+        const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(bitmap, 0, 0, width, height);
+        const ctx = canvas.getContext('2d', { alpha: false });
+        if (ctx) {
+            ctx.imageSmoothingEnabled = true;
+            ctx.imageSmoothingQuality = 'high';
+            ctx.drawImage(bitmap, 0, 0, width, height);
+        }
+        bitmap.close();
 
-        return new Promise((resolve) => {
+        return await new Promise<Blob>((resolve) => {
             canvas.toBlob(
                 (blob) => {
                     resolve(blob || file);
                 },
                 'image/webp',
-                0.85,
+                0.8,
             );
         });
     } catch {

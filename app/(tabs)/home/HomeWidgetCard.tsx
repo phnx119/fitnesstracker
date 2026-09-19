@@ -4,7 +4,7 @@ import { Card, Stack, Typography } from '@mui/material';
 import { PropsWithChildren } from 'react';
 
 export default function HomeWidgetCard({
-    flex = 1,
+    flex = undefined,
     title = undefined,
     children,
 }: PropsWithChildren<{ flex?: number; title?: string | undefined }>) {
