@@ -1,12 +1,12 @@
 'use client';
 
 import TabContentStack from '@/components/TabContentStack';
-import instaWindowPosImg from '@/public/csLineups/mirage/t/instaWindow/instaWindowPositions.png';
-import instaWindow1 from '@/public/csLineups/mirage/t/instaWindow/spawn1InstaWindow.png';
-import instaWindow2 from '@/public/csLineups/mirage/t/instaWindow/spawn2InstaWindow.png';
-import instaWindow3 from '@/public/csLineups/mirage/t/instaWindow/spawn3InstaWindow.png';
-import instaWindow4 from '@/public/csLineups/mirage/t/instaWindow/spawn4InstaWindow.png';
-import instaWindow5 from '@/public/csLineups/mirage/t/instaWindow/spawn5InstaWindow.png';
+import instaWindowPosImg from '@/public/csLineups/mirage/t/instaWindow/instaWindowPositions.webp';
+import instaWindow1 from '@/public/csLineups/mirage/t/instaWindow/spawn1InstaWindow.webp';
+import instaWindow2 from '@/public/csLineups/mirage/t/instaWindow/spawn2InstaWindow.webp';
+import instaWindow3 from '@/public/csLineups/mirage/t/instaWindow/spawn3InstaWindow.webp';
+import instaWindow4 from '@/public/csLineups/mirage/t/instaWindow/spawn4InstaWindow.webp';
+import instaWindow5 from '@/public/csLineups/mirage/t/instaWindow/spawn5InstaWindow.webp';
 import { Stack } from '@mui/material';
 import CsImage from '../../CsImage';
 import MiniHeader from '../../MiniHeader';

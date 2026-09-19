@@ -1,16 +1,16 @@
 'use client';
 
 import TabContentStack from '@/components/TabContentStack';
-import spawn1End from '@/public/csLineups/ancient/ct/instaElbow/spawn1End.jpg';
-import spawn1Start from '@/public/csLineups/ancient/ct/instaElbow/spawn1Start.jpg';
-import spawn2End from '@/public/csLineups/ancient/ct/instaElbow/spawn2End.jpg';
-import spawn2Start from '@/public/csLineups/ancient/ct/instaElbow/spawn2Start.jpg';
-import spawn3End from '@/public/csLineups/ancient/ct/instaElbow/spawn3End.jpg';
-import spawn3Start from '@/public/csLineups/ancient/ct/instaElbow/spawn3Start.jpg';
-import spawn4End from '@/public/csLineups/ancient/ct/instaElbow/spawn4End.jpg';
-import spawn4Start from '@/public/csLineups/ancient/ct/instaElbow/spawn4Start.jpg';
-import spawn5End from '@/public/csLineups/ancient/ct/instaElbow/spawn5End.jpg';
-import spawn5Start from '@/public/csLineups/ancient/ct/instaElbow/spawn5Start.jpg';
+import spawn1End from '@/public/csLineups/ancient/ct/instaElbow/spawn1End.webp';
+import spawn1Start from '@/public/csLineups/ancient/ct/instaElbow/spawn1Start.webp';
+import spawn2End from '@/public/csLineups/ancient/ct/instaElbow/spawn2End.webp';
+import spawn2Start from '@/public/csLineups/ancient/ct/instaElbow/spawn2Start.webp';
+import spawn3End from '@/public/csLineups/ancient/ct/instaElbow/spawn3End.webp';
+import spawn3Start from '@/public/csLineups/ancient/ct/instaElbow/spawn3Start.webp';
+import spawn4End from '@/public/csLineups/ancient/ct/instaElbow/spawn4End.webp';
+import spawn4Start from '@/public/csLineups/ancient/ct/instaElbow/spawn4Start.webp';
+import spawn5End from '@/public/csLineups/ancient/ct/instaElbow/spawn5End.webp';
+import spawn5Start from '@/public/csLineups/ancient/ct/instaElbow/spawn5Start.webp';
 import { Stack } from '@mui/material';
 import CsImage from '../../CsImage';
 import MiniHeader from '../../MiniHeader';

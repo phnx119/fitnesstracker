@@ -1,8 +1,8 @@
 'use client';
 
-import LMBIcon from '@/public/inputIcons/LMBIcon.png';
-import LMBRMBIcon from '@/public/inputIcons/LMBRMBIcon.png';
-import RMBIcon from '@/public/inputIcons/RMBIcon.png';
+import LMBIcon from '@/public/inputIcons/LMBIcon.webp';
+import LMBRMBIcon from '@/public/inputIcons/LMBRMBIcon.webp';
+import RMBIcon from '@/public/inputIcons/RMBIcon.webp';
 
 import { Stack, Typography } from '@mui/material';
 import { IconLetterW, IconTagsChevronUp } from '@tabler/icons-react/';

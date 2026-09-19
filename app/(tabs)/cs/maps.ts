@@ -1,10 +1,10 @@
-import ancient from '@/public/csMapIcons/ancient.png';
-import anubis from '@/public/csMapIcons/anubis.png';
-import cache from '@/public/csMapIcons/cache.png';
-import dust from '@/public/csMapIcons/dust.png';
-import inferno from '@/public/csMapIcons/inferno.png';
-import mirage from '@/public/csMapIcons/mirage.png';
-import nuke from '@/public/csMapIcons/nuke.png';
+import ancient from '@/public/csMapIcons/ancient.webp';
+import anubis from '@/public/csMapIcons/anubis.webp';
+import cache from '@/public/csMapIcons/cache.webp';
+import dust from '@/public/csMapIcons/dust.webp';
+import inferno from '@/public/csMapIcons/inferno.webp';
+import mirage from '@/public/csMapIcons/mirage.webp';
+import nuke from '@/public/csMapIcons/nuke.webp';
 
 export const CS_MAPS = [
     {
