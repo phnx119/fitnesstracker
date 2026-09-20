@@ -148,7 +148,7 @@ export default function MachinePage() {
                     <IconGraphOff size="35" />
                 </IconButton>
 
-                <IconButton onClick={() => addSet(null)}>
+                <IconButton onClick={addSet}>
                     <IconGraph size="35" />
                 </IconButton>
             </Stack>
@@ -173,11 +173,7 @@ export default function MachinePage() {
         dbInstance.MachineSession.add({
             machineId: machine?.id,
             date: Date.now(),
-        }).then((id) => {
-            setActiveSessionId(id);
-
-            addSet(id);
-        });
+        }).then((id) => setActiveSessionId(id));
     }
 
     function removeSession() {
@@ -190,14 +186,13 @@ export default function MachinePage() {
         );
     }
 
-    function addSet(id: number | null = null) {
-        const sessionId = id ?? activeSessionId;
-        if (!machine?.id || !sessionId || !session) {
+    function addSet() {
+        if (!machine?.id || !activeSessionId || !session) {
             return;
         }
 
         const currentSessionIndex = machineData.findIndex(
-            (s) => s.id === sessionId,
+            (s) => s.id === activeSessionId,
         );
 
         const previousSession =
@@ -212,7 +207,7 @@ export default function MachinePage() {
 
         dbInstance.SetRecord.add({
             machineId: machine.id,
-            sessionId: sessionId,
+            sessionId: activeSessionId,
             reps: previousSetRecord?.reps ?? 12,
             setNumber: currentSetIndex,
             weight: previousSetRecord?.weight ?? 50,
